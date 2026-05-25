@@ -19,17 +19,18 @@
         }
         [data-theme="light"] {
             --bg: #f8fafc; --bg-card: #ffffff; --bg-input: #f1f5f9;
-            --text: #0f172a; --text-muted: #475569; --text-dim: #94a3b8;
-            --border: #e2e8f0; --shadow: 0 4px 24px rgba(0,0,0,0.1);
+            --text: #0f172a; --text-muted: #475569; --text-dim: #64748b;
+            --border: #cbd5e1; --shadow: 0 4px 24px rgba(0,0,0,0.1);
         }
         * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-        body { font-family:'Inter',-apple-system,sans-serif; background:var(--bg); color:var(--text); min-height:100vh; overflow-x:hidden; padding-bottom:140px; scroll-behavior:smooth; transition: background 0.3s, color 0.3s; }
-        .header { background:var(--bg-card); padding:16px 20px; position:sticky; top:0; z-index:100; border-bottom:1px solid var(--border); backdrop-filter:blur(20px); transition: background 0.3s; }
+        body { font-family:'Inter',-apple-system,sans-serif; background:var(--bg); color:var(--text); min-height:100vh; overflow-x:hidden; padding-bottom:120px; scroll-behavior:smooth; }
+        .header { background:linear-gradient(135deg,var(--bg-card),#1a2332); padding:16px 20px; position:sticky; top:0; z-index:100; border-bottom:1px solid var(--border); backdrop-filter:blur(20px); }
+        [data-theme="light"] .header { background:linear-gradient(135deg,#ffffff,#f1f5f9); }
         .header-top { display:flex; align-items:center; justify-content:space-between; gap:10px; }
         .header-actions { display:flex; gap:8px; }
         .header h1 { font-size:18px; font-weight:700; background:linear-gradient(135deg,var(--primary-light),var(--accent)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; display:flex; align-items:center; gap:8px; }
         .icon-btn { background:none; border:none; color:var(--text-muted); cursor:pointer; padding:4px; border-radius:50%; transition:all 0.2s; display:flex; align-items:center; justify-content:center; }
-        .icon-btn:hover { background:rgba(100,100,100,0.1); color:var(--text); }
+        .icon-btn:hover { background:rgba(255,255,255,0.1); color:var(--text); }
         .icon-btn svg { width:20px; height:20px; }
         .version-badge { font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:500; color:#10b981; cursor:pointer; padding:3px 8px; border-radius:6px; background:rgba(16,185,129,0.08); border:1px solid rgba(16,185,129,0.2); transition:all 0.2s; white-space:nowrap; }
         .version-badge:hover { background:rgba(16,185,129,0.15); }
@@ -146,17 +147,17 @@
         .modal-box h3 { font-size:18px; margin-bottom:4px; background:linear-gradient(135deg,var(--primary-light),var(--accent)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
         .modal-close { position:absolute; top:16px; right:16px; background:none; border:none; color:var(--text-dim); cursor:pointer; font-size:20px; }
         .help-section { margin-bottom:20px; }
-        .help-section h4 { font-size:14px; color:var(--primary-light); margin-bottom:10px; border-bottom:1px solid var(--border); padding-bottom:4px; }
+        .help-section h4 { font-size:14px; color:var(--primary-light); margin-bottom:10px; border-bottom:1px solid var(--border); padding-bottom:4px; display:flex; align-items:center; gap:6px; }
         .help-item { display:flex; align-items:flex-start; gap:10px; margin-bottom:12px; font-size:12px; color:var(--text-muted); line-height:1.4; }
         .help-icon { width:28px; height:28px; background:var(--bg-input); border-radius:6px; display:flex; align-items:center; justify-content:center; flex-shrink:0; color:var(--text); border:1px solid var(--border); }
         .help-icon svg { width:14px; height:14px; }
         .help-icon.text-icon { font-size:14px; font-weight:bold; }
         .help-text strong { color:var(--text); }
         .help-text p { margin-top:2px; }
-        .settings-slider { width:100%; margin:10px 0; }
-        .settings-slider input[type=range] { width:100%; }
-        .settings-slider .slider-label { display:flex; justify-content:space-between; font-size:11px; color:var(--text-dim); }
-        .settings-toggle { display:flex; align-items:center; justify-content:space-between; padding:8px 0; }
+        .help-badge { display:inline-block; padding:1px 5px; border-radius:3px; font-size:10px; font-weight:600; }
+        .help-badge.good { background:rgba(16,185,129,0.2); color:var(--accent); }
+        .help-badge.warn { background:rgba(245,158,11,0.2); color:var(--warning); }
+        .help-badge.err { background:rgba(239,68,68,0.2); color:var(--danger); }
         .version-modal-box .ver-date { font-size:12px; color:var(--text-dim); margin-bottom:16px; }
         .changelog-item { padding:10px 0; border-bottom:1px solid rgba(71,85,105,0.3); }
         .changelog-item:last-child { border-bottom:none; }
@@ -179,7 +180,6 @@
         .confirm-box h3 { font-size:16px; margin-bottom:8px; }
         .confirm-box p { font-size:13px; color:var(--text-muted); margin-bottom:18px; }
         .confirm-box img.confirm-preview { max-width:100%; height:80px; object-fit:contain; border-radius:6px; margin-bottom:15px; border:1px solid var(--border); background:#000; }
-        .confirm-box .confirm-input { width:100%; background:var(--bg-input); border:1px solid var(--border); border-radius:6px; padding:10px; color:var(--text); font-family:'JetBrains Mono',monospace; font-size:16px; letter-spacing:2px; text-align:center; margin-bottom:12px; }
         .confirm-actions { display:flex; gap:10px; }
         .confirm-actions .btn { flex:1; }
         .pedana-actions { display:flex; flex-direction:column; gap:10px; margin-top:8px; }
@@ -197,7 +197,7 @@
         .progress-bar { position:absolute; bottom:0; left:0; height:3px; background:var(--accent); transition:width 0.3s; z-index:5; }
         .cooldown-overlay { position:absolute; top:0; left:0; right:0; bottom:0; background:rgba(16,185,129,0.08); pointer-events:none; z-index:4; display:none; }
         .cooldown-overlay.active { display:block; }
-        .scroll-top-btn { position:fixed; bottom:100px; right:16px; width:40px; height:40px; background:#64748b; border:1px solid var(--accent); border-radius:50%; display:none; align-items:center; justify-content:center; cursor:pointer; z-index:200; box-shadow:0 2px 12px rgba(0,0,0,0.4); animation:borderPulse 1.2s ease-in-out infinite; transition:transform 0.15s; }
+        .scroll-top-btn { position:fixed; bottom:80px; right:16px; width:40px; height:40px; background:#64748b; border:1px solid var(--accent); border-radius:50%; display:none; align-items:center; justify-content:center; cursor:pointer; z-index:200; box-shadow:0 2px 12px rgba(0,0,0,0.4); animation:borderPulse 1.2s ease-in-out infinite; transition:transform 0.15s; }
         .scroll-top-btn.visible { display:flex; }
         .scroll-top-btn:active { transform:scale(0.9); }
         .scroll-top-btn svg { width:20px; height:20px; color:white; }
@@ -205,6 +205,19 @@
         .status-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:10px; }
         .status-grid .btn { font-size:12px; padding:8px; }
         .manual-input { font-family:'JetBrains Mono',monospace; font-size:18px; letter-spacing:3px; text-align:center; width:100%; padding:10px; margin:10px 0; background:var(--bg-input); border:2px solid var(--primary); border-radius:8px; color:var(--text); }
+        
+        /* Settings Modal Styles */
+        .settings-group { margin-bottom:16px; }
+        .settings-group h4 { font-size:13px; color:var(--text-dim); margin-bottom:8px; display:flex; align-items:center; gap:6px; }
+        .settings-row { display:flex; align-items:center; justify-content:space-between; padding:8px 0; border-bottom:1px solid rgba(71,85,105,0.2); }
+        .settings-row:last-child { border-bottom:none; }
+        .settings-label { font-size:12px; color:var(--text-muted); }
+        .settings-input { width:100px; background:var(--bg-input); border:1px solid var(--border); border-radius:6px; color:var(--text); padding:6px 8px; font-family:'JetBrains Mono',monospace; font-size:12px; outline:none; }
+        .settings-input:focus { border-color:var(--primary); }
+        .gsheet-link-btn { position:fixed; bottom:80px; right:80px; background:var(--bg-card); border:1px solid var(--accent); border-radius:50%; width:40px; height:40px; display:flex; align-items:center; justify-content:center; cursor:pointer; z-index:200; box-shadow:0 2px 12px rgba(0,0,0,0.4); transition:all 0.2s; }
+        .gsheet-link-btn:hover { transform:scale(1.1); }
+        .gsheet-link-btn svg { width:20px; height:20px; color:var(--accent); }
+        
         @media (max-width:380px) { .btn { padding:8px 8px; font-size:11px; } .status-btn { font-size:9px; padding:3px 6px; } .record-image-wrap { width:120px; height:46px; } .serial-display { width:120px; } .record-meta { gap:3px; } }
     </style>
 </head>
@@ -221,9 +234,9 @@
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
             </button>
             <button class="icon-btn" onclick="openSettingsModal()" title="Impostazioni">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33 2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82 2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33 2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
             </button>
-            <span class="version-badge" id="versionBadge" onclick="requestVersionAccess()">v4.0.0</span>
+            <span class="version-badge" id="versionBadge" onclick="requestVersionAccess()">v3.1.1</span>
         </div>
     </div>
     <div class="scan-counter">
@@ -292,75 +305,76 @@
 
 <div class="confirm-modal" id="passwordModal"><div class="confirm-box"><h3>🔒 Accesso Protetto</h3><p style="margin-top:12px;">Inserisci la password temporanea (HHMM)</p><input type="password" class="input-field" id="versionPassword" maxlength="4" style="text-align:center;font-family:'JetBrains Mono',monospace;letter-spacing:6px;font-size:20px;width:120px;margin:0 auto;" inputmode="numeric"><div class="confirm-actions" style="margin-top:16px;"><button class="btn btn-outline" onclick="closePasswordModal()">Annulla</button><button class="btn btn-primary" onclick="checkVersionPassword()">OK</button></div></div></div>
 
+<!-- Help Modal -->
 <div class="modal-overlay" id="helpModal">
     <div class="modal-box" onclick="event.stopPropagation()">
         <button class="modal-close" onclick="document.getElementById('helpModal').classList.remove('visible')">✕</button>
         <h3>📖 Guida Completa all'Uso</h3>
         <p style="font-size:12px;color:var(--text-dim);margin-bottom:16px;">Panoramica dettagliata dell'interfaccia e delle funzioni</p>
-        <div class="help-section">
-            <h4>📷 Area Fotocamera</h4>
-            <div class="help-item"><div class="help-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div><div class="help-text"><strong>Avvia / Ferma OCR:</strong> Attiva la scansione continua. La fotocamera analizza automaticamente il riquadro verde in tempo reale.</div></div>
-            <div class="help-item"><div class="help-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div><div class="help-text"><strong>Flash:</strong> Attiva la torcia per migliorare la leggibilità di seriali sbiaditi o in condizioni di scarsa luce.</div></div>
-            <div class="help-item"><div class="help-icon">✏️</div><div class="help-text"><strong>Inserimento Manuale:</strong> Se il seriale è troppo sbiadito o illeggibile, premi "Manuale" per inserirlo manualmente.</div></div>
-        </div>
-        <div class="help-section">
-            <h4>⚙️ Configurazione Iniziale</h4>
-            <div class="help-item"><div class="help-icon text-icon">👤</div><div class="help-text"><strong>Operatore:</strong> Nome associato automaticamente a ogni seriale scansionato.</div></div>
-            <div class="help-item"><div class="help-icon text-icon">📍</div><div class="help-text"><strong>Pedana:</strong> Campo obbligatorio. Viene richiesto conferma dopo ogni scansione.</div></div>
-        </div>
-        <div class="help-section">
-            <h4>⚙️ Impostazioni Avanzate</h4>
-            <div class="help-item"><div class="help-icon">⏱️</div><div class="help-text"><strong>Cooldown:</strong> Tempo di pausa tra una scansione e l'altra.</div></div>
-            <div class="help-item"><div class="help-icon">🌓</div><div class="help-text"><strong>Tema:</strong> Passa dalla modalità scura a quella chiara.</div></div>
-            <div class="help-item"><div class="help-icon">🔍</div><div class="help-text"><strong>Contrasto:</strong> Regola il contrasto dell'immagine per migliorare il riconoscimento.</div></div>
-            <div class="help-item"><div class="help-icon">🔄</div><div class="help-text"><strong>Inversione:</strong> Inverte i colori dell'immagine per rilevare seriali su sfondi scuri.</div></div>
-            <div class="help-item"><div class="help-icon">🔲</div><div class="help-text"><strong>Bordi:</strong> Rileva i bordi del testo per migliorare la leggibilità.</div></div>
-            <div class="help-item"><div class="help-icon">🔓</div><div class="help-text"><strong>Sensor Pattern:</strong> Disabilita per accettare seriali di qualsiasi formato.</div></div>
-        </div>
-        <div class="help-section">
-            <h4>☁️ Esportazione</h4>
-            <div class="help-item"><div class="help-icon text-icon" style="background:#217346;color:white;">X</div><div class="help-text"><strong>Excel:</strong> File .xlsx con tutti i dati.</div></div>
-            <div class="help-item"><div class="help-icon text-icon" style="background:var(--primary);color:white;">🌐</div><div class="help-text"><strong>HTML+Img:</strong> Report web con immagini embeddate.</div></div>
-            <div class="help-item"><div class="help-icon text-icon" style="background:var(--text-dim);color:white;">📦</div><div class="help-text"><strong>ZIP:</strong> Archivio immagini + CSV riepilogo.</div></div>
-        </div>
+        <div class="help-section"><h4>📷 Area Fotocamera</h4><div class="help-item"><div class="help-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div><div class="help-text"><strong>Avvia / Ferma OCR:</strong> Attiva la scansione continua. La fotocamera analizza automaticamente il riquadro verde in tempo reale.</div></div><div class="help-item"><div class="help-icon">✏️</div><div class="help-text"><strong>Inserimento Manuale:</strong> Se il seriale è troppo sbiadito o illeggibile, premi "Manuale" per inserirlo manualmente.</div></div></div>
+        <div class="help-section"><h4>⚙️ Configurazione Iniziale</h4><div class="help-item"><div class="help-icon text-icon">👤</div><div class="help-text"><strong>Operatore:</strong> Nome associato automaticamente a ogni seriale scansionato.</div></div><div class="help-item"><div class="help-icon text-icon">📍</div><div class="help-text"><strong>Pedana:</strong> Campo obbligatorio. Viene richiesto conferma dopo ogni scansione.</div></div></div>
+        <div class="help-section"><h4>🎯 Confidenza e Validazione</h4><div class="help-item"><div class="help-icon text-icon">%</div><div class="help-text"><strong>Confidenza OCR:</strong> <span class="help-badge err">&lt;35%</span> Scartata | <span class="help-badge warn">35-50%</span> Conferma manuale richiesta | <span class="help-badge good">&gt;50%</span> Accettata</div></div></div>
+        <div class="help-section"><h4>⚙️ Impostazioni</h4><div class="help-item"><div class="help-icon">⚙️</div><div class="help-text"><strong>Impostazioni:</strong> Clicca l'icona ⚙️ per modificare: tempo di cooldown, tema Chiaro/Scuro, contrasto, inversione colori, edge detection, e pattern seriale.</div></div></div>
         <button class="btn btn-primary" style="width:100%;margin-top:10px;" onclick="document.getElementById('helpModal').classList.remove('visible')">Ho capito</button>
     </div>
 </div>
 
+<!-- Settings Modal -->
 <div class="modal-overlay" id="settingsModal">
     <div class="modal-box" onclick="event.stopPropagation()">
-        <button class="modal-close" onclick="document.getElementById('settingsModal').classList.remove('visible')">✕</button>
+        <button class="modal-close" onclick="closeSettingsModal()">✕</button>
         <h3>⚙️ Impostazioni</h3>
-        <div class="settings-slider">
-            <div class="slider-label"><span>Tempo Cooldown</span><span id="cooldownVal">1000ms</span></div>
-            <input type="range" id="cooldownSlider" min="500" max="2000" step="100" value="1000" oninput="updateSettings()">
+        <div class="settings-group">
+            <h4>⏱️ Tempo di Cooldown</h4>
+            <div class="settings-row">
+                <span class="settings-label">Tempo tra scansioni (ms)</span>
+                <input type="number" class="settings-input" id="cooldownInput" min="200" max="3000" step="100" value="800">
+            </div>
         </div>
-        <div class="settings-slider">
-            <div class="slider-label"><span>Contrasto</span><span id="contrastVal">1.0</span></div>
-            <input type="range" id="contrastSlider" min="0.5" max="3.0" step="0.1" value="1.0" oninput="updateSettings()">
+        <div class="settings-group">
+            <h4>🎨 Tema</h4>
+            <div class="settings-row">
+                <span class="settings-label">Tema Scuro/Chiaro</span>
+                <div class="toggle-switch" id="themeToggle" onclick="toggleTheme()"></div>
+            </div>
         </div>
-        <div class="settings-toggle">
-            <span>Tema Chiaro</span>
-            <div class="toggle-switch" id="themeToggle" onclick="toggleTheme()"></div>
+        <div class="settings-group">
+            <h4>🔍 Miglioramento Scansione</h4>
+            <div class="settings-row">
+                <span class="settings-label">Contrasto Adattivo</span>
+                <div class="toggle-switch active" id="contrastToggle" onclick="toggleSetting('contrast')"></div>
+            </div>
+            <div class="settings-row">
+                <span class="settings-label">Inversione Colori</span>
+                <div class="toggle-switch" id="invertToggle" onclick="toggleSetting('invert')"></div>
+            </div>
+            <div class="settings-row">
+                <span class="settings-label">Edge Detection</span>
+                <div class="toggle-switch" id="edgeToggle" onclick="toggleSetting('edge')"></div>
+            </div>
         </div>
-        <div class="settings-toggle">
-            <span>Inversione Colori</span>
-            <div class="toggle-switch" id="invertToggle" onclick="toggleInvert()"></div>
+        <div class="settings-group">
+            <h4>🔢 Pattern Seriale</h4>
+            <div class="settings-row">
+                <span class="settings-label">Pattern BDBCF00XXX</span>
+                <div class="toggle-switch active" id="patternToggle" onclick="toggleSetting('pattern')"></div>
+            </div>
+            <div class="settings-row" style="flex-direction:column;align-items:flex-start;gap:8px;">
+                <span class="settings-label">Lunghezza minima caratteri</span>
+                <input type="number" class="settings-input" id="minCharsInput" min="3" max="20" value="10" style="width:80px;">
+            </div>
         </div>
-        <div class="settings-toggle">
-            <span>Determinazione Bordi</span>
-            <div class="toggle-switch" id="edgesToggle" onclick="toggleEdges()"></div>
-        </div>
-        <div class="settings-toggle">
-            <span>Pattern Fisso (BDBCF00XXX)</span>
-            <div class="toggle-switch active" id="patternToggle" onclick="togglePattern()"></div>
-        </div>
-        <div class="settings-slider" id="patternSettings">
-            <div class="slider-label"><span>Min Caratteri</span><span id="minCharsVal">3</span></div>
-            <input type="range" id="minCharsSlider" min="2" max="20" step="1" value="3" oninput="updateSettings()">
-            <div class="slider-label" style="margin-top:8px;"><span>Max Caratteri</span><span id="maxCharsVal">20</span></div>
-            <input type="range" id="maxCharsSlider" min="3" max="30" step="1" value="20" oninput="updateSettings()">
-        </div>
+        <button class="btn btn-primary" style="width:100%;margin-top:20px;" onclick="saveSettings()">Salva Impostazioni</button>
+    </div>
+</div>
+
+<div class="modal-overlay" id="versionModal">
+    <div class="modal-box version-modal-box" onclick="event.stopPropagation()">
+        <button class="modal-close" onclick="closeVersionModal()">✕</button>
+        <h3>📋 Changelog</h3>
+        <div class="ver-date" id="versionBuildDate"></div>
+        <div id="changelogContent" style="max-height:300px;overflow-y:auto;margin-bottom:20px;"></div>
+        <button class="btn btn-primary" style="width:100%;" onclick="closeVersionModal()">Chiudi</button>
     </div>
 </div>
 
@@ -402,152 +416,187 @@
     <button class="btn btn-accent" onclick="exportExcel()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg>Excel</button>
     <button class="btn btn-primary" onclick="exportHtmlWithImages()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>HTML+Img</button>
     <button class="btn btn-outline" onclick="exportZip()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8v13H3V8M1 3h22v5H1zM10 12h4"/></svg>ZIP</button>
-    <button class="btn btn-warning" onclick="window.open('https://docs.google.com/spreadsheets/d/18WJa9UjOLjqHLF8DCUvwhbt5pPHx0bdCBN6lOPsmdxA/edit?gid=0#gid=0', '_blank')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Foglio</button>
 </div>
 
-<script>
-const APP_VERSION='4.0.0';
-const STORAGE_KEY='scannerSerialiOCR_data';
-const GSHEET_KEY='scannerSerialiOCR_gsheet';
-const SETTINGS_KEY='scannerSerialiOCR_settings';
+<!-- Google Sheet Link Button -->
+<a class="gsheet-link-btn" href="https://docs.google.com/spreadsheets/d/18WJa9UjOLjqHLF8DCUvwhbt5pPHx0bdCBN6lOPsmdxA/edit?gid=0#gid=0" target="_blank" rel="noopener noreferrer" title="Apri Google Sheet">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+</a>
 
-let settings = {
-    cooldown: 1000,
-    contrast: 1.0,
-    invert: false,
-    edges: false,
-    pattern: true,
-    minChars: 3,
-    maxChars: 20
-};
+<script>
+const APP_VERSION='3.1.1';
+const STORAGE_KEY='scannerSerialiOCR_data';
+const SETTINGS_KEY='scannerSettings';
+const GSHEET_KEY='scannerSerialiOCR_gsheet';
+const IMG_DB_NAME='ScannerSerialiDB';
+const IMG_DB_VERSION=1;
+const IMG_STORE='images';
+const SERIAL_PATTERN=/^BDBCF00[0-9]{3}$/;
+const IMG_MARGIN=15;
+
+const CHANGELOG=[
+    {ver:'3.1.1',date:'26/05/2026',desc:'Fix: parametri mancanti SERIAL_PATTERN e IMG_MARGIN; corretto passaggio immagine in processSerial; rimosso duplicato JSZip; fix riferimenti DOM inesistenti',tags:['fix']},
+    {ver:'3.1.0',date:'20/05/2026',desc:'Aggiunta gestione pedana post-scan, modal impostazioni avanzate, export ZIP con immagini',tags:['feat','ui']},
+    {ver:'3.0.0',date:'15/05/2026',desc:'Rilascio iniziale con OCR Tesseract.js, sync Google Sheets, IndexedDB per immagini',tags:['feat']}
+];
 
 let cameraActive=false, flashOn=false, multiDetect=false, videoEl=null, stream=null, ocrWorker=null, scanTimer=null, idleTimer=null;
 let records=[], scanTotal=0, confirmCallback=null, audioCtx=null;
 let scanCooldown=false, scanPaused=false;
 let lastScanPedana='', lastScanImage=null;
 let pedanaCallback=null, pedanaEditRecordId=null;
-let lastScanTime=0;
 let gsheetUrl='', syncStatus='idle';
+const lowConfTracker = {};
+let manualEntrySerial='', manualEntryImage=null;
 
-// ===== SETTINGS =====
+// Settings
+let settings = {
+    cooldown: 800,
+    theme: 'dark',
+    contrast: true,
+    invert: false,
+    edge: false,
+    pattern: true,
+    minChars: 10
+};
+
 function loadSettings(){
     try{
         const s=localStorage.getItem(SETTINGS_KEY);
         if(s){
             const parsed=JSON.parse(s);
             settings={...settings,...parsed};
-            applySettings();
         }
     }catch(e){}
+    applySettings();
 }
-function saveSettings(){
-    try{localStorage.setItem(SETTINGS_KEY,JSON.stringify(settings));}catch(e){}
-}
-function applySettings(){
-    document.documentElement.setAttribute('data-theme', settings.darkTheme ? 'light' : 'dark');
-    document.getElementById('cooldownSlider').value=settings.cooldown;
-    document.getElementById('contrastSlider').value=settings.contrast;
-    document.getElementById('invertToggle').classList.toggle('active',settings.invert);
-    document.getElementById('edgesToggle').classList.toggle('active',settings.edges);
-    document.getElementById('patternToggle').classList.toggle('active',settings.pattern);
-    document.getElementById('minCharsSlider').value=settings.minChars;
-    document.getElementById('maxCharsSlider').value=settings.maxChars;
-    document.getElementById('cooldownVal').textContent=settings.cooldown+'ms';
-    document.getElementById('contrastVal').textContent=settings.contrast;
-    document.getElementById('minCharsVal').textContent=settings.minChars;
-    document.getElementById('maxCharsVal').textContent=settings.maxChars;
-}
-function updateSettings(){
-    settings.cooldown=parseInt(document.getElementById('cooldownSlider').value);
-    settings.contrast=parseFloat(document.getElementById('contrastSlider').value);
-    settings.minChars=parseInt(document.getElementById('minCharsSlider').value);
-    settings.maxChars=parseInt(document.getElementById('maxCharsSlider').value);
-    saveSettings();
-    document.getElementById('cooldownVal').textContent=settings.cooldown+'ms';
-    document.getElementById('contrastVal').textContent=settings.contrast;
-    document.getElementById('minCharsVal').textContent=settings.minChars;
-    document.getElementById('maxCharsVal').textContent=settings.maxChars;
-}
-function toggleTheme(){settings.darkTheme=!settings.darkTheme;saveSettings();applySettings();}
-function toggleInvert(){settings.invert=!settings.invert;saveSettings();}
-function toggleEdges(){settings.edges=!settings.edges;saveSettings();}
-function togglePattern(){settings.pattern=!settings.pattern;saveSettings();applySettings();}
-function openSettingsModal(){document.getElementById('settingsModal').classList.add('visible');applySettings();}
 
-// ===== AUDIO =====
+function applySettings(){
+    document.documentElement.setAttribute('data-theme',settings.theme);
+    if(document.getElementById('themeToggle')){
+        document.getElementById('themeToggle').classList.toggle('active',settings.theme==='light');
+    }
+    if(document.getElementById('contrastToggle'))document.getElementById('contrastToggle').classList.toggle('active',settings.contrast);
+    if(document.getElementById('invertToggle'))document.getElementById('invertToggle').classList.toggle('active',settings.invert);
+    if(document.getElementById('edgeToggle'))document.getElementById('edgeToggle').classList.toggle('active',settings.edge);
+    if(document.getElementById('patternToggle'))document.getElementById('patternToggle').classList.toggle('active',settings.pattern);
+    if(document.getElementById('cooldownInput'))document.getElementById('cooldownInput').value=settings.cooldown;
+    if(document.getElementById('minCharsInput'))document.getElementById('minCharsInput').value=settings.minChars;
+}
+
+function openSettingsModal(){
+    applySettings();
+    document.getElementById('settingsModal').classList.add('visible');
+}
+function closeSettingsModal(){document.getElementById('settingsModal').classList.remove('visible');}
+function toggleTheme(){settings.theme=settings.theme==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',settings.theme);document.getElementById('themeToggle').classList.toggle('active',settings.theme==='light');}
+function toggleSetting(key){settings[key]=!settings[key];}
+function saveSettings(){
+    settings.cooldown=Math.max(200,Math.min(3000,parseInt(document.getElementById('cooldownInput').value)||800));
+    settings.minChars=Math.max(3,Math.min(20,parseInt(document.getElementById('minCharsInput').value)||10));
+    localStorage.setItem(SETTINGS_KEY,JSON.stringify(settings));applySettings();closeSettingsModal();toast('Impostazioni salvate','success');}
+
+function toggleMultiDetect(){multiDetect=!multiDetect;document.getElementById('toggleMulti').classList.toggle('active',multiDetect);}
+
+function checkPedanaRequired(){
+    const p=document.getElementById('pedana').value.trim();
+    if(!p){document.getElementById('pedana').classList.add('missing');toast('⚠️ Pedana richiesta','error');beepErr();vib('err');return false;}
+    document.getElementById('pedana').classList.remove('missing');return true;
+}
+
+function applyAdaptiveThreshold(ctx,w,h){
+    const imageData=ctx.getImageData(0,0,w,h);
+    const data=imageData.data;
+    // Grayscale
+    const gray=new Uint8Array(w*h);
+    for(let i=0;i<data.length;i+=4)gray[i/4]=0.299*data[i]+0.587*data[i+1]+0.114*data[i+2];
+    // Contrast adjustment
+    if(settings.contrast){
+        const threshold=128;
+        for(let i=0;i<gray.length;i++){
+            gray[i]=gray[i]>threshold?255:0;
+        }
+    }
+    // Invert
+    if(settings.invert){
+        for(let i=0;i<gray.length;i++)gray[i]=255-gray[i];
+    }
+    // Edge detection (simple Sobel)
+    if(settings.edge){
+        const edges=new Uint8Array(gray);
+        for(let y=1;y<h-1;y++){
+            for(let x=1;x<w-1;x++){
+                const gx=-gray[(y-1)*w+(x-1)]+gray[(y-1)*w+(x+1)]
+                        -2*gray[y*w+(x-1)]+2*gray[y*w+(x+1)]
+                        -gray[(y+1)*w+(x-1)]+gray[(y+1)*w+(x+1)];
+                const gy=-gray[(y-1)*w+(x-1)]-2*gray[(y-1)*w+x]-gray[(y-1)*w+(x+1)]
+                        +gray[(y+1)*w+(x-1)]+2*gray[(y+1)*w+x]+gray[(y+1)*w+(x+1)];
+                const mag=Math.sqrt(gx*gx+gy*gy);
+                edges[y*w+x]=mag>128?255:0;
+            }
+        }
+        for(let i=0;i<data.length;i+=4){data[i]=data[i+1]=data[i+2]=edges[i/4];}
+    }else{
+        for(let i=0;i<data.length;i+=4){data[i]=data[i+1]=data[i+2]=gray[i/4];}
+    }
+    ctx.putImageData(imageData,0,0);
+}
+
+function scrollToTop(){window.scrollTo({top:0,behavior:'smooth'});}
+function checkScrollPosition(){const btn=document.getElementById('scrollTopBtn');if(window.scrollY>200)btn.classList.add('visible');else btn.classList.remove('visible');}
+window.addEventListener('scroll',checkScrollPosition,{passive:true});
+
 function getAudioCtx(){if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==='suspended')audioCtx.resume();return audioCtx;}
 function playTone(f,d,t='square',v=0.12){try{const c=getAudioCtx(),o=c.createOscillator(),g=c.createGain();o.type=t;o.frequency.value=f;g.gain.value=v;g.gain.exponentialRampToValueAtTime(0.001,c.currentTime+d/1000);o.connect(g);g.connect(c.destination);o.start();o.stop(c.currentTime+d/1000);}catch(e){}}
 function beepOk(){playTone(1200,50,'sine');setTimeout(()=>playTone(1600,50,'sine'),70);}
 function beepDup(){playTone(400,120,'sawtooth');setTimeout(()=>playTone(300,120,'sawtooth'),180);}
 function beepErr(){playTone(200,250,'sawtooth');}
 function vib(p='ok'){if(navigator.vibrate){if(p==='ok')navigator.vibrate([40,25,40]);else if(p==='dup')navigator.vibrate([180]);else if(p==='err')navigator.vibrate([80,40,80,40,80]);}}
-function toast(m,t='success'){const e=document.getElementById('toast');e.textContent=m;e.className='toast '+t;setTimeout(()=>e.classList.add('visible'),10);setTimeout(()=>e.classList.remove('visible'),2800);}
+function toast(m,t='success'){const el=document.getElementById('toast');el.textContent=m;el.className='toast '+t;setTimeout(()=>el.classList.add('visible'),10);setTimeout(()=>el.classList.remove('visible'),2800);}
 function showConfirm(title,msg,cb,imageUrl=null){
     document.getElementById('confirmTitle').textContent=title;
     document.getElementById('confirmMsg').textContent=msg;
-    const preview = document.getElementById('confirmPreviewImage');
-    if(imageUrl){preview.src=imageUrl;preview.style.display='block';} else{preview.style.display='none';}
+    const preview=document.getElementById('confirmPreviewImage');
+    if(imageUrl){preview.src=imageUrl;preview.style.display='block';}else{preview.style.display='none';}
     confirmCallback=cb;
     document.getElementById('confirmModal').classList.add('visible');
 }
 function closeConfirm(){document.getElementById('confirmModal').classList.remove('visible');confirmCallback=null;}
 function executeConfirm(){if(confirmCallback)confirmCallback();closeConfirm();}
 
-function validateSerial(s){
-    if(!settings.pattern){
-        if(s.length < settings.minChars) return `Min ${settings.minChars} caratteri`;
-        if(s.length > settings.maxChars) return `Max ${settings.maxChars} caratteri`;
-        return null;
-    }
-    if(s.length!==10)return'10 caratteri richiesti';
-    if(!s.startsWith('BDBCF00'))return'Inizia con BDBCF00';
-    if(!/^BDBCF00[A-F0-9]{3}$/.test(s))return'Caratteri non validi';
-    return null;
-}
-function isValidSerial(s){ return validateSerial(s) === null; }
-
-function cropFromBbox(canvas,rw,rh,bbox,margin){
-    const{x0,y0,x1,y1}=bbox;
-    const cX=Math.max(0,x0-margin),cY=Math.max(0,y0-margin);
-    const cW=Math.min(rw-cX,(x1-x0)+margin*2),cH=Math.min(rh-cY,(y1-y0)+margin*2);
-    if(cW<=0||cH<=0)return null;
-    const cc=document.createElement('canvas');cc.width=cW;cc.height=cH;
-    const cctx=cc.getContext('2d');cctx.drawImage(canvas,cX,cY,cW,cH,0,0,cW,cH);
-    return cc;
-}
-
-function scrollToTop(){window.scrollTo({top:0,behavior:'smooth'});}
-function checkScrollPosition(){const btn=document.getElementById('scrollTopBtn');const scrolledDown=window.scrollY>200;if(scrolledDown)btn.classList.add('visible');else btn.classList.remove('visible');}
-window.addEventListener('scroll',checkScrollPosition,{passive:true});
+const OCR_CORRECTION_MAP={'O':'0','o':'0','Q':'0','I':'1','l':'1','i':'1','S':'5','s':'5','Z':'2','z':'2'};
+function fixOCR(raw){let c=[],f='';for(let i=0;i<raw.length;i++){if(OCR_CORRECTION_MAP.hasOwnProperty(raw[i])){f+=OCR_CORRECTION_MAP[raw[i]];c.push(`${raw[i]}→${OCR_CORRECTION_MAP[raw[i]]}`);}else{f+=raw[i];}}return{fixed:f.toUpperCase(),corrections:c};}
+function detectCorrections(raw,serial){const c=[],ru=raw.toUpperCase(),mn=Math.min(ru.length,serial.length);for(let i=0;i<mn;i++){if(ru[i]!==serial[i])c.push(`${ru[i]}→${serial[i]}`);}return c;}
+function isValidSerial(s){return SERIAL_PATTERN.test(s);}
+function validateSerial(s){if(s.length!==10)return'10 caratteri richiesti';if(!s.startsWith('BDBCF00'))return'Inizia con BDBCF00';if(!SERIAL_PATTERN.test(s))return'Caratteri non validi';return null;}
+function cropFromBbox(canvas,rw,rh,bbox,margin){const{x0,y0,x1,y1}=bbox;const cX=Math.max(0,x0-margin),cY=Math.max(0,y0-margin);const cW=Math.min(rw-cX,(x1-x0)+margin*2),cH=Math.min(rh-cY,(y1-y0)+margin*2);if(cW<=0||cH<=0)return null;const cc=document.createElement('canvas');cc.width=cW;cc.height=cH;const cctx=cc.getContext('2d');cctx.drawImage(canvas,cX,cY,cW,cH,0,0,cW,cH);return cc.toDataURL('image/jpeg',0.8);}
 
 function openHelpModal(){document.getElementById('helpModal').classList.add('visible');}
 function openManualEntry(){
     document.getElementById('manualSerialInput').value='BDBCF00';
     document.getElementById('manualEntryTitle').textContent='✏️ Inserimento Manuale';
-    document.getElementById('manualEntryDesc').textContent='Inserisci manualmente il seriale completo.';
+    document.getElementById('manualEntryDesc').textContent='Inserisci manualmente il seriale completo (10 caratteri).';
     document.getElementById('manualEntryModal').classList.add('visible');
-    setTimeout(()=>{
-        const inp=document.getElementById('manualSerialInput');
-        inp.focus();
-        inp.setSelectionRange(7, 10);
-    },200);
+    setTimeout(()=>{const inp=document.getElementById('manualSerialInput');inp.focus();inp.setSelectionRange(7,10);},200);
 }
 function closeManualEntry(){document.getElementById('manualEntryModal').classList.remove('visible');}
 function confirmManualEntry(){
     const val=document.getElementById('manualSerialInput').value.trim().toUpperCase();
     const errMsg=validateSerial(val);
     if(errMsg){toast('❌ '+errMsg,'error');return;}
-    
     const isDup=records.some(r=>r.serial===val);
     if(isDup){toast('⚠️ Seriale già esistente!','warning');beepDup();return;}
-    
     closeManualEntry();
-    processSerialResult({serial:val, image:null, confidence:100});
+    const rec={id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),serial:val,timestamp:new Date().toLocaleString('it-IT'),operator:document.getElementById('operatorName').value.trim()||'N/D',pedana:document.getElementById('pedana').value.trim()||'N/D',runNumber:'',modified:false,status:'',note:'',image:null,confidence:100,corrections:[],_synced:false,_imgUploaded:false,_confirmed:true,_manual:true};
+    records.unshift(rec);scanTotal++;document.getElementById('scanCount').textContent=scanTotal;saveToStorage();
+    beepOk();vib('ok');renderRecords();toast('✅ Inserito manualmente','success');
+    if(gsheetUrl)sendToGSheet(rec).then(()=>{saveToStorage();setSyncStatus('synced');renderRecords();}).catch(()=>{setSyncStatus('pending');renderRecords();});
+    setTimeout(()=>{showPedanaModal(val,null,()=>{if(cameraActive&&!scanPaused)document.getElementById('ocrStatus').textContent='✓ Pronto';updateScanIndicator();resetIdleTimer();});},400);
 }
 
 function requestVersionAccess(){const n=new Date();document.getElementById('versionPassword').value='';document.getElementById('passwordModal').classList.add('visible');document.getElementById('passwordModal').dataset.pwd=String(n.getHours()).padStart(2,'0')+String(n.getMinutes()).padStart(2,'0');setTimeout(()=>{const i=document.getElementById('versionPassword');if(i)i.focus();},200);}
 function closePasswordModal(){document.getElementById('passwordModal').classList.remove('visible');}
-function checkVersionPassword(){const input=document.getElementById('versionPassword').value.trim();if(input===document.getElementById('passwordModal').dataset.pwd){closePasswordModal();document.getElementById('modalGsheetUrl').value=gsheetUrl;openVersionModal();}else{toast('❌ Password errata','error');beepErr();vib('err');document.getElementById('versionPassword').value='';document.getElementById('versionPassword').focus();}}
+function checkVersionPassword(){const input=document.getElementById('versionPassword').value.trim();if(input===document.getElementById('passwordModal').dataset.pwd){closePasswordModal();openVersionModal();}else{toast('❌ Password errata','error');beepErr();vib('err');document.getElementById('versionPassword').value='';}}
 document.addEventListener('keydown',(e)=>{if(e.key==='Enter'&&document.getElementById('passwordModal').classList.contains('visible'))checkVersionPassword();});
 
 function openVersionModal(){
@@ -558,491 +607,139 @@ function openVersionModal(){
 }
 function closeVersionModal(){document.getElementById('versionModal').classList.remove('visible');}
 
-// ===== GOOGLE SHEETS LOGIC =====
 function loadGSheetUrl(){try{const u=localStorage.getItem(GSHEET_KEY);if(u){gsheetUrl=u;}}catch(e){}}
-function setSyncStatus(status){
-    syncStatus=status;
-    const el=document.getElementById('syncIndicator');
-    if(status==='idle'||status==='synced'){el.className='sync-status synced';el.textContent='🟢 Sync';}
-    else if(status==='syncing'){el.className='sync-status uploading';el.textContent='🔄 Invio...';}
-    else if(status==='error'){el.className='sync-status error';el.textContent='🔴 Errore';}
-    else if(status==='pending'){el.className='sync-status pending';el.textContent='🟡 In coda';}
-}
+function setSyncStatus(status){syncStatus=status;const el=document.getElementById('syncIndicator');if(status==='idle'||status==='synced'){el.className='sync-status synced';el.textContent='🟢 Sync';}else if(status==='syncing'){el.className='sync-status pending';el.textContent='🔄 Invio...';}else if(status==='error'){el.className='sync-status error';el.textContent='🔴 Errore';}else if(status==='pending'){el.className='sync-status pending';el.textContent='🟡 In coda';}}
 
-async function sendToGSheet(record){
-    if(!gsheetUrl || !gsheetUrl.includes('/exec')) return false;
-    try{
-        const payload = {
-            timestamp: record.timestamp || new Date().toLocaleString('it-IT'),
-            serial: record.serial || '',
-            confidence: record.confidence || '',
-            corrections: (record.corrections||[]).join(', '),
-            modified: record.modified ? 'Sì' : 'No',
-            runNumber: record.runNumber || '',
-            pedana: record.pedana || '',
-            operator: record.operator || '',
-            status: record.status || '',
-            note: record.note || ''
-        };
-        await fetch(gsheetUrl, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: {'Content-Type': 'text/plain;charset=utf-8'},
-            body: JSON.stringify(payload)
-        });
-        record._synced = true;
-        return true;
-    } catch(e) {
-        record._synced = false;
-        return false;
-    }
-}
+async function sendToGSheet(record){if(!gsheetUrl||!gsheetUrl.includes('/exec'))return false;try{const payload={timestamp:record.timestamp||new Date().toLocaleString('it-IT'),serial:record.serial||'',confidence:record.confidence||'',corrections:(record.corrections||[]).join(', '),modified:record.modified?'Sì':'No',runNumber:record.runNumber||'',pedana:record.pedana||'',operator:record.operator||'',status:record.status||'',note:record.note||''};await fetch(gsheetUrl,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});record._synced=true;return true;}catch(e){console.warn('GSheet fail:',e);record._synced=false;return false;}}
+async function syncPendingToGSheet(){if(!gsheetUrl){toast('Configura URL','error');return;}const unsynced=records.filter(r=>!r._synced);if(unsynced.length===0){toast('Tutto sincronizzato ✅','success');return;}setSyncStatus('syncing');toast(`🔄 Invio ${unsynced.length} record...`,'success');let ok=0,err=0;for(const r of unsynced){const s=await sendToGSheet(r);if(s)ok++;else err++;}saveToStorage();if(err===0){toast(`✅ ${ok} inviati`,'success');setSyncStatus('synced');}else{toast(`⚠️ ${ok} ok, ${err} errori`,'warning');setSyncStatus('error');}renderRecords();}
 
-async function syncPendingToGSheet(){
-    if(!gsheetUrl){toast('Configura URL nelle impostazioni','error');return;}
-    const unsynced=records.filter(r=>!r._synced);
-    if(unsynced.length===0){toast('Tutto sincronizzato ✅','success');return;}
-    setSyncStatus('syncing');
-    toast(`🔄 Invio ${unsynced.length} record...`,'success');
-    let ok=0, err=0;
-    for(const r of unsynced){
-        const s = await sendToGSheet(r);
-        if(s) ok++; else err++;
-    }
-    saveToStorage();
-    if(err===0){toast(`✅ ${ok} inviati`,'success');setSyncStatus('synced');}
-    else{toast(`⚠️ ${ok} ok, ${err} errori`,'warning');setSyncStatus('error');}
-    renderRecords();
-}
+function openApplyStatusModal(){const c=document.getElementById('pedana').value.trim();if(!c){toast('Imposta Pedana','warning');return;}document.getElementById('applyPedanaName').textContent=c;document.getElementById('statusApplyModal').classList.add('visible');}
+function executeApplyStatus(status){const c=document.getElementById('pedana').value.trim();if(!c)return;let count=0;records.forEach(r=>{if(r.pedana===c){r.status=status;r._synced=false;count++;}});document.getElementById('statusApplyModal').classList.remove('visible');if(count>0){saveToStorage();renderRecords();toast(`✅ "${status}" a ${count} record`,'success');if(gsheetUrl)syncPendingToGSheet();}else toast('Nessun record','warning');}
 
-// ===== APPLY STATUS =====
-function openApplyStatusModal(){
-    const c=document.getElementById('pedana').value.trim();
-    if(!c){toast('Imposta Pedana','warning');return;}
-    document.getElementById('applyPedanaName').textContent=c;
-    document.getElementById('statusApplyModal').classList.add('visible');
-}
-function executeApplyStatus(status){
-    const c=document.getElementById('pedana').value.trim();
-    if(!c)return;
-    let count=0;
-    records.forEach(r=>{if(r.pedana===c){r.status=status;r._synced=false;count++;}});
-    document.getElementById('statusApplyModal').classList.remove('visible');
-    if(count>0){saveToStorage();renderRecords();toast(`✅ "${status}" a ${count} record`,'success');if(gsheetUrl)syncPendingToGSheet();}
-    else toast('Nessun record','warning');
-}
-
-// ===== STORAGE & PEDANA =====
 let imgDB=null;
-function openImgDB(){return new Promise((resolve,reject)=>{if(imgDB){resolve(imgDB);return;}const req=indexedDB.open('ScannerSerialiDB',1);req.onupgradeneeded=(e)=>{const db=e.target.result;if(!db.objectStoreNames.contains('images'))db.createObjectStore('images',{keyPath:'id'});};req.onsuccess=(e)=>{imgDB=e.target.result;resolve(imgDB);};req.onerror=(e)=>reject(e);});}
-async function saveImg(id,dataUrl){try{const db=await openImgDB();const tx=db.transaction('images','readwrite');tx.objectStore('images').put({id:id,data:dataUrl});return new Promise((r)=>{tx.oncomplete=()=>r();});}catch(e){}}
-async function loadAllImages(){try{const db=await openImgDB();const tx=db.transaction('images','readonly');const store=tx.objectStore('images');return new Promise((r)=>{const req=store.getAll();req.onsuccess=()=>{const map={};(req.result||[]).forEach(item=>{map[item.id]=item.data;});r(map);};req.onerror=()=>r({});});}catch(e){return {};}}
-async function deleteImg(id){try{const db=await openImgDB();const tx=db.transaction('images','readwrite');tx.objectStore('images').delete(id);}catch(e){}}
-
-async function saveToStorage(){
-    try{
-        const lean=records.map(r=>{const c={...r};c.image=null;return c;});
-        localStorage.setItem(STORAGE_KEY,JSON.stringify({records:lean,scanTotal:scanTotal,operator:document.getElementById('operatorName').value,pedana:document.getElementById('pedana').value,timestamp:Date.now()}));
-        for(const r of records){if(r.image){await saveImg(r.id,r.image);}}
-    }catch(e){}
-}
-
-async function loadFromStorage(){
-    try{
-        const raw=localStorage.getItem(STORAGE_KEY);
-        if(!raw)return false;
-        const d=JSON.parse(raw);
-        if(Date.now()-d.timestamp>7*24*60*60*1000){localStorage.removeItem(STORAGE_KEY);return false;}
-        records=d.records||[];
-        scanTotal=d.scanTotal||0;
-        if(d.operator)document.getElementById('operatorName').value=d.operator;
-        if(d.pedana)document.getElementById('pedana').value=d.pedana;
-        document.getElementById('scanCount').textContent=scanTotal;
-        const imgMap=await loadAllImages();
-        records.forEach(r=>{if(imgMap[r.id])r.image=imgMap[r.id];});
-        return true;
-    }catch(e){return false;}
-}
+function openImgDB(){return new Promise((resolve,reject)=>{if(imgDB){resolve(imgDB);return;}const req=indexedDB.open(IMG_DB_NAME,IMG_DB_VERSION);req.onupgradeneeded=(e)=>{const db=e.target.result;if(!db.objectStoreNames.contains(IMG_STORE))db.createObjectStore(IMG_STORE,{keyPath:'id'});};req.onsuccess=(e)=>{imgDB=e.target.result;resolve(imgDB);};req.onerror=(e)=>reject(e);});}
+async function saveImg(id,dataUrl){try{const db=await openImgDB();const tx=db.transaction(IMG_STORE,'readwrite');tx.objectStore(IMG_STORE).put({id:id,data:dataUrl});return new Promise((r)=>{tx.oncomplete=()=>r();});}catch(e){}}
+async function loadAllImages(){try{const db=await openImgDB();const tx=db.transaction(IMG_STORE,'readonly');const store=tx.objectStore(IMG_STORE);return new Promise((r)=>{const req=store.getAll();req.onsuccess=()=>{const map={};(req.result||[]).forEach(item=>{map[item.id]=item.data;});r(map);};req.onerror=()=>r({});});}catch(e){return {};}}
+async function deleteImg(id){try{const db=await openImgDB();const tx=db.transaction(IMG_STORE,'readwrite');tx.objectStore(IMG_STORE).delete(id);}catch(e){}}
+async function saveToStorage(){try{const lean=records.map(r=>{const c={...r};c.image=null;return c;});localStorage.setItem(STORAGE_KEY,JSON.stringify({records:lean,scanTotal:scanTotal,operator:document.getElementById('operatorName').value,pedana:document.getElementById('pedana').value,timestamp:Date.now()}));for(const r of records){if(r.image&&!r.image.includes('[truncated]')){await saveImg(r.id,r.image);}}}catch(e){}}
+async function loadFromStorage(){try{const raw=localStorage.getItem(STORAGE_KEY);if(!raw)return false;const d=JSON.parse(raw);if(Date.now()-d.timestamp>7*24*60*60*1000){localStorage.removeItem(STORAGE_KEY);return false;}records=d.records||[];scanTotal=d.scanTotal||0;if(d.operator)document.getElementById('operatorName').value=d.operator;if(d.pedana)document.getElementById('pedana').value=d.pedana;document.getElementById('scanCount').textContent=scanTotal;const imgMap=await loadAllImages();records.forEach(r=>{if(imgMap[r.id])r.image=imgMap[r.id];});return true;}catch(e){return false;}}
 
 function showPedanaModal(serial,imgData,callback){
+    const current=document.getElementById('pedana').value.trim()||'—';
     document.getElementById('pedanaSerialRef').textContent='Seriale: '+serial;
-    document.getElementById('pedanaBigRef').textContent='Pedana: '+document.getElementById('pedana').value;
-    document.getElementById('pedanaModalMsg').textContent='Conferma o modifica';
-    document.getElementById('pedanaPreviewWrap').style.display='none';
+    document.getElementById('pedanaBigRef').textContent=current;
+    document.getElementById('pedanaModalTitle').textContent='📍 Pedana / Posizione';
+    document.getElementById('pedanaModalMsg').textContent='Conferma pedana o modifica seriale';
+    const pw=document.getElementById('pedanaPreviewWrap');
+    if(imgData){pw.innerHTML=`<img src="${imgData}" alt="preview">`;pw.style.display='block';}else{pw.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--text-dim);font-size:9px;">No img</div>';pw.style.display='flex';}
     document.getElementById('pedanaChangeInput').style.display='none';
     document.getElementById('newPedanaInput').value='';
     pedanaCallback=callback;
     document.getElementById('pedanaModal').classList.add('visible');
 }
-
-function pedanaKeep(){
-    document.getElementById('pedanaModal').classList.remove('visible');
-    if(pedanaCallback)pedanaCallback();
-    pedanaCallback=null;
-}
-function pedanaChange(){
-    document.getElementById('pedanaChangeInput').style.display='block';
-    document.getElementById('newPedanaInput').value='';
-    setTimeout(()=>document.getElementById('newPedanaInput').focus(),100);
-}
-function pedanaCancel(){
-    document.getElementById('pedanaChangeInput').style.display='none';
-}
-function pedanaConfirm(){
-    const nv=document.getElementById('newPedanaInput').value.trim();
-    if(!nv){toast('Obbligatorio','error');return;}
-    document.getElementById('pedana').value=nv;
-    document.getElementById('pedanaModal').classList.remove('visible');
-    document.getElementById('pedana').classList.remove('missing');
-    lastScanPedana=nv;
-    saveToStorage();
-    if(pedanaCallback)pedanaCallback();
-    pedanaCallback=null;
-}
+function pedanaKeep(){document.getElementById('pedanaModal').classList.remove('visible');if(pedanaCallback)pedanaCallback(document.getElementById('pedana').value.trim());pedanaCallback=null;}
+function pedanaChange(){document.getElementById('pedanaChangeInput').style.display='block';document.getElementById('newPedanaInput').value='';setTimeout(()=>document.getElementById('newPedanaInput').focus(),100);}
+function pedanaCancel(){document.getElementById('pedanaChangeInput').style.display='none';}
+function pedanaConfirm(){const nv=document.getElementById('newPedanaInput').value.trim();if(!nv){toast('Obbligatorio','error');return;}document.getElementById('pedana').value=nv;document.getElementById('pedanaModal').classList.remove('visible');document.getElementById('pedana').classList.remove('missing');lastScanPedana=nv;saveToStorage();if(pedanaCallback)pedanaCallback(nv);pedanaCallback=null;}
 document.addEventListener('keydown',(e)=>{if(e.key==='Enter'&&document.getElementById('pedanaChangeInput').style.display==='block')pedanaConfirm();});
 
-function openPedanaEdit(id){
-    const rec=records.find(r=>r.id===id);
-    if(!rec)return;
-    pedanaEditRecordId=id;
-    document.getElementById('pedanaEditMsg').textContent=`Seriale: ${rec.serial}`;
-    document.getElementById('pedanaEditInput').value=rec.pedana;
-    document.getElementById('pedanaEditModal').classList.add('visible');
-    setTimeout(()=>{document.getElementById('pedanaEditInput').focus();},200);
-}
+function openPedanaEdit(id){const rec=records.find(r=>r.id===id);if(!rec)return;pedanaEditRecordId=id;document.getElementById('pedanaEditMsg').textContent=`Seriale: ${rec.serial}`;document.getElementById('pedanaEditInput').value=rec.pedana;document.getElementById('pedanaEditModal').classList.add('visible');setTimeout(()=>{const i=document.getElementById('pedanaEditInput');if(i){i.focus();i.select();}},200);}
 function closePedanaEdit(){document.getElementById('pedanaEditModal').classList.remove('visible');pedanaEditRecordId=null;}
-function confirmPedanaEdit(){
-    const nv=document.getElementById('pedanaEditInput').value.trim();
-    if(!nv){toast('Obbligatorio','error');return;}
-    const rec=records.find(r=>r.id===pedanaEditRecordId);
-    if(rec){rec.pedana=nv;rec._synced=false;renderRecords();saveToStorage();toast('Aggiornata','success');}
-    closePedanaEdit();
-}
+function confirmPedanaEdit(){const nv=document.getElementById('pedanaEditInput').value.trim();if(!nv){toast('Obbligatorio','error');return;}const rec=records.find(r=>r.id===pedanaEditRecordId);if(rec){rec.pedana=nv;rec._synced=false;renderRecords();saveToStorage();toast('Pedana aggiornata','success');}closePedanaEdit();}
 document.addEventListener('keydown',(e)=>{if(e.key==='Enter'&&document.getElementById('pedanaEditModal').classList.contains('visible'))confirmPedanaEdit();});
-
-// ===== CAMERA & SCAN =====
-function resetIdleTimer(){
-    if(idleTimer)clearTimeout(idleTimer);
-    if(!cameraActive)return;
-    lastScanTime=Date.now();
-    idleTimer=setTimeout(()=>{if(cameraActive){toast('⚡ Chiusura: 30s inattività','warning');setTimeout(()=>stopCamera(),500);}},IDLE_TIMEOUT);
-}
-
-async function toggleCamera(){if(cameraActive){stopCamera();}else{await startCamera();}}
-
-async function startCamera(){
-    const btn=document.getElementById('btnCamera');
-    btn.innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2"/><line x1="18" y1="6" x2="6" y2="18"/></svg><span>Ferma</span>`;
-    btn.classList.remove('btn-primary');btn.classList.add('btn-danger');
-    try{
-        videoEl=document.getElementById('videoFeed');
-        stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment',width:{ideal:1280},height:{ideal:720}},audio:false});
-        videoEl.srcObject=stream;
-        await new Promise(r=>{videoEl.onloadedmetadata=()=>r();});
-        document.getElementById('cameraContainer').classList.add('active');
-        document.getElementById('btnFlash').disabled=false;
-        document.getElementById('scanIndicator').innerHTML='<span class="loading-indicator"><span class="spinner"></span> Caricamento...</span>';
-        document.getElementById('ocrStatus').textContent='Inizializzazione OCR...';
-        cameraActive=true;
-        ocrWorker=await Tesseract.createWorker('eng',1,{logger:(m)=>{
-            if(m.status==='recognizing text'){
-                document.getElementById('progressBar').style.width=Math.round(m.progress*100)+'%';
-                document.getElementById('ocrStatus').textContent=`OCR ${Math.round(m.progress*100)}%`;
-            }
-        }});
-        await ocrWorker.setParameters({tessedit_char_whitelist:'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789',preserve_interword_spaces:'0'});
-        document.getElementById('scanIndicator').innerHTML='<span class="scanning-indicator"><span class="dot"></span> Pronto</span>';
-        document.getElementById('ocrStatus').textContent='✓ Scansione attiva';
-        document.getElementById('progressBar').style.width='0%';
-        scanTimer=setInterval(scanFrame,SCAN_INTERVAL);
-        resetIdleTimer();checkScrollPosition();
-        toast('📷 Avviata','success');vib('ok');
-    }catch(err){console.error(err);toast('Errore: '+err.message,'error');beepErr();vib('err');resetBtnCamera();}
-}
-
-function stopCamera(){
-    if(scanTimer){clearInterval(scanTimer);scanTimer=null;}
-    if(idleTimer){clearTimeout(idleTimer);idleTimer=null;}
-    if(stream){stream.getTracks().forEach(t=>t.stop());stream=null;}
-    if(ocrWorker){ocrWorker.terminate();ocrWorker=null;}
-    cameraActive=false;flashOn=false;videoEl=null;scanCooldown=false;scanPaused=false;
-    document.getElementById('cameraContainer').classList.remove('active');
-    document.getElementById('btnFlash').disabled=true;
-    document.getElementById('btnFlash').classList.remove('btn-accent');document.getElementById('btnFlash').classList.add('btn-warning');
-    document.getElementById('progressBar').style.width='0%';
-    document.getElementById('cooldownOverlay').classList.remove('active');
-    updateScanIndicator();resetBtnCamera();checkScrollPosition();toast('📷 Spenta','warning');
-}
-
-function resetBtnCamera(){
-    const btn=document.getElementById('btnCamera');
-    btn.innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg><span>Avvia OCR</span>`;
-    btn.classList.add('btn-primary');btn.classList.remove('btn-danger');
-}
-
-function updateScanIndicator(){
-    const el=document.getElementById('scanIndicator');
-    if(!cameraActive){el.innerHTML='';return;}
-    if(scanPaused){el.innerHTML='<span class="paused-indicator"><span class="dot"></span> Pausa</span>';return;}
-    if(scanCooldown){el.innerHTML='<span class="paused-indicator"><span class="dot"></span> Cooldown</span>';return;}
-    el.innerHTML='<span class="scanning-indicator"><span class="dot"></span> Scansione</span>';
-}
-
-async function toggleFlash(){
-    if(!stream)return;
-    try{
-        const track=stream.getVideoTracks()[0];if(!track)return;
-        const caps=track.getCapabilities();if(!caps||!caps.torch){toast('Flash non supportato','error');return;}
-        flashOn=!flashOn;await track.applyConstraints({advanced:[{torch:flashOn}]});
-        const btn=document.getElementById('btnFlash');
-        if(flashOn){btn.classList.remove('btn-warning');btn.classList.add('btn-accent');toast('🔦 ON','success');}
-        else{btn.classList.remove('btn-accent');btn.classList.add('btn-warning');toast('🔦 OFF','warning');}
-    }catch(e){toast('Errore flash','error');}
-}
-
-function toggleMultiDetect(){multiDetect=!multiDetect;document.getElementById('toggleMulti').classList.toggle('active',multiDetect);}
-
-function checkPedanaRequired(){
-    const p=document.getElementById('pedana').value.trim();
-    if(!p){document.getElementById('pedana').classList.add('missing');toast('⚠️ Pedana richiesta','error');beepErr();vib('err');return false;}
-    document.getElementById('pedana').classList.remove('missing');return true;
-}
-
-// ===== IMPROVED IMAGE PROCESSING =====
-function applyImageProcessing(ctx,w,h){
-    const imageData=ctx.getImageData(0,0,w,h);
-    const data=imageData.data;
-    
-    // 1. Invert colors if enabled
-    if(settings.invert){
-        for(let i=0;i<data.length;i+=4){
-            data[i]=255-data[i];
-            data[i+1]=255-data[i+1];
-            data[i+2]=255-data[i+2];
-        }
-    }
-    
-    // 2. Apply contrast
-    if(settings.contrast !== 1.0){
-        for(let i=0;i<data.length;i+=4){
-            data[i]=Math.min(255,Math.max(0,((data[i]/255-0.5)*settings.contrast+0.5)*255));
-            data[i+1]=Math.min(255,Math.max(0,((data[i+1]/255-0.5)*settings.contrast+0.5)*255));
-            data[i+2]=Math.min(255,Math.max(0,((data[i+2]/255-0.5)*settings.contrast+0.5)*255));
-        }
-    }
-    
-    // 3. Convert to grayscale
-    const gray=new Uint8Array(w*h);
-    for(let i=0;i<data.length;i+=4) gray[i/4]=0.299*data[i]+0.587*data[i+1]+0.114*data[i+2];
-    
-    // 4. Mild Gaussian blur to reduce noise
-    const blurred=new Uint8Array(gray);
-    for(let y=1;y<h-1;y++){
-        for(let x=1;x<w-1;x++){
-            const idx=y*w+x;
-            blurred[idx]=(gray[idx-1]+gray[idx+1]+gray[idx-w]+gray[idx+w]+gray[idx-w-1]+gray[idx-w+1]+gray[idx+w-1]+gray[idx+w+1]+gray[idx])/9;
-        }
-    }
-    
-    // 5. Apply Otsu threshold
-    let threshold=0;
-    let maxVar=0;
-    let total=0;
-    let sum=0;
-    for(let i=0;i<blurred.length;i++){sum+=blurred[i];total++;}
-    let sumB=0;
-    for(let t=0;t<256;t++){
-        const wB=sumB/(total>0?total:1);
-        const wF=(sum-sumB)/(total>0?total:1);
-        if(wB===0||wF===0)continue;
-        const mB=sumB/wB;
-        const mF=(sum-sumB)/wF;
-        const varBetween=wB*wF*(mB-mF)*(mB-mF);
-        if(varBetween>maxVar){maxVar=varBetween;threshold=t;}
-        sumB+=blurred[i];
-    }
-    
-    // Apply threshold
-    for(let i=0;i<data.length;i+=4){
-        const idx=i/4;
-        const val=blurred[idx]>threshold?255:0;
-        data[i]=val;data[i+1]=val;data[i+2]=val;
-    }
-    
-    // 6. Edge detection (Sobel)
-    if(settings.edges){
-        const edges=new Uint8Array(data);
-        for(let y=1;y<h-1;y++){
-            for(let x=1;x<w-1;x++){
-                const idx=(y*w+x)*4;
-                const gx = -(data[(y-1)*w+x-1]*4) + (data[(y-1)*w+x+1]*4)
-                          -2*(data[y*w+x-1]) + 2*(data[y*w+x+1])
-                          -(data[(y+1)*w+x-1]*4) + (data[(y+1)*w+x+1]*4);
-                const val = Math.min(255, Math.abs(gx));
-                data[idx]=val;data[idx+1]=val;data[idx+2]=val;
-            }
-        }
-    }
-    
-    ctx.putImageData(imageData,0,0);
-}
 
 async function scanFrame(){
     if(!cameraActive||!videoEl||!ocrWorker)return;
     if(videoEl.readyState<2)return;
     if(scanCooldown||scanPaused)return;
     if(!checkPedanaRequired())return;
-
+    
     const canvas=document.getElementById('captureCanvas'),ctx=canvas.getContext('2d');
     const vw=videoEl.videoWidth,vh=videoEl.videoHeight;
     const rw=Math.floor(vw*0.85),rh=Math.floor(vh*0.3);
     const rx=Math.floor((vw-rw)/2),ry=Math.floor((vh-rh)/2);
     canvas.width=rw;canvas.height=rh;
     ctx.drawImage(videoEl,rx,ry,rw,rh,0,0,rw,rh);
+    applyAdaptiveThreshold(ctx,rw,rh);
     
-    // Create ROI canvas
-    const roiCanvas=document.createElement('canvas');
-    roiCanvas.width=rw;roiCanvas.height=rh;
-    const roiCtx=roiCanvas.getContext('2d');
-    roiCtx.drawImage(canvas,0,0);
-    
-    // Apply image processing
-    applyImageProcessing(roiCtx,rw,rh);
-
-    let best=null;
-    
-    // Try 1: Processed image
-    best=await extractBestFromOCR(await ocrWorker.recognize(roiCanvas), roiCanvas);
-    
-    if(!best || !isValidSerial(best.serial)){
-        // Try 2: Original image
-        const origCanvas=document.createElement('canvas');
-        origCanvas.width=rw;origCanvas.height=rh;
-        origCanvas.getContext('2d').drawImage(canvas,0,0);
-        best=await extractBestFromOCR(await ocrWorker.recognize(origCanvas), origCanvas);
-    }
-    
-    if(!best || !isValidSerial(best.serial)){
-        // Try 3: Inverted
-        const invCanvas=document.createElement('canvas');
-        invCanvas.width=rw;invCanvas.height=rh;
-        const invCtx=invCanvas.getContext('2d');
-        invCtx.drawImage(canvas,0,0);
-        const invData=invCtx.getImageData(0,0,rw,rh);
-        for(let i=0;i<invData.data.length;i+=4){
-            invData.data[i]=255-invData.data[i];
-            invData.data[i+1]=255-invData.data[i+1];
-            invData.data[i+2]=255-invData.data[i+2];
-        }
-        invCtx.putImageData(invData,0,0);
-        best=await extractBestFromOCR(await ocrWorker.recognize(invCanvas), invCanvas);
-    }
-    
-    if(best && isValidSerial(best.serial)){
-        processSerialResult(best);
-        return;
-    }
-    
-    // Try 4: Pattern search in raw text
-    const rawResult=await ocrWorker.recognize(canvas);
-    const allText=(rawResult.data.text||'').toUpperCase();
-    const match=allText.match(/BDBCF00[A-F0-9]{3}/);
-    if(match){
-        processSerialResult({serial:match[0], confidence:100, image:null, _manual:true});
-        return;
-    }
-    
-    // If pattern disabled, check for any valid text
-    if(!settings.pattern){
-        const words=rawResult.data.words||[];
-        for(const word of words){
-            const cleaned=word.text.replace(/[^A-Za-z0-9]/g,'');
-            if(cleaned.length>=settings.minChars && cleaned.length<=settings.maxChars){
-                processSerialResult({serial:cleaned.toUpperCase(), confidence:word.confidence, image:null});
-                return;
+    try{
+        const roiX=rw*0.075,roiY=rh*0.35,roiW=rw*0.85,roiH=rh*0.30;
+        const roiCanvas=document.createElement('canvas');roiCanvas.width=roiW;roiCanvas.height=roiH;
+        const roiCtx=roiCanvas.getContext('2d');roiCtx.drawImage(canvas,roiX,roiY,roiW,roiH,0,0,roiW,roiH);
+        
+        const result=await ocrWorker.recognize(roiCanvas);
+        let found=false;
+        
+        for(const word of result.data.words||[]){
+            let cleaned=word.text.replace(/[^A-Za-z0-9]/g,'');
+            if(cleaned.length<settings.minChars)continue;
+            
+            let{fixed,corrections}=fixOCR(cleaned);
+            const conf=Math.round(word.confidence);
+            
+            // Check pattern if enabled
+            if(settings.pattern){
+                if(fixed.length===10&&isValidSerial(fixed)){
+                    const img=cropFromBbox(canvas,rw,rh,word.bbox,IMG_MARGIN);
+                    processSerial(fixed,img,conf,corrections);
+                    found=true;
+                }
+            }else{
+                // No pattern constraint - accept any valid text
+                const img=cropFromBbox(canvas,rw,rh,word.bbox,IMG_MARGIN);
+                processSerial(fixed,img,conf,corrections);
+                found=true;
             }
+            if(found)break;
         }
-    }
+    }catch(e){console.error('OCR error:',e);}
+    
+    document.getElementById('ocrStatus').textContent='✓ Pronto';
+    document.getElementById('progressBar').style.width='0%';
 }
 
-function processSerialResult(result){
-    if(!result || !isValidSerial(result.serial)) return;
+function processSerial(serial,imageData,confidence,corrections){
+    if(!serial)return;
     
-    const isDup=records.some(r=>r.serial===result.serial);
-    if(isDup){
-        toast('⚠️ Seriale duplicato','warning');
-        beepDup();vib('dup');
-        return;
-    }
+    // Check duplicate
+    const isDup=records.some(r=>r.serial===serial);
+    if(isDup){toast('⚠️ Duplicato: '+serial,'warning');beepDup();vib('dup');scanCooldown=false;document.getElementById('cooldownOverlay').classList.remove('active');if(cameraActive&&!scanPaused)document.getElementById('ocrStatus').textContent='✓ Pronto';updateScanIndicator();return;}
     
-    resetIdleTimer();
-    scanCooldown=true;
+    resetIdleTimer();scanCooldown=true;
     document.getElementById('cooldownOverlay').classList.add('active');
     document.getElementById('ocrStatus').textContent='⏱ Cooldown...';
     updateScanIndicator();
     
     const operator=document.getElementById('operatorName').value.trim()||'N/D';
     const pedana=document.getElementById('pedana').value.trim()||'N/D';
-    lastScanPedana=pedana;lastScanImage=imgData;
+    lastScanPedana=pedana;
+    lastScanImage=imageData;
     const ts=new Date().toLocaleString('it-IT');
     
-    const rec={
-        id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),
-        serial:result.serial,
-        timestamp:ts,
-        operator:operator,
-        pedana:pedana,
-        runNumber:'',
-        modified:false,
-        status:'',
-        note:'',
-        image:result.image||null,
-        confidence:result.confidence||0,
-        corrections:[],
-        _synced:false,
-        _imgUploaded:false,
-        _confirmed:false,
-        _manual:result._manual||false
-    };
+    const rec={id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),serial,timestamp:ts,operator,pedana,runNumber:'',modified:false,status:'',note:'',image:imageData,confidence:confidence,corrections:corrections||[],_synced:false,_imgUploaded:false,_confirmed:confidence>=50};
     
-    records.unshift(rec);
-    scanTotal++;
-    document.getElementById('scanCount').textContent=scanTotal;
-    if(rec.image)saveImg(rec.id,rec.image);
+    records.unshift(rec);scanTotal++;document.getElementById('scanCount').textContent=scanTotal;
     saveToStorage();
     
-    beepOk();vib('ok');renderRecords();
-    
     if(confidence<50)toast('⚠️ Bassa confidenza','warning');
-    else toast('✅ '+rec.serial,'success');
+    else{beepOk();vib('ok');toast('✅ '+serial,'success');}
     
+    renderRecords();
     if(gsheetUrl)sendToGSheet(rec).then(()=>{saveToStorage();setSyncStatus('synced');renderRecords();}).catch(()=>{setSyncStatus('pending');renderRecords();});
     
     setTimeout(()=>{
-        showPedanaModal(rec.serial,rec.image,()=>{
+        showPedanaModal(serial,imageData,()=>{
             scanCooldown=false;
             document.getElementById('cooldownOverlay').classList.remove('active');
             if(cameraActive&&!scanPaused)document.getElementById('ocrStatus').textContent='✓ Pronto';
-            updateScanIndicator();
-            resetIdleTimer();
+            updateScanIndicator();resetIdleTimer();
         });
     },1000);
 }
 
-function extractBestFromOCR(result, sourceCanvas) {
-    let best = null;
-    for(const word of result.data.words||[]){
-        let cleaned=word.text.replace(/[^A-Za-z0-9]/g,'');
-        if(cleaned.length<10)continue;
-        let{fixed,corrections}=fixOCR(cleaned);
-        const conf=Math.round(word.confidence);
-        if(fixed.length===10&&isValidSerial(fixed)){
-            const img=cropFromBbox(sourceCanvas,sourceCanvas.width,sourceCanvas.height,word.bbox,IMG_MARGIN);
-            best={serial:fixed,confidence:conf,corrections,image:img};
-        }
-    }
-    return best;
-}
+function confirmLowConf(id){const rec=records.find(r=>r.id===id);if(rec){rec._confirmed=true;renderRecords();toast('Confermato','success');}}
+
+function getConfClass(conf){if(conf>=80)return'meta-tag conf-high';if(conf>=60)return'meta-tag conf-mid';return'meta-tag conf-low';}
 
 function renderRecords(){
     const el=document.getElementById('recordsList');
@@ -1089,88 +786,70 @@ function renderRecords(){
 function editRun(id){const rec=records.find(r=>r.id===id);if(!rec)return;const cell=document.getElementById('runCell-'+id);const cur=rec.runNumber||'';cell.innerHTML=`<input type="text" class="run-input" id="runInput-${id}" value="${cur}" placeholder="RUN" maxlength="10" onblur="saveRun('${id}')" onkeydown="if(event.key==='Enter')this.blur()">`;cell.classList.add('editing');const inp=document.getElementById('runInput-'+id);inp.focus();inp.select();}
 function saveRun(id){const rec=records.find(r=>r.id===id);if(!rec)return;const inp=document.getElementById('runInput-'+id);if(!inp)return;const nv=inp.value.trim();rec.runNumber=nv;rec._synced=false;saveToStorage();renderRecords();if(gsheetUrl&&nv)sendToGSheet(rec);}
 
-function editSerial(id,newVal){
-    const rec=records.find(r=>r.id===id);
-    if(!rec)return;
-    const input=document.querySelector(`#record-${id} .serial-display`);
-    const orig=input?.dataset?.orig||rec.serial;
-    if(newVal===orig)return;
-    let{fixed}=fixOCR(newVal.trim().toUpperCase());
-    const errMsg=validateSerial(fixed);
-    if(errMsg){toast('❌ '+errMsg,'error');beepErr();input.value=orig;return;}
-    showConfirm('Conferma modifica',`Modificare "${rec.serial}" in "${fixed}"?`,()=>{
-        if(records.some(r=>r.serial===fixed&&r.id!==rec.id)){toast('⚠️ Già esistente!','warning');beepDup();vib('dup');input.value=orig;return;}
-        rec.serial=fixed;rec.modified=true;rec._synced=false;toast('Modificato: '+fixed,'success');beepOk();renderRecords();saveToStorage();
-    }, rec.image || null);
-    input.value=orig;
-}
-
+function editSerial(id,newVal){const rec=records.find(r=>r.id===id);if(!rec)return;const input=document.querySelector(`#record-${id} .serial-display`);const orig=input?.dataset?.orig||rec.serial;if(newVal===orig)return;let{fixed}=fixOCR(newVal.trim().toUpperCase());const errMsg=validateSerial(fixed);if(errMsg){toast('❌ '+errMsg,'error');beepErr();if(input)input.value=orig;return;}showConfirm('Conferma modifica',`Modificare "${rec.serial}" in "${fixed}"?`,()=>{if(records.some(r=>r.serial===fixed&&r.id!==rec.id)){toast('⚠️ Seriale già esistente!','warning');beepDup();vib('dup');if(input)input.value=orig;return;}rec.serial=fixed;rec.modified=true;rec._synced=false;toast('Modificato: '+fixed,'success');beepOk();renderRecords();saveToStorage();});if(input)input.value=orig;}
 function setStatus(id,s){const rec=records.find(r=>r.id===id);if(!rec)return;rec.status=s;rec._synced=false;vib('ok');renderRecords();saveToStorage();}
 function setNote(id,n){const rec=records.find(r=>r.id===id);if(rec)rec.note=n;saveToStorage();}
-function deleteRecord(id){const rec=records.find(r=>r.id===id);if(!rec)return;showConfirm('Elimina record',`Eliminare "${rec.serial}"?`,()=>{records=records.filter(r=>r.id!==id);scanTotal=Math.max(0,scanTotal-1);document.getElementById('scanCount').textContent=scanTotal;deleteImg(id);vib('err');beepErr();renderRecords();saveToStorage();toast('Eliminato','warning');},rec.image||null);}
+function deleteRecord(id){const rec=records.find(r=>r.id===id);if(!rec)return;showConfirm('Elimina record',`Eliminare "${rec.serial}"?`,()=>{records=records.filter(r=>r.id!==id);scanTotal=Math.max(0,scanTotal-1);document.getElementById('scanCount').textContent=scanTotal;deleteImg(id);vib('err');beepErr();renderRecords();saveToStorage();toast('Eliminato','warning');});}
 
 function openModal(id){const rec=records.find(r=>r.id===id);if(!rec||!rec.image)return;scanPaused=true;updateScanIndicator();document.getElementById('modalImage').src=rec.image;document.getElementById('imageModal').classList.add('visible');}
 function closeModal(){document.getElementById('imageModal').classList.remove('visible');scanPaused=false;updateScanIndicator();}
 
-// ===== EXPORT =====
-function exportExcel(){
-    if(records.length===0){toast('Nessun record','warning');return;}
-    const data=records.map((r,i)=>({
-        '#':i+1, 'Timestamp':r.timestamp, 'Seriale':r.serial, 'Run':r.runNumber||'—',
-        'Confidenza %':r.confidence, 'Correzioni OCR':r.corrections&&r.corrections.length?r.corrections.join(', '):'—',
-        'Modificato':r.modified?'Sì':'No', 'Lotto/Posizione':r.pedana, 'Operatore':r.operator, 'Stato':r.status||'—', 'Note':r.note
-    }));
-    const ws=XLSX.utils.json_to_sheet(data);
-    ws['!cols']=[{wch:5},{wch:20},{wch:15},{wch:8},{wch:12},{wch:20},{wch:10},{wch:15},{wch:15},{wch:14},{wch:25}];
-    const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Scansioni');
-    XLSX.writeFile(wb,`Scansioni_${new Date().toISOString().slice(0,10)}.xlsx`);
-    toast(`📊 Excel: ${records.length} record`,'success');vib('ok');
-}
+function exportExcel(){if(records.length===0){toast('Nessun record','warning');return;}const data=records.map((r,i)=>({'#':i+1,'Timestamp':r.timestamp,'Seriale':r.serial,'Run':r.runNumber||'—','Confidenza %':r.confidence,'Correzioni OCR':r.corrections&&r.corrections.length?r.corrections.join(', '):'—','Modificato':r.modified?'Sì':'No','Lotto/Posizione':r.pedana,'Operatore':r.operator,'Stato':r.status||'—','Note':r.note}));const ws=XLSX.utils.json_to_sheet(data);ws['!cols']=[{wch:5},{wch:20},{wch:15},{wch:8},{wch:12},{wch:20},{wch:10},{wch:15},{wch:15},{wch:14},{wch:25}];const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Scansioni');XLSX.writeFile(wb,`Scansioni_${new Date().toISOString().slice(0,10)}.xlsx`);toast(`📊 Excel: ${records.length} record`,'success');vib('ok');}
 
-function exportHtmlWithImages(){
-    if(records.length===0){toast('Nessun record','warning');return;}
-    let html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Report Scansioni ${new Date().toLocaleDateString('it-IT')}</title><style>body{font-family:Arial,sans-serif;margin:20px;background:#f5f5f5;color:#333;}h1{font-size:20px;margin-bottom:4px;}.meta{font-size:12px;color:#666;margin-bottom:16px;}table{width:100%;border-collapse:collapse;background:white;box-shadow:0 1px 3px rgba(0,0,0,0.1);font-size:12px;}th{background:#1e293b;color:white;padding:8px 6px;text-align:left;font-size:11px;position:sticky;top:0;}td{padding:6px;border-bottom:1px solid #e2e8f0;vertical-align:middle;}tr:hover{background:#f0f9ff;}.img-cell{width:140px;text-align:center;vertical-align:middle;}.img-cell img{max-width:130px;max-height:50px;border-radius:4px;border:1px solid #ddd;}.serial{font-family:monospace;font-weight:bold;font-size:14px;letter-spacing:1px;}.good{color:#10b981;font-weight:bold;}.rotto{color:#ef4444;font-weight:bold;}.sporco{color:#a16207;font-weight:bold;}.rfid{color:#8b5cf6;font-weight:bold;}.bar{color:#06b6d4;font-weight:bold;}.dubbio{color:#64748b;font-weight:bold;}.conf-high{color:#10b981;}.conf-mid{color:#f59e0b;}.conf-low{color:#ef4444;}@media print{body{margin:10px;}table{font-size:10px;}}</style></head><body><h1>📋 Report Scansioni Seriali</h1><div class="meta">Generato: ${new Date().toLocaleString('it-IT')} | Totale: ${records.length}</div><table><thead><tr><th>#</th><th>Timestamp</th><th>Seriale</th><th>Run</th><th>Anteprima</th><th>Conf.</th><th>Correzioni</th><th>Pedana</th><th>Operatore</th><th>Stato</th><th>Note</th></tr></thead><tbody>`;
-    records.forEach((r,i)=>{
-        const cc=r.confidence>=80?'conf-high':r.confidence>=60?'conf-mid':'conf-low';
-        let stClass='',stText=r.status||'—';
-        if(r.status==='Good')stClass='good';else if(r.status==='Rotto')stClass='rotto';else if(r.status==='Sporco')stClass='sporco';else if(r.status==='RF-ID')stClass='rfid';else if(r.status==='Barra Mancante')stClass='bar';else if(r.status==='Dubbio/Altro')stClass='dubbio';
-        const imgHtml=r.image?`<td class="img-cell"><img src="${r.image}" alt="serial"></td>`:`<div class="img-cell">—</div>`;
-        html+=`<tr><td>${i+1}</td><td>${r.timestamp}</td><td class="serial">${r.serial}${r.modified?' <small style="color:#f59e0b;">(mod)</small>':''}</td><td>${r.runNumber||'—'}</td>${imgHtml}<td class="${cc}">${r.confidence}%</td><td>${(r.corrections||[]).join(', ')||'—'}</td><td>${r.pedana}</td><td>${r.operator}</td><td class="${stClass}">${stText}</td><td>${r.note||''}</td></tr>`;
-    });
-    html+=`</tbody></table></body></html>`;
-    const blob=new Blob([html],{type:'text/html;charset=utf-8'});
-    saveAs(blob,`Report_Scansioni_${new Date().toISOString().slice(0,10)}.html`);
-    toast(`📄 HTML: ${records.length} record`,'success');vib('ok');
-}
+function exportHtmlWithImages(){if(records.length===0){toast('Nessun record','warning');return;}let html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Report Scansioni ${new Date().toLocaleDateString('it-IT')}</title><style>body{font-family:Arial,sans-serif;margin:20px;background:#f5f5f5;color:#333;}h1{font-size:20px;margin-bottom:4px;}.meta{font-size:12px;color:#666;margin-bottom:16px;}table{width:100%;border-collapse:collapse;background:white;box-shadow:0 1px 3px rgba(0,0,0,0.1);font-size:12px;}th{background:#1e293b;color:white;padding:8px 6px;text-align:left;font-size:11px;position:sticky;top:0;}td{padding:6px;border-bottom:1px solid #e2e8f0;vertical-align:middle;}tr:hover{background:#f0f9ff;}.img-cell{width:140px;text-align:center;vertical-align:middle;}.img-cell img{max-width:130px;max-height:50px;border-radius:4px;border:1px solid #ddd;}.serial{font-family:monospace;font-weight:bold;font-size:14px;letter-spacing:1px;}.good{color:#10b981;font-weight:bold;}.rotto{color:#ef4444;font-weight:bold;}.sporco{color:#a16207;font-weight:bold;}.rfid{color:#8b5cf6;font-weight:bold;}.bar{color:#06b6d4;font-weight:bold;}.dubbio{color:#64748b;font-weight:bold;}.conf-high{color:#10b981;}.conf-mid{color:#f59e0b;}.conf-low{color:#ef4444;}@media print{body{margin:10px;}table{font-size:10px;}}</style></head><body><h1>📋 Report Scansioni Seriali</h1><div class="meta">Generato: ${new Date().toLocaleString('it-IT')} | Totale: ${records.length}</div><table><thead><tr><th>#</th><th>Timestamp</th><th>Seriale</th><th>Run</th><th>Anteprima</th><th>Conf.</th><th>Correzioni</th><th>Pedana</th><th>Operatore</th><th>Stato</th><th>Note</th></tr></thead><tbody>`;records.forEach((r,i)=>{const cc=r.confidence>=80?'conf-high':r.confidence>=60?'conf-mid':'conf-low';let stClass='',stText=r.status||'—';if(r.status==='Good')stClass='good';else if(r.status==='Rotto')stClass='rotto';else if(r.status==='Sporco')stClass='sporco';else if(r.status==='RF-ID')stClass='rfid';else if(r.status==='Barra Mancante')stClass='bar';else if(r.status==='Dubbio/Altro')stClass='dubbio';const imgHtml=r.image?`<td class="img-cell"><img src="${r.image}" alt="serial"></td>`:`<td class="img-cell">—</td>`;html+=`<tr><td>${i+1}</td><td>${r.timestamp}</td><td class="serial">${r.serial}${r.modified?' <small style="color:#f59e0b;">(mod)</small>':''}</td><td>${r.runNumber||'—'}</td>${imgHtml}<td class="${cc}">${r.confidence}%</td><td>${(r.corrections||[]).join(', ')||'—'}</td><td>${r.pedana}</td><td>${r.operator}</td><td class="${stClass}">${stText}</td><td>${r.note||''}</td></tr>`;});html+=`</tbody></table></body></html>`;const blob=new Blob([html],{type:'text/html;charset=utf-8'});saveAs(blob,`Report_Scansioni_${new Date().toISOString().slice(0,10)}.html`);toast(`📄 HTML: ${records.length} record`,'success');vib('ok');}
 
-async function exportZip(){
-    if(records.length===0){toast('Nessun record','warning');return;}
-    toast('📦 ZIP...','success');
+async function exportZip(){if(records.length===0){toast('Nessun record','warning');return;}toast('📦 ZIP...','success');try{const zip=new JSZip(),imgF=zip.folder('immagini');let cnt=0;for(const r of records){if(r.image){imgF.file(`${r.serial}_${r.id}.jpg`,r.image.split(',')[1],{base64:true});cnt++;}}const csv='N,Timestamp,Seriale,Run,Conf%,Correzioni,Modificato,Lotto,Operatore,Stato,Note\n'+records.map((r,i)=>`${i+1},${r.timestamp},${r.serial},${r.runNumber||''},${r.confidence},"${(r.corrections||[]).join(', ')}",${r.modified?'Sì':'No'},${r.pedana},${r.operator},${r.status||'—'},"${r.note}"`).join('\n');zip.file('riepilogo.csv',csv);const blob=await zip.generateAsync({type:'blob'});saveAs(blob,`Archivio_${new Date().toISOString().slice(0,10)}.zip`);toast(`📦 ZIP: ${cnt} img`,'success');vib('ok');}catch(e){console.error(e);toast('Errore ZIP','error');beepErr();}}
+
+function resetIdleTimer(){if(idleTimer)clearTimeout(idleTimer);idleTimer=setTimeout(()=>{if(cameraActive&&!scanPaused&&!scanCooldown)document.getElementById('ocrStatus').textContent='⏳ In attesa...';},10000);}
+
+async function toggleCamera(){if(cameraActive){stopCamera();}else{await startCamera();}}
+async function startCamera(){
+    const btn=document.getElementById('btnCamera');
+    btn.innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2"/><line x1="18" y1="6" x2="6" y2="18"/></svg><span>Ferma</span>`;
+    btn.classList.remove('btn-primary');btn.classList.add('btn-danger');
     try{
-        const zip=new JSZip(),imgF=zip.folder('immagini');
-        let cnt=0;
-        for(const r of records){
-            if(r.image){
-                const fileName = `${r.serial}.jpg`;
-                imgF.file(fileName, r.image.split(',')[1], {base64:true});
-                cnt++;
-            }
-        }
-        const csv='N,Timestamp,Seriale,Run,Conf%,Correzioni,Modificato,Lotto,Operatore,Stato,Note\n'+records.map((r,i)=>`${i+1},${r.timestamp},${r.serial},${r.runNumber||''},${r.confidence},"${(r.corrections||[]).join(', ')}",${r.modified?'Sì':'No'},${r.pedana},${r.operator},${r.status||'—'},"${r.note}"`).join('\n');
-        zip.file('riepilogo.csv',csv);
-        const blob=await zip.generateAsync({type:'blob'});
-        saveAs(blob,`Archivio_${new Date().toISOString().slice(0,10)}.zip`);
-        toast(`📦 ZIP: ${cnt} img`,'success');vib('ok');
-    }catch(e){console.error(e);toast('Errore ZIP','error');beepErr();}
+        videoEl=document.getElementById('videoFeed');
+        stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment',width:{ideal:1280},height:{ideal:720}},audio:false});
+        videoEl.srcObject=stream;
+        await new Promise(r=>{videoEl.onloadedmetadata=()=>r();});
+        document.getElementById('cameraContainer').classList.add('active');
+        document.getElementById('btnFlash').disabled=false;
+        document.getElementById('scanIndicator').innerHTML='<span class="loading-indicator"><span class="spinner"></span> Caricamento...</span>';
+        document.getElementById('ocrStatus').textContent='Inizializzazione OCR...';
+        cameraActive=true;
+        ocrWorker=await Tesseract.createWorker('eng',1,{logger:(m)=>{if(m.status==='recognizing text'){document.getElementById('progressBar').style.width=Math.round(m.progress*100)+'%';document.getElementById('ocrStatus').textContent=`OCR ${Math.round(m.progress*100)}%`;if(Math.round(m.progress*100)>=100)playTone(1000,50,'sine',0.05);}}});
+        await ocrWorker.setParameters({tessedit_char_whitelist:'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789',preserve_interword_spaces:'0'});
+        document.getElementById('scanIndicator').innerHTML='<span class="scanning-indicator"><span class="dot"></span> Pronto</span>';
+        document.getElementById('ocrStatus').textContent='✓ Scansione attiva';
+        document.getElementById('progressBar').style.width='0%';
+        scanTimer=setInterval(scanFrame,settings.cooldown||800);
+        resetIdleTimer();checkScrollPosition();toast('📷 Avviata','success');vib('ok');
+    }catch(err){console.error(err);toast('Errore: '+err.message,'error');beepErr();vib('err');resetBtnCamera();}
 }
+function stopCamera(){
+    if(scanTimer){clearInterval(scanTimer);scanTimer=null;}
+    if(idleTimer){clearTimeout(idleTimer);idleTimer=null;}
+    if(stream){stream.getTracks().forEach(t=>t.stop());stream=null;}
+    if(ocrWorker){try{ocrWorker.terminate();}catch(e){}}
+    cameraActive=false;flashOn=false;videoEl=null;scanCooldown=false;scanPaused=false;
+    document.getElementById('cameraContainer').classList.remove('active');
+    document.getElementById('btnFlash').disabled=true;
+    document.getElementById('btnFlash').classList.remove('btn-accent');document.getElementById('btnFlash').classList.add('btn-warning');
+    document.getElementById('progressBar').style.width='0%';
+    document.getElementById('cooldownOverlay').classList.remove('active');
+    updateScanIndicator();resetBtnCamera();checkScrollPosition();toast('📷 Spenta','warning');
+}
+function resetBtnCamera(){const btn=document.getElementById('btnCamera');btn.innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg><span>Avvia OCR</span>`;btn.classList.add('btn-primary');btn.classList.remove('btn-danger');}
+function updateScanIndicator(){const el=document.getElementById('scanIndicator');if(!cameraActive){el.innerHTML='';return;}if(scanPaused){el.innerHTML='<span class="paused-indicator"><span class="dot"></span> Pausa</span>';return;}if(scanCooldown){el.innerHTML='<span class="paused-indicator"><span class="dot"></span> Cooldown</span>';return;}el.innerHTML='<span class="scanning-indicator"><span class="dot"></span> Scansione</span>';}
+async function toggleFlash(){if(!stream)return;try{const track=stream.getVideoTracks()[0];if(!track)return;const caps=track.getCapabilities();if(!caps||!caps.torch){toast('Flash non supportato','error');return;}flashOn=!flashOn;await track.applyConstraints({advanced:[{torch:flashOn}]});const btn=document.getElementById('btnFlash');if(flashOn){btn.classList.remove('btn-warning');btn.classList.add('btn-accent');toast('🔦 ON','success');}else{btn.classList.remove('btn-accent');btn.classList.add('btn-warning');toast('🔦 OFF','warning');}}catch(e){toast('Errore flash','error');}}
 
-// Init
 document.addEventListener('DOMContentLoaded',async()=>{
-    loadSettings();
     await openImgDB();
+    loadSettings();
     loadGSheetUrl();
     const loaded=await loadFromStorage();
-    if(loaded&&records.length>0){renderRecords();toast(`📂 ${records.length} recuperati`,'success');const unsynced=records.filter(r=>!r._synced);if(unsynced.length>0){setSyncStatus('pending');if(gsheetUrl)setTimeout(()=>syncPendingToGSheet(),2000);}else{setSyncStatus('synced');}}else{renderRecords();setSyncStatus('idle');}setSyncStatus(syncStatus);
+    if(loaded&&records.length>0){renderRecords();toast(`📂 ${records.length} recuperati`,'success');const unsynced=records.filter(r=>!r._synced);if(unsynced.length>0){setSyncStatus('pending');if(gsheetUrl)setTimeout(()=>syncPendingToGSheet(),2000);}else{setSyncStatus('synced');}}else{renderRecords();setSyncStatus('idle');}
+    setSyncStatus(syncStatus);
 });
 window.addEventListener('beforeunload',()=>{saveToStorage();});
 document.addEventListener('visibilitychange',()=>{if(document.hidden)saveToStorage();});
