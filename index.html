@@ -221,7 +221,7 @@
             <button class="icon-btn" onclick="openHelpModal()" title="Guida">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
             </button>
-            <span class="version-badge" id="versionBadge" onclick="requestVersionAccess()">v6.0.1</span>
+            <span class="version-badge" id="versionBadge" onclick="requestVersionAccess()">v6.0.2</span>
         </div>
     </div>
     <div class="scan-counter">
@@ -298,39 +298,32 @@
         
         <div class="help-section">
             <h4>📷 Area Fotocamera</h4>
-            <div class="help-item"><div class="help-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div><div class="help-text"><strong>Avvia / Ferma OCR:</strong> Attiva o disattiva la fotocamera. La scansione è automatica e continua all'interno del riquadro verde. La fotocamera si chiude automaticamente dopo 30 secondi di inattività per risparmiare batteria.</div></div>
-            <div class="help-item"><div class="help-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div><div class="help-text"><strong>Flash:</strong> Attiva la torcia del dispositivo. Utile in ambienti poco illuminati o per leggere seriali sbiaditi o poco leggibili.</div></div>
-            <div class="help-item"><div class="help-icon" style="border:2px solid var(--accent);border-radius:4px;"></div><div class="help-text"><strong>Riquadro Verde (ROI):</strong> Zona di analisi attiva. Posiziona il seriale all'interno del riquadro. Il sistema rileva automaticamente l'orientamento (anche sottosopra) e ruota l'anteprima correttamente per la lettura.</div></div>
-            <div class="help-item"><div class="help-icon">✏️</div><div class="help-text"><strong>Inserimento Manuale:</strong> Se il seriale è troppo sbiadito per essere rilevato automaticamente, premi il pulsante "Manuale" per inserirlo manualmente.</div></div>
+            <div class="help-item"><div class="help-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div><div class="help-text"><strong>Avvia / Ferma OCR:</strong> Attiva la scansione continua. La fotocamera analizza automaticamente il riquadro verde in tempo reale.</div></div>
+            <div class="help-item"><div class="help-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div><div class="help-text"><strong>Flash:</strong> Attiva la torcia per migliorare la leggibilità di seriali sbiaditi o in condizioni di scarsa luce.</div></div>
+            <div class="help-item"><div class="help-icon">✏️</div><div class="help-text"><strong>Inserimento Manuale:</strong> Se il seriale è troppo sbiadito o illeggibile, premi "Manuale" per inserirlo manualmente.</div></div>
         </div>
 
         <div class="help-section">
             <h4>⚙️ Configurazione Iniziale</h4>
-            <div class="help-item"><div class="help-icon text-icon">👤</div><div class="help-text"><strong>Operatore:</strong> Inserisci il nome dell'operatore. Questo valore verrà associato automaticamente a ogni seriale scansionato per tracciare chi ha effettuato la scansione.</div></div>
-            <div class="help-item"><div class="help-icon text-icon">📍</div><div class="help-text"><strong>Pedana:</strong> Campo obbligatorio. Dopo ogni scansione viene chiesto se mantenere o cambiare la pedana. Toccando il campo pedana nei record esistenti è possibile modificarlo successivamente.</div></div>
+            <div class="help-item"><div class="help-icon text-icon">👤</div><div class="help-text"><strong>Operatore:</strong> Nome associato automaticamente a ogni seriale scansionato.</div></div>
+            <div class="help-item"><div class="help-icon text-icon">📍</div><div class="help-text"><strong>Pedana:</strong> Campo obbligatorio. Viene richiesto conferma dopo ogni scansione.</div></div>
         </div>
 
         <div class="help-section">
             <h4>🎯 Confidenza e Validazione</h4>
-            <div class="help-item"><div class="help-icon text-icon">%</div><div class="help-text"><strong>Percentuale di Confidenza:</strong> Indica la sicurezza della lettura OCR. <span class="help-badge err">&lt;35%</span> Scartata automaticamente | <span class="help-badge warn">35-50%</span> Richiede conferma manuale | <span class="help-badge good">&gt;50%</span> Accettata automaticamente.</div></div>
-            <div class="help-item"><div class="help-icon text-icon">⚡</div><div class="help-text"><strong>Correzioni OCR:</strong> Se il sistema ha corretto automaticamente caratteri ambigui (es. O→0, S→5), appare un badge viola con le correzioni applicate.</div></div>
+            <div class="help-item"><div class="help-icon text-icon">%</div><div class="help-text"><strong>Confidenza OCR:</strong> <span class="help-badge err">&lt;35%</span> Scartata | <span class="help-badge warn">35-50%</span> Conferma manuale richiesta | <span class="help-badge good">&gt;50%</span> Accettata</div></div>
         </div>
 
         <div class="help-section">
             <h4>☁️ Esportazione</h4>
-            <div class="help-item"><div class="help-icon text-icon" style="background:#217346;color:white;">X</div><div class="help-text"><strong>Excel:</strong> Esporta un file .xlsx con tutte le colonne dati dei record scansionati. Include anche il riferimento all'immagine salvata nello ZIP.</div></div>
-            <div class="help-item"><div class="help-icon text-icon" style="background:var(--primary);color:white;">🌐</div><div class="help-text"><strong>HTML+Img:</strong> Genera un report web completo con le immagini delle anteprime embeddate direttamente nel file HTML. Ideale per controlli visivi rapidi senza connessione.</div></div>
-            <div class="help-item"><div class="help-icon text-icon" style="background:var(--text-dim);color:white;">📦</div><div class="help-text"><strong>ZIP:</strong> Archivio compresso contenente tutte le immagini dei seriali (nominate con il seriale stesso) + un file CSV di riepilogo. Ideale per backup completi.</div></div>
-        </div>
-
-        <div class="help-section">
-            <h4>🔍 Ricerca Record</h4>
-            <div class="help-item"><div class="help-icon">🔍</div><div class="help-text"><strong>Barra di Ricerca:</strong> Inserisci gli ultimi 3 caratteri alfanumerici del seriale per cercarlo rapidamente. Premi il pulsante o invio per evidenziare il record corrispondente.</div></div>
+            <div class="help-item"><div class="help-icon text-icon" style="background:#217346;color:white;">X</div><div class="help-text"><strong>Excel:</strong> File .xlsx con tutti i dati.</div></div>
+            <div class="help-item"><div class="help-icon text-icon" style="background:var(--primary);color:white;">🌐</div><div class="help-text"><strong>HTML+Img:</strong> Report web con immagini embeddate.</div></div>
+            <div class="help-item"><div class="help-icon text-icon" style="background:var(--text-dim);color:white;">📦</div><div class="help-text"><strong>ZIP:</strong> Archivio immagini + CSV riepilogo.</div></div>
         </div>
 
         <div class="help-section">
             <h4>🔄 Google Sheets</h4>
-            <div class="help-item"><div class="help-icon">☁️</div><div class="help-text"><strong>Sincronizzazione:</strong> I record vengono inviati automaticamente a Google Sheets se configurato. Puoi configurare l'URL del tuo script Apps Script dalla schermata delle impostazioni (versione). Lo stato di sincronizzazione è visibile nell'icona ☁️ accanto a ogni record.</div></div>
+            <div class="help-item"><div class="help-icon">☁️</div><div class="help-text"><strong>Sincronizzazione:</strong> Configura l'URL dalla schermata impostazioni (versione). Stato visibile con icona ☁️.</div></div>
         </div>
         <button class="btn btn-primary" style="width:100%;margin-top:10px;" onclick="document.getElementById('helpModal').classList.remove('visible')">Ho capito</button>
     </div>
@@ -397,7 +390,7 @@
 </div>
 
 <script>
-const APP_VERSION='6.0.1';
+const APP_VERSION='6.0.2';
 const STORAGE_KEY='scannerSerialiOCR_data';
 const GSHEET_KEY='scannerSerialiOCR_gsheet';
 const IMG_DB_NAME='ScannerSerialiDB';
@@ -405,6 +398,7 @@ const IMG_DB_VERSION=1;
 const IMG_STORE='images';
 
 const CHANGELOG=[
+    {ver:'v6.0.2',date:'24/05/2026',desc:'Ripristinata scansione continua OCR. Migliorato riconoscimento seriali sbiaditi (contrasto adattivo + pattern BDBCF00).',tags:['fix','feat']},
     {ver:'v6.0.1',date:'24/05/2026',desc:'Miglioramento OCR per seriali sbiaditi. Pulsante inserimento manuale aggiunto.',tags:['feat','fix']},
     {ver:'v6.0.0',date:'24/05/2026',desc:'Codice Google Sheets pulito e ottimizzato. Invio dati a foglio Google senza immagini. Logica funzionante testata.',tags:['feat','fix']},
     {ver:'v5.5.0',date:'24/05/2026',desc:'Ripristinato export HTML+Img con anteprime embeddate.',tags:['feat','fix']},
@@ -535,12 +529,21 @@ function confirmManualEntry(){
     records.unshift(rec);
     scanTotal++;
     document.getElementById('scanCount').textContent=scanTotal;
+    if(manualEntryImage)saveImg(rec.id,manualEntryImage);
     saveToStorage();
     
     beepOk();vib('ok');renderRecords();
     toast('✅ Inserito manualmente','success');
     
     if(gsheetUrl)sendToGSheet(rec).then(()=>{saveToStorage();setSyncStatus('synced');renderRecords();}).catch(()=>{setSyncStatus('pending');renderRecords();});
+    
+    setTimeout(()=>{
+        showPedanaModal(val,manualEntryImage,()=>{
+            if(cameraActive&&!scanPaused)document.getElementById('ocrStatus').textContent='✓ Pronto';
+            updateScanIndicator();
+            resetIdleTimer();
+        });
+    },400);
 }
 
 function requestVersionAccess(){const n=new Date();document.getElementById('versionPassword').value='';document.getElementById('passwordModal').classList.add('visible');document.getElementById('passwordModal').dataset.pwd=String(n.getHours()).padStart(2,'0')+String(n.getMinutes()).padStart(2,'0');setTimeout(()=>{const i=document.getElementById('versionPassword');if(i)i.focus();},200);}
@@ -726,16 +729,15 @@ async function toggleFlash(){if(!stream)return;try{const track=stream.getVideoTr
 function toggleMultiDetect(){multiDetect=!multiDetect;document.getElementById('toggleMulti').classList.toggle('active',multiDetect);}
 function checkPedanaRequired(){const p=document.getElementById('pedana').value.trim();if(!p){document.getElementById('pedana').classList.add('missing');toast('⚠️ Pedana richiesta','error');beepErr();vib('err');return false;}document.getElementById('pedana').classList.remove('missing');return true;}
 
-// ===== IMAGE PROCESSING FOR FADED SERIALS =====
+// ===== IMPROVED IMAGE PROCESSING =====
 function applyAdaptiveThreshold(ctx,w,h){
     const imageData=ctx.getImageData(0,0,w,h);
     const data=imageData.data;
-    
-    // 1. Convert to grayscale
+    // Convert to grayscale
     const gray=new Uint8Array(w*h);
     for(let i=0;i<data.length;i+=4) gray[i/4]=0.299*data[i]+0.587*data[i+1]+0.114*data[i+2];
     
-    // 2. Apply Gaussian-like blur to reduce noise
+    // Apply mild Gaussian-like blur to reduce noise
     const blurred=new Uint8Array(gray);
     for(let y=1;y<h-1;y++){
         for(let x=1;x<w-1;x++){
@@ -744,16 +746,16 @@ function applyAdaptiveThreshold(ctx,w,h){
         }
     }
     
-    // 3. Apply Otsu-like adaptive threshold with multiple attempts for faded text
+    // Apply Otsu's method for optimal threshold
     let threshold=0;
     let maxVar=0;
     let total=0;
     let sum=0;
-    for(let i=0;i<gray.length;i++){sum+=blurred[i];total++;}
+    for(let i=0;i<blurred.length;i++){sum+=blurred[i];total++;}
     let sumB=0;
     for(let t=0;t<256;t++){
-        const wB=sumB/(total-total>0?total:1);
-        const wF=(sum-sumB)/(total-total>0?total:1);
+        const wB=sumB/(total>0?total:1);
+        const wF=(sum-sumB)/(total>0?total:1);
         if(wB===0||wF===0)continue;
         const mB=sumB/wB;
         const mF=(sum-sumB)/wF;
@@ -762,14 +764,14 @@ function applyAdaptiveThreshold(ctx,w,h){
         sumB+=blurred[i];
     }
     
-    // Apply threshold
+    // Apply threshold with slight dilation for faded text
     for(let i=0;i<data.length;i+=4){
         const idx=i/4;
         const val=blurred[idx]>threshold?255:0;
         data[i]=val;data[i+1]=val;data[i+2]=val;
     }
     
-    // 4. Try to reconnect broken characters with dilation (for faded text)
+    // Mild dilation to reconnect broken characters
     const dilated=new Uint8Array(data);
     for(let y=1;y<h-1;y++){
         for(let x=1;x<w-1;x++){
@@ -783,6 +785,7 @@ function applyAdaptiveThreshold(ctx,w,h){
     ctx.putImageData(imageData,0,0);
 }
 
+// ===== IMPROVED OCR SCANNING =====
 async function scanFrame(){
     if(!cameraActive||!videoEl||!ocrWorker)return;
     if(videoEl.readyState<2)return;
@@ -796,26 +799,115 @@ async function scanFrame(){
     canvas.width=rw;canvas.height=rh;
     ctx.drawImage(videoEl,rx,ry,rw,rh,0,0,rw,rh);
     
-    // Apply improved image processing for faded serials
-    applyAdaptiveThreshold(ctx,rw,rh);
+    // Create ROI canvas
+    const roiCanvas=document.createElement('canvas');
+    roiCanvas.width=rw;roiCanvas.height=rh;
+    const roiCtx=roiCanvas.getContext('2d');
+    roiCtx.drawImage(canvas,0,0);
 
-    try{
-        const roiX=rw*0.075,roiY=rh*0.35,roiW=rw*0.85,roiH=rh*0.30;
-        const roiCanvas=document.createElement('canvas');roiCanvas.width=roiW;roiCanvas.height=roiH;
-        const roiCtx=roiCanvas.getContext('2d');roiCtx.drawImage(canvas,roiX,roiY,roiW,roiH,0,0,roiW,roiH);
+    // Try 1: Original image
+    let best=await extractBestFromOCR(await ocrWorker.recognize(roiCanvas), roiCanvas);
+    if(best && best.confidence >= 35) {
+        processResult(best);
+        return;
+    }
 
-        const best = await processROIAndOCR(roiCanvas);
-        if(best){
-            if(isValidSerial(best.serial)){
-                processSerial(best.serial,best.image,best.confidence,best.corrections);
-            } else if(best.confidence < 35) {
-                const trackText=(best.serial&&best.serial.length>=7)?best.serial.substring(0,7):'';
-                if(trackText){const c=trackLowConfidence(trackText,Date.now());if(c>=5){openManualEntryModal(trackText,best.image);scanPaused=true;}}
-            }
-        }
-    }catch(e){console.error('OCR error:',e);}
-    document.getElementById('ocrStatus').textContent='✓ Pronto';
-    document.getElementById('progressBar').style.width='0%';
+    // Try 2: Adaptive threshold for faded text
+    applyAdaptiveThreshold(roiCtx,rw,rh);
+    best=await extractBestFromOCR(await ocrWorker.recognize(roiCanvas), roiCanvas);
+    if(best && best.confidence >= 35) {
+        processResult(best);
+        return;
+    }
+
+    // Try 3: Inverted image
+    const invCanvas=document.createElement('canvas');
+    invCanvas.width=rw;invCanvas.height=rh;
+    const invCtx=invCanvas.getContext('2d');
+    invCtx.drawImage(canvas,0,0);
+    const invData=invCtx.getImageData(0,0,rw,rh);
+    for(let i=0;i<imgData2.data.length;i+=4){
+        invData.data[i]=255-invData.data[i];
+        invData.data[i+1]=255-invData.data[i+1];
+        invData.data[i+2]=255-invData.data[i+2];
+    }
+    invCtx.putImageData(invData,0,0);
+    best=await extractBestFromOCR(await ocrWorker.recognize(invCanvas), invCanvas);
+    if(best && best.confidence >= 35) {
+        processResult(best);
+        return;
+    }
+
+    // Try 4: Check for pattern BDBCF00 in text
+    const rawResult=await ocrWorker.recognize(canvas);
+    const allText=(rawResult.data.text||'').toUpperCase();
+    const match=allText.match(/BDBCF00[A-F0-9]{3}/);
+    if(match){
+        processResult({serial:match[0],confidence:100,corrections:[],image:null,_manual:true});
+        return;
+    }
+}
+
+function processResult(result){
+    if(!result || !isValidSerial(result.serial)) return;
+    
+    // Check for duplicates
+    const isDup=records.some(r=>r.serial===result.serial);
+    if(isDup){
+        toast('⚠️ Seriale duplicato','warning');
+        beepDup();vib('dup');
+        return;
+    }
+    
+    resetIdleTimer();scanCooldown=true;
+    document.getElementById('cooldownOverlay').classList.add('active');
+    document.getElementById('ocrStatus').textContent='⏱ Cooldown...';
+    updateScanIndicator();
+    
+    const operator=document.getElementById('operatorName').value.trim()||'N/D';
+    const pedana=document.getElementById('pedana').value.trim()||'N/D';
+    lastScanPedana=pedana;
+    const ts=new Date().toLocaleString('it-IT');
+    
+    const rec={
+        id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),
+        serial:result.serial,
+        timestamp:ts,
+        operator,
+        pedana,
+        runNumber:'',
+        modified:false,
+        status:'',
+        note:'',
+        image:result.image||null,
+        confidence:result.confidence,
+        corrections:result.corrections||[],
+        _synced:false,
+        _imgUploaded:false,
+        _confirmed:true,
+        _manual:result._manual||false
+    };
+    
+    records.unshift(rec);
+    scanTotal++;
+    document.getElementById('scanCount').textContent=scanTotal;
+    if(rec.image)saveImg(rec.id,rec.image);
+    saveToStorage();
+    
+    beepOk();vib('ok');renderRecords();
+    toast('✅ '+serial,'success');
+    
+    if(gsheetUrl)sendToGSheet(rec).then(()=>{saveToStorage();setSyncStatus('synced');renderRecords();}).catch(()=>{setSyncStatus('pending');renderRecords();});
+    
+    setTimeout(()=>{
+        showPedanaModal(rec.serial,rec.image,()=>{
+            scanCooldown=false;
+            document.getElementById('cooldownOverlay').classList.remove('active');
+            if(cameraActive&&!scanPaused)document.getElementById('ocrStatus').textContent='✓ Pronto';
+            updateScanIndicator();
+            resetIdleTimer();
+        });
+    },1000);
 }
 
 function extractBestFromOCR(result, sourceCanvas) {
@@ -831,21 +923,6 @@ function extractBestFromOCR(result, sourceCanvas) {
         }
     }
     return best;
-}
-
-async function processROIAndOCR(roiCanvas) {
-    let best = extractBestFromOCR(await ocrWorker.recognize(roiCanvas), roiCanvas);
-    if(best && best.confidence >= 35) return best;
-
-    const flipCanvas = document.createElement('canvas');
-    flipCanvas.width = roiCanvas.width; flipCanvas.height = roiCanvas.height;
-    const fCtx = flipCanvas.getContext('2d');
-    fCtx.translate(flipCanvas.width, flipCanvas.height);
-    fCtx.rotate(Math.PI);
-    fCtx.drawImage(roiCanvas, 0, 0);
-
-    const flippedBest = extractBestFromOCR(await ocrWorker.recognize(flipCanvas), flipCanvas);
-    return flippedBest;
 }
 
 function getConfClass(c){if(c>=80)return'conf-high';if(c>=60)return'conf-mid';return'conf-low';}
@@ -1045,7 +1122,7 @@ function exportHtmlWithImages(){
         const cc=r.confidence>=80?'conf-high':r.confidence>=60?'conf-mid':'conf-low';
         let stClass='',stText=r.status||'—';
         if(r.status==='Good')stClass='good';else if(r.status==='Rotto')stClass='rotto';else if(r.status==='Sporco')stClass='sporco';else if(r.status==='RF-ID')stClass='rfid';else if(r.status==='Barra Mancante')stClass='bar';else if(r.status==='Dubbio/Altro')stClass='dubbio';
-        const imgHtml=r.image?`<td class="img-cell"><img src="${r.image}" alt="serial"></td>`:`<td class="img-cell">—</td>`;
+        const imgHtml=r.image?`<td class="img-cell"><img src="${r.image}" alt="serial"></td>`:`<div class="img-cell">—</div>`;
         html+=`<tr><td>${i+1}</td><td>${r.timestamp}</td><td class="serial">${r.serial}${r.modified?' <small style="color:#f59e0b;">(mod)</small>':''}</td><td>${r.runNumber||'—'}</td>${imgHtml}<td class="${cc}">${r.confidence}%</td><td>${(r.corrections||[]).join(', ')||'—'}</td><td>${r.pedana}</td><td>${r.operator}</td><td class="${stClass}">${stText}</td><td>${r.note||''}</td></tr>`;
     });
     html+=`</tbody></table></body></html>`;
