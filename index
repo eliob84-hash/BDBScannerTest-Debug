@@ -1,0 +1,921 @@
+<!-- Versione: 6.0.1 | Data: 24/05/2026 | Modifiche: Changelog completo, Guida Help dettagliata -->
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Scanner Seriali OCR</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <style>
+        :root {
+            --primary: #2563eb; --primary-dark: #1d4ed8; --primary-light: #3b82f6;
+            --accent: #10b981; --danger: #ef4444; --warning: #f59e0b;
+            --bg: #0f172a; --bg-card: #1e293b; --bg-input: #334155;
+            --text: #f1f5f9; --text-muted: #94a3b8; --text-dim: #64748b;
+            --border: #475569; --radius: 12px; --shadow: 0 4px 24px rgba(0,0,0,0.3);
+        }
+        * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+        body { font-family:'Inter',-apple-system,sans-serif; background:var(--bg); color:var(--text); min-height:100vh; overflow-x:hidden; padding-bottom:120px; scroll-behavior:smooth; }
+        .header { background:linear-gradient(135deg,var(--bg-card),#1a2332); padding:16px 20px; position:sticky; top:0; z-index:100; border-bottom:1px solid var(--border); backdrop-filter:blur(20px); }
+        .header-top { display:flex; align-items:center; justify-content:space-between; gap:10px; }
+        .header-actions { display:flex; gap:8px; }
+        .header h1 { font-size:18px; font-weight:700; background:linear-gradient(135deg,var(--primary-light),var(--accent)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; display:flex; align-items:center; gap:8px; }
+        .icon-btn { background:none; border:none; color:var(--text-muted); cursor:pointer; padding:4px; border-radius:50%; transition:all 0.2s; display:flex; align-items:center; justify-content:center; }
+        .icon-btn:hover { background:rgba(255,255,255,0.1); color:var(--text); }
+        .icon-btn svg { width:20px; height:20px; }
+        .version-badge { font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:500; color:#10b981; cursor:pointer; padding:3px 8px; border-radius:6px; background:rgba(16,185,129,0.08); border:1px solid rgba(16,185,129,0.2); transition:all 0.2s; white-space:nowrap; }
+        .version-badge:hover { background:rgba(16,185,129,0.15); }
+        .scan-counter { display:flex; align-items:center; justify-content:space-between; margin-top:6px; }
+        .scan-counter .label { font-size:12px; color:var(--text-muted); display:flex; align-items:center; gap:6px; }
+        .scan-counter .count { background:var(--primary); color:white; padding:2px 10px; border-radius:10px; font-weight:600; font-size:12px; }
+        .scanning-indicator { display:inline-flex; align-items:center; gap:4px; font-size:11px; color:var(--accent); padding:3px 8px; background:rgba(16,185,129,0.1); border-radius:12px; }
+        .scanning-indicator .dot { width:5px; height:5px; background:var(--accent); border-radius:50%; animation:blink 1s infinite; }
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+        .paused-indicator { display:inline-flex; align-items:center; gap:4px; font-size:11px; color:var(--warning); padding:3px 8px; background:rgba(245,158,11,0.1); border-radius:12px; }
+        .paused-indicator .dot { width:5px; height:5px; background:var(--warning); border-radius:50%; }
+        .loading-indicator { display:inline-flex; align-items:center; gap:4px; font-size:11px; color:var(--primary-light); padding:3px 8px; background:rgba(37,99,235,0.1); border-radius:12px; }
+        .spinner { width:10px; height:10px; border:2px solid var(--primary-light); border-top-color:transparent; border-radius:50%; animation:spin 0.8s linear infinite; }
+        @keyframes spin { to{transform:rotate(360deg)} }
+        .sync-status { display:inline-flex; align-items:center; gap:4px; font-size:10px; padding:2px 8px; border-radius:10px; margin-left:6px; }
+        .sync-status.synced { background:rgba(16,185,129,0.12); color:var(--accent); }
+        .sync-status.pending { background:rgba(245,158,11,0.12); color:var(--warning); }
+        .sync-status.error { background:rgba(239,68,68,0.12); color:var(--danger); }
+        .sync-status.uploading { background:rgba(139,92,246,0.12); color:#a78bfa; }
+        .config-panel { padding:14px 18px; display:flex; flex-direction:column; gap:10px; }
+        .input-group label { font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; color:var(--text-dim); margin-bottom:4px; }
+        .input-group label .req { color:var(--danger); }
+        .input-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+        .input-field { background:var(--bg-input); border:1px solid var(--border); border-radius:var(--radius); padding:10px 12px; color:var(--text); font-size:14px; font-family:'Inter',sans-serif; outline:none; transition:border-color 0.2s, box-shadow 0.2s; width:100%; }
+        .input-field:focus { border-color:var(--primary); box-shadow:0 0 0 3px rgba(37,99,235,0.2); }
+        .input-field.missing { border-color:var(--danger); animation:pulseBorder 1s ease-in-out 3; }
+        @keyframes pulseBorder { 0%,100%{border-color:var(--danger)} 50%{border-color:transparent} }
+        .pedana-field { border-left:3px solid var(--warning); }
+        .controls-bar { display:flex; gap:8px; padding:0 18px 10px; }
+        .btn { display:inline-flex; align-items:center; justify-content:center; gap:6px; padding:10px 14px; border:none; border-radius:var(--radius); font-size:13px; font-weight:600; font-family:'Inter',sans-serif; cursor:pointer; transition:all 0.2s; flex:1; min-width:0; white-space:nowrap; }
+        .btn:active { transform:scale(0.96); }
+        .btn-primary { background:var(--primary); color:white; }
+        .btn-accent { background:var(--accent); color:white; }
+        .btn-warning { background:var(--warning); color:#1e293b; }
+        .btn-danger { background:var(--danger); color:white; }
+        .btn-outline { background:var(--bg-input); color:var(--text); border:1px solid var(--border); }
+        .btn svg { width:16px; height:16px; flex-shrink:0; }
+        .toggle-row { display:flex; align-items:center; justify-content:space-between; padding:6px 18px 12px; }
+        .toggle-label { font-size:12px; color:var(--text-muted); display:flex; align-items:center; gap:6px; }
+        .toggle-label svg { width:15px; height:15px; }
+        .toggle-switch { position:relative; width:42px; height:23px; background:var(--bg-input); border-radius:12px; cursor:pointer; transition:background 0.3s; border:1px solid var(--border); }
+        .toggle-switch.active { background:var(--primary); border-color:var(--primary); }
+        .toggle-switch::after { content:''; position:absolute; top:2px; left:2px; width:17px; height:17px; background:white; border-radius:50%; transition:transform 0.3s; }
+        .toggle-switch.active::after { transform:translateX(19px); }
+        .scanner-section { padding:0 18px; position:relative; }
+        .camera-container { position:relative; border-radius:var(--radius); overflow:hidden; background:#000; display:none; aspect-ratio:4/3; }
+        .camera-container.active { display:block; }
+        #videoFeed { width:100%; height:100%; object-fit:cover; }
+        .roi-overlay { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:85%; height:30%; border:2px solid var(--accent); border-radius:8px; pointer-events:none; box-shadow:0 0 20px rgba(16,185,129,0.3), inset 0 0 20px rgba(16,185,129,0.1); }
+        .roi-overlay::before, .roi-overlay::after { content:''; position:absolute; width:20px; height:20px; border-color:var(--accent); border-style:solid; }
+        .roi-overlay::before { top:-1px; left:-1px; border-width:3px 0 0 3px; border-radius:4px 0 0 0; }
+        .roi-overlay::after { bottom:-1px; right:-1px; border-width:0 3px 3px 0; border-radius:0 0 4px 0; }
+        .scan-line { position:absolute; top:50%; left:8%; width:84%; height:2px; background:linear-gradient(90deg,transparent,var(--accent),transparent); animation:scanPulse 1.8s ease-in-out infinite; box-shadow:0 0 12px var(--accent); pointer-events:none; }
+        @keyframes scanPulse { 0%,100%{opacity:0.3;transform:translateY(-18px)} 50%{opacity:1;transform:translateY(18px)} }
+        .ocr-status { position:absolute; bottom:8px; left:8px; font-size:10px; color:var(--text-dim); background:rgba(0,0,0,0.6); padding:3px 8px; border-radius:6px; z-index:5; }
+        #captureCanvas { display:none; }
+        .results-section { padding:14px 18px; }
+        .results-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; gap:10px; }
+        .results-header h2 { font-size:15px; font-weight:600; white-space:nowrap; }
+        .btn-apply-status { flex:0 0 auto; padding:6px 12px; font-size:11px; white-space:nowrap; }
+        .record-card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:12px; margin-bottom:10px; animation:slideIn 0.3s ease-out; transition:background 0.3s; }
+        .record-card.low-conf { background:rgba(245,158,11,0.15); border-color:var(--warning); }
+        @keyframes slideIn { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+        .record-top { display:flex; align-items:center; gap:10px; flex-wrap:nowrap; }
+        .record-image-wrap { width:130px; height:50px; border-radius:6px; overflow:hidden; background:#000; flex-shrink:0; cursor:pointer; position:relative; border:1px solid var(--border); }
+        .record-image-wrap img { width:100%; height:100%; object-fit:contain; image-rendering:auto; }
+        .record-info { flex:1; min-width:0; }
+        .serial-display { font-family:'JetBrains Mono',monospace; font-size:15px; font-weight:500; padding:5px 7px; background:var(--bg-input); border:1px solid var(--border); border-radius:8px; outline:none; width:130px; max-width:130px; min-width:0; color:var(--text); transition:all 0.2s; letter-spacing:1.5px; text-align:center; }
+        .serial-display.modified { color:var(--warning); border-color:var(--warning); }
+        .serial-display:focus { border-color:var(--primary); box-shadow:0 0 0 3px rgba(37,99,235,0.15); width:130px; }
+        .record-meta { font-size:10px; color:var(--text-dim); margin-top:4px; display:flex; flex-wrap:wrap; gap:5px; align-items:center; }
+        .meta-tag { display:inline-flex; align-items:center; gap:3px; padding:1px 5px; border-radius:3px; font-size:9px; font-weight:600; font-family:'JetBrains Mono',monospace; }
+        .meta-tag.conf-high { background:rgba(16,185,129,0.12); color:var(--accent); }
+        .meta-tag.conf-mid { background:rgba(245,158,11,0.12); color:var(--warning); }
+        .meta-tag.conf-low { background:rgba(239,68,68,0.12); color:var(--danger); }
+        .meta-tag.correction { background:rgba(139,92,246,0.12); color:#a78bfa; }
+        .meta-tag.synced-tag { background:rgba(16,185,129,0.12); color:var(--accent); }
+        .meta-tag.pending-tag { background:rgba(245,158,11,0.12); color:var(--warning); }
+        .run-cell { display:inline-flex; align-items:center; gap:3px; background:rgba(59,130,246,0.08); border:1px solid rgba(59,130,246,0.3); border-radius:4px; padding:1px 6px; font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--primary-light); cursor:pointer; transition:all 0.2s; min-width:36px; justify-content:center; }
+        .run-cell:hover { background:rgba(59,130,246,0.15); }
+        .run-cell.editing { background:var(--bg-input); border-color:var(--primary); padding:0; }
+        .run-input { width:36px; background:transparent; border:none; color:var(--primary-light); font-family:'JetBrains Mono',monospace; font-size:10px; text-align:center; outline:none; padding:1px 4px; }
+        .run-input::placeholder { color:var(--text-dim); }
+        .mod-badge { background:var(--warning); color:#1e293b; padding:1px 5px; border-radius:3px; font-size:9px; font-weight:700; }
+        .pedana-inline { cursor:pointer; background:rgba(245,158,11,0.1); border:1px dashed rgba(245,158,11,0.4); padding:1px 6px; border-radius:4px; transition:all 0.2s; }
+        .pedana-inline:hover { background:rgba(245,158,11,0.2); }
+        .delete-btn { background:none; border:none; color:var(--text-dim); cursor:pointer; padding:6px; border-radius:8px; transition:all 0.2s; flex-shrink:0; }
+        .delete-btn:hover { background:rgba(239,68,68,0.15); color:var(--danger); }
+        .delete-btn svg { width:18px; height:18px; }
+        .status-selector { display:flex; gap:4px; margin-top:8px; flex-wrap:wrap; }
+        .status-btn { padding:4px 8px; border:1px solid var(--border); border-radius:6px; background:var(--bg-input); color:var(--text-muted); font-size:10px; font-weight:500; cursor:pointer; transition:all 0.2s; font-family:'Inter',sans-serif; white-space:nowrap; display:inline-flex; align-items:center; gap:3px; }
+        .status-btn .st-good { color:#22c55e; font-weight:700; }
+        .status-btn .st-rotto { color:#ef4444; font-weight:700; }
+        .status-btn .st-sporco { color:#a16207; font-weight:700; }
+        .status-btn .st-bar { color:#ffffff; font-weight:700; }
+        .status-btn.active-good { background:var(--accent); color:white; border-color:var(--accent); }
+        .status-btn.active-broken { background:var(--danger); color:white; border-color:var(--danger); }
+        .status-btn.active-dirty { background:var(--warning); color:#1e293b; border-color:var(--warning); }
+        .status-btn.active-rfid { background:#8b5cf6; color:white; border-color:#8b5cf6; }
+        .status-btn.active-bar { background:#06b6d4; color:white; border-color:#06b6d4; }
+        .status-btn.active-doubt { background:var(--text-dim); color:white; border-color:var(--text-dim); }
+        .status-btn.active-none { background:transparent; border:1px dashed var(--border); color:var(--text-dim); }
+        .note-input { margin-top:6px; width:100%; background:var(--bg-input); border:1px solid var(--border); border-radius:6px; padding:6px 10px; color:var(--text); font-size:12px; font-family:'Inter',sans-serif; outline:none; display:block; }
+        .note-input:focus { border-color:#ec4899; }
+        .confirm-low-btn { margin-top:6px; width:100%; padding:6px; background:var(--warning); color:#1e293b; border:none; border-radius:6px; font-weight:600; cursor:pointer; font-size:11px; transition:all 0.2s; }
+        .confirm-low-btn:hover { background:#d97706; }
+        .confirm-low-btn svg { width:14px; height:14px; vertical-align:middle; margin-right:4px; }
+        .image-modal { position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.95); z-index:1000; display:none; align-items:center; justify-content:center; cursor:pointer; }
+        .image-modal.visible { display:flex; }
+        .image-modal img { max-width:95%; max-height:95%; object-fit:contain; border-radius:8px; }
+        .close-modal-btn { position:absolute; top:16px; right:16px; background:rgba(255,255,255,0.15); border:none; color:white; width:36px; height:36px; border-radius:50%; cursor:pointer; font-size:18px; display:flex; align-items:center; justify-content:center; }
+        .modal-overlay { position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1500; display:none; align-items:center; justify-content:center; padding:20px; }
+        .modal-overlay.visible { display:flex; }
+        .modal-box { background:var(--bg-card); border:1px solid var(--border); border-radius:16px; padding:24px; max-width:450px; width:100%; max-height:85vh; overflow-y:auto; position:relative; }
+        .modal-box h3 { font-size:18px; margin-bottom:4px; background:linear-gradient(135deg,var(--primary-light),var(--accent)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+        .modal-close { position:absolute; top:16px; right:16px; background:none; border:none; color:var(--text-dim); cursor:pointer; font-size:20px; }
+        .help-section { margin-bottom:20px; }
+        .help-section h4 { font-size:14px; color:var(--primary-light); margin-bottom:10px; border-bottom:1px solid var(--border); padding-bottom:4px; display:flex; align-items:center; gap:6px; }
+        .help-item { display:flex; align-items:flex-start; gap:10px; margin-bottom:12px; font-size:12px; color:var(--text-muted); line-height:1.4; }
+        .help-icon { width:28px; height:28px; background:var(--bg-input); border-radius:6px; display:flex; align-items:center; justify-content:center; flex-shrink:0; color:var(--text); border:1px solid var(--border); }
+        .help-icon svg { width:14px; height:14px; }
+        .help-icon.text-icon { font-size:14px; font-weight:bold; }
+        .help-text strong { color:var(--text); }
+        .help-text p { margin-top:2px; }
+        .help-badge { display:inline-block; padding:1px 5px; border-radius:3px; font-size:10px; font-weight:600; }
+        .help-badge.good { background:rgba(16,185,129,0.2); color:var(--accent); }
+        .help-badge.warn { background:rgba(245,158,11,0.2); color:var(--warning); }
+        .help-badge.err { background:rgba(239,68,68,0.2); color:var(--danger); }
+        .version-modal-box .ver-date { font-size:12px; color:var(--text-dim); margin-bottom:16px; }
+        .changelog-item { padding:10px 0; border-bottom:1px solid rgba(71,85,105,0.3); }
+        .changelog-item:last-child { border-bottom:none; }
+        .changelog-item .ch-ver { font-size:12px; font-weight:600; color:var(--accent); font-family:'JetBrains Mono',monospace; }
+        .changelog-item .ch-date { font-size:10px; color:var(--text-dim); margin-left:6px; }
+        .changelog-item .ch-desc { font-size:12px; color:var(--text-muted); margin-top:4px; }
+        .changelog-item .ch-tags { margin-top:4px; display:flex; gap:4px; flex-wrap:wrap; }
+        .ch-tag { font-size:9px; padding:2px 6px; border-radius:4px; font-weight:600; }
+        .ch-tag.feat { background:rgba(37,99,235,0.15); color:var(--primary-light); }
+        .ch-tag.fix { background:rgba(16,185,129,0.15); color:var(--accent); }
+        .ch-tag.ui { background:rgba(245,158,11,0.15); color:var(--warning); }
+        .toast { position:fixed; top:20px; left:50%; transform:translateX(-50%) translateY(-100px); background:var(--bg-card); border:1px solid var(--border); padding:12px 20px; border-radius:var(--radius); font-size:13px; font-weight:500; z-index:2000; transition:transform 0.3s ease-out; box-shadow:var(--shadow); max-width:90%; text-align:center; }
+        .toast.visible { transform:translateX(-50%) translateY(0); }
+        .toast.success { border-color:var(--accent); }
+        .toast.warning { border-color:var(--warning); }
+        .toast.error { border-color:var(--danger); }
+        .confirm-modal { position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1500; display:none; align-items:center; justify-content:center; padding:20px; }
+        .confirm-modal.visible { display:flex; }
+        .confirm-box { background:var(--bg-card); border:1px solid var(--border); border-radius:16px; padding:22px; max-width:340px; width:100%; text-align:center; }
+        .confirm-box h3 { font-size:16px; margin-bottom:8px; }
+        .confirm-box p { font-size:13px; color:var(--text-muted); margin-bottom:18px; }
+        .confirm-box img.confirm-preview { max-width:100%; height:80px; object-fit:contain; border-radius:6px; margin-bottom:15px; border:1px solid var(--border); background:#000; }
+        .confirm-actions { display:flex; gap:10px; }
+        .confirm-actions .btn { flex:1; }
+        .pedana-actions { display:flex; flex-direction:column; gap:10px; margin-top:8px; }
+        .pedana-actions .btn-row { display:flex; gap:10px; }
+        .pedana-actions .btn-row .btn { flex:1; }
+        .serial-ref { font-family:'JetBrains Mono',monospace; font-size:18px; font-weight:600; color:var(--text); letter-spacing:2px; padding:6px 10px; background:var(--bg-input); border-radius:6px; display:inline-block; margin:4px 0; border:1px solid var(--border); }
+        .pedana-big { font-family:'JetBrains Mono',monospace; font-size:18px; font-weight:700; color:var(--warning); letter-spacing:2px; padding:8px 12px; background:rgba(245,158,11,0.08); border-radius:8px; display:block; margin:6px 0 2px; border:1px solid rgba(245,158,11,0.3); }
+        .pedana-preview { width:120px; height:44px; border-radius:6px; overflow:hidden; background:#000; margin:6px auto; border:1px solid var(--border); }
+        .pedana-preview img { width:100%; height:100%; object-fit:contain; }
+        .empty-state { text-align:center; padding:36px 20px; color:var(--text-dim); }
+        .empty-state svg { width:44px; height:44px; margin-bottom:10px; opacity:0.4; }
+        .empty-state p { font-size:13px; }
+        .bottom-bar { position:fixed; bottom:0; left:0; right:0; background:var(--bg-card); border-top:1px solid var(--border); padding:10px 18px; display:flex; gap:8px; z-index:100; backdrop-filter:blur(20px); flex-wrap:wrap; }
+        .bottom-bar .btn { font-size:12px; padding:10px 10px; }
+        .progress-bar { position:absolute; bottom:0; left:0; height:3px; background:var(--accent); transition:width 0.3s; z-index:5; }
+        .cooldown-overlay { position:absolute; top:0; left:0; right:0; bottom:0; background:rgba(16,185,129,0.08); pointer-events:none; z-index:4; display:none; }
+        .cooldown-overlay.active { display:block; }
+        .scroll-top-btn { position:fixed; bottom:80px; right:16px; width:40px; height:40px; background:#64748b; border:1px solid var(--accent); border-radius:50%; display:none; align-items:center; justify-content:center; cursor:pointer; z-index:200; box-shadow:0 2px 12px rgba(0,0,0,0.4); animation:borderPulse 1.2s ease-in-out infinite; transition:transform 0.15s; }
+        .scroll-top-btn.visible { display:flex; }
+        .scroll-top-btn:active { transform:scale(0.9); }
+        .scroll-top-btn svg { width:20px; height:20px; color:white; }
+        @keyframes borderPulse { 0%,100%{border-color:var(--accent);box-shadow:0 2px 12px rgba(0,0,0,0.4),0 0 0 0 rgba(16,185,129,0.3)} 50%{border-color:rgba(16,185,129,0.5);box-shadow:0 2px 12px rgba(0,0,0,0.4),0 0 0 6px rgba(16,185,129,0)} }
+        .status-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:10px; }
+        .status-grid .btn { font-size:12px; padding:8px; }
+        .manual-input { font-family:'JetBrains Mono',monospace; font-size:18px; letter-spacing:3px; text-align:center; width:100%; padding:10px; margin:10px 0; background:var(--bg-input); border:2px solid var(--primary); border-radius:8px; color:var(--text); }
+        .gsheet-config-area { margin-top:20px; padding-top:20px; border-top:1px solid var(--border); text-align:left; }
+        .gsheet-config-area label { font-size:11px; color:var(--text-dim); display:block; margin-bottom:5px; }
+        .gsheet-input-row { display:flex; gap:8px; margin-bottom:10px; }
+        .gsheet-input-row input { flex:1; background:var(--bg); border:1px solid var(--border); border-radius:6px; color:var(--text); padding:8px; font-family:'JetBrains Mono',monospace; font-size:11px; }
+        .gsheet-options { display:flex; align-items:center; justify-content:space-between; font-size:11px; color:var(--text-muted); flex-wrap:wrap; gap:8px; }
+        .gsheet-diagnostic { margin-top:8px; padding:6px; background:var(--bg); border-radius:4px; font-size:10px; color:var(--text-muted); font-family:'JetBrains Mono',monospace; }
+        @media (max-width:380px) { .btn { padding:8px 8px; font-size:11px; } .status-btn { font-size:9px; padding:3px 6px; } .record-image-wrap { width:120px; height:46px; } .serial-display { width:120px; } .record-meta { gap:3px; } }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="header-top">
+        <h1>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+            Scanner Seriali OCR
+        </h1>
+        <div class="header-actions">
+            <button class="icon-btn" onclick="openHelpModal()" title="Guida">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            </button>
+            <span class="version-badge" id="versionBadge" onclick="requestVersionAccess()">v6.0.1</span>
+        </div>
+    </div>
+    <div class="scan-counter">
+        <span class="label">Seriali: <span class="count" id="scanCount">0</span><span id="syncIndicator" class="sync-status synced" title="Stato sync">🟢 Sync</span></span>
+        <span id="scanIndicator"></span>
+    </div>
+</div>
+
+<div class="config-panel">
+    <div class="input-row">
+        <div class="input-group"><label>Operatore</label><input type="text" class="input-field" id="operatorName" placeholder="Nome operatore"></div>
+        <div class="input-group"><label>N° Pedana / Posizione <span class="req">*</span></label><input type="text" class="input-field pedana-field" id="pedana" placeholder="Obbligatorio"></div>
+    </div>
+</div>
+
+<div class="controls-bar">
+    <button class="btn btn-primary" id="btnCamera" onclick="toggleCamera()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        <span>Avvia OCR</span>
+    </button>
+    <button class="btn btn-warning" id="btnFlash" onclick="toggleFlash()" disabled>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        <span>Flash</span>
+    </button>
+</div>
+
+<div class="toggle-row">
+    <span class="toggle-label">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="M7 7h3v3H7z"/><path d="M14 7h3v3h-3z"/><path d="M7 14h3v3H7z"/></svg>
+        Rilevamento multiplo (Sperimentale)
+    </span>
+    <div class="toggle-switch" id="toggleMulti" onclick="toggleMultiDetect()"></div>
+</div>
+
+<div class="scanner-section" id="scannerSection">
+    <div class="camera-container" id="cameraContainer">
+        <video id="videoFeed" autoplay playsinline muted></video>
+        <div class="roi-overlay"></div>
+        <div class="scan-line"></div>
+        <div class="cooldown-overlay" id="cooldownOverlay"></div>
+        <div class="ocr-status" id="ocrStatus">Inizializzazione OCR...</div>
+        <div class="progress-bar" id="progressBar" style="width:0%"></div>
+    </div>
+    <canvas id="captureCanvas"></canvas>
+</div>
+
+<div class="results-section">
+    <div class="results-header">
+        <h2>📋 Risultati</h2>
+        <button class="btn btn-outline btn-apply-status" onclick="openApplyStatusModal()">
+            Applica Stato a Pedana
+        </button>
+    </div>
+    <div id="recordsList">
+        <div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 7h.01M12 7h.01M17 7h.01M7 12h10M7 17h6"/></svg><p>Nessun seriale scansionato.<br>Avvia la fotocamera per iniziare.</p></div>
+    </div>
+</div>
+
+<div class="scroll-top-btn" id="scrollTopBtn" onclick="scrollToTop()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg></div>
+
+<div class="image-modal" id="imageModal" onclick="closeModal()"><button class="close-modal-btn" onclick="closeModal()">✕</button><img id="modalImage" src="" alt="Zoom"></div>
+
+<div class="confirm-modal" id="passwordModal"><div class="confirm-box"><h3>🔒 Accesso Protetto</h3><p style="margin-top:12px;">Inserisci la password temporanea (HHMM)</p><input type="password" class="input-field" id="versionPassword" maxlength="4" style="text-align:center;font-family:'JetBrains Mono',monospace;letter-spacing:6px;font-size:20px;width:120px;margin:0 auto;" inputmode="numeric"><div class="confirm-actions" style="margin-top:16px;"><button class="btn btn-outline" onclick="closePasswordModal()">Annulla</button><button class="btn btn-primary" onclick="checkVersionPassword()">OK</button></div></div></div>
+
+<div class="modal-overlay" id="helpModal">
+    <div class="modal-box" onclick="event.stopPropagation()">
+        <button class="modal-close" onclick="document.getElementById('helpModal').classList.remove('visible')">✕</button>
+        <h3>📖 Guida Completa all'Uso</h3>
+        <p style="font-size:12px;color:var(--text-dim);margin-bottom:16px;">Panoramica dettagliata dell'interfaccia e delle funzioni</p>
+        
+        <div class="help-section">
+            <h4>📷 Area Fotocamera</h4>
+            <div class="help-item"><div class="help-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div><div class="help-text"><strong>Avvia / Ferma OCR:</strong> Attiva o disattiva la fotocamera. La scansione è automatica e continua all'interno del riquadro verde. La fotocamera si chiude automaticamente dopo 30 secondi di inattività per risparmiare batteria.</div></div>
+            <div class="help-item"><div class="help-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div><div class="help-text"><strong>Flash:</strong> Attiva la torcia del dispositivo. Utile in ambienti poco illuminati o per leggere seriali sbiaditi o poco leggibili.</div></div>
+            <div class="help-item"><div class="help-icon" style="border:2px solid var(--accent);border-radius:4px;"></div><div class="help-text"><strong>Riquadro Verde (ROI):</strong> Zona di analisi attiva. Posiziona il seriale all'interno del riquadro. Il sistema rileva automaticamente l'orientamento (anche sottosopra) e ruota l'anteprima correttamente per la lettura.</div></div>
+        </div>
+
+        <div class="help-section">
+            <h4>⚙️ Configurazione Iniziale</h4>
+            <div class="help-item"><div class="help-icon text-icon">👤</div><div class="help-text"><strong>Operatore:</strong> Inserisci il nome dell'operatore. Questo valore verrà associato automaticamente a ogni seriale scansionato per tracciare chi ha effettuato la scansione.</div></div>
+            <div class="help-item"><div class="help-icon text-icon">📍</div><div class="help-text"><strong>Pedana:</strong> Campo obbligatorio. Dopo ogni scansione viene chiesto se mantenere o cambiare la pedana. Toccando il campo pedana nei record esistenti è possibile modificarlo successivamente.</div></div>
+        </div>
+
+        <div class="help-section">
+            <h4>🎯 Confidenza e Validazione</h4>
+            <div class="help-item"><div class="help-icon text-icon">%</div><div class="help-text"><strong>Percentuale di Confidenza:</strong> Indica la sicurezza della lettura OCR. <span class="help-badge err">&lt;35%</span> Scartata automaticamente | <span class="help-badge warn">35-50%</span> Richiede conferma manuale | <span class="help-badge good">&gt;50%</span> Accettata automaticamente.</div></div>
+            <div class="help-item"><div class="help-icon text-icon">⚡</div><div class="help-text"><strong>Correzioni OCR:</strong> Se il sistema ha corretto automaticamente caratteri ambigui (es. O→0, S→5), appare un badge viola con le correzioni applicate.</div></div>
+        </div>
+
+        <div class="help-section">
+            <h4>☁️ Esportazione</h4>
+            <div class="help-item"><div class="help-icon text-icon" style="background:#217346;color:white;">X</div><div class="help-text"><strong>Excel:</strong> Esporta un file .xlsx con tutte le colonne dati dei record scansionati. Include anche il riferimento all'immagine salvata nello ZIP.</div></div>
+            <div class="help-item"><div class="help-icon text-icon" style="background:var(--primary);color:white;">🌐</div><div class="help-text"><strong>HTML+Img:</strong> Genera un report web completo con le immagini delle anteprime embeddate direttamente nel file HTML. Ideale per controlli visivi rapidi senza connessione.</div></div>
+            <div class="help-item"><div class="help-icon text-icon" style="background:var(--text-dim);color:white;">📦</div><div class="help-text"><strong>ZIP:</strong> Archivio compresso contenente tutte le immagini dei seriali (nominate con il seriale stesso) + un file CSV di riepilogo. Ideale per backup completi.</div></div>
+        </div>
+
+        <div class="help-section">
+            <h4>🔍 Ricerca Record</h4>
+            <div class="help-item"><div class="help-icon">🔍</div><div class="help-text"><strong>Barra di Ricerca:</strong> Inserisci gli ultimi 3 caratteri alfanumerici del seriale per cercarlo rapidamente. Premi il pulsante o invio per evidenziare il record corrispondente.</div></div>
+        </div>
+
+        <div class="help-section">
+            <h4>🔄 Google Sheets</h4>
+            <div class="help-item"><div class="help-icon">☁️</div><div class="help-text"><strong>Sincronizzazione:</strong> I record vengono inviati automaticamente a Google Sheets se configurato. Puoi configurare l'URL del tuo script Apps Script dalla schermata delle impostazioni (versione). Lo stato di sincronizzazione è visibile nell'icona ☁️ accanto a ogni record.</div></div>
+        </div>
+        <button class="btn btn-primary" style="width:100%;margin-top:10px;" onclick="document.getElementById('helpModal').classList.remove('visible')">Ho capito</button>
+    </div>
+</div>
+
+<div class="modal-overlay" id="versionModal">
+    <div class="modal-box version-modal-box" onclick="event.stopPropagation()">
+        <button class="modal-close" onclick="closeVersionModal()">✕</button>
+        <h3>⚙️ Configurazione</h3>
+        <div class="ver-date" id="versionBuildDate"></div>
+        <h4 style="font-size:14px;color:var(--primary-light);margin-bottom:12px;border-bottom:1px solid var(--border);padding-bottom:6px;">📋 Changelog</h4>
+        <div id="changelogContent" style="max-height:250px;overflow-y:auto;margin-bottom:20px;"></div>
+        <div class="gsheet-config-area">
+            <h4 style="font-size:14px;color:var(--primary-light);margin-bottom:12px;border-bottom:1px solid var(--border);padding-bottom:6px;">🔗 Google Sheets</h4>
+            <label>URL Script (/exec)</label>
+            <div class="gsheet-input-row"><input type="text" id="modalGsheetUrl" placeholder="https://script.google.com/macros/s/.../exec"></div>
+            <div class="gsheet-options">
+                <button class="btn btn-outline" style="padding:4px 8px;font-size:10px;" onclick="saveModalGSheet()">💾 Salva</button>
+                <button class="btn btn-outline" style="padding:4px 8px;font-size:10px;" onclick="verifyGSheetFromModal()">🔍 Verifica</button>
+            </div>
+            <div class="gsheet-diagnostic" id="gsheetDiag" style="display:none;"></div>
+        </div>
+    </div>
+</div>
+
+<div class="confirm-modal" id="pedanaModal">
+    <div class="confirm-box">
+        <h3 id="pedanaModalTitle">📍 Pedana</h3>
+        <div class="serial-ref" id="pedanaSerialRef"></div>
+        <div class="pedana-preview" id="pedanaPreviewWrap"></div>
+        <div class="pedana-big" id="pedanaBigRef"></div>
+        <p id="pedanaModalMsg"></p>
+        <div class="pedana-actions">
+            <div class="btn-row"><button class="btn btn-warning" onclick="pedanaChange()">✏️ Cambia</button><button class="btn btn-accent" onclick="pedanaKeep()">✓ Mantieni</button></div>
+            <div id="pedanaChangeInput" style="display:none;">
+                <input type="text" class="input-field" id="newPedanaInput" style="text-align:center;font-family:'JetBrains Mono',monospace;font-size:16px;letter-spacing:2px;" maxlength="20" placeholder="Nuovo numero pedana">
+                <div class="btn-row" style="margin-top:10px;"><button class="btn btn-outline" onclick="pedanaCancel()">Annulla</button><button class="btn btn-primary" onclick="pedanaConfirm()">Conferma</button></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="confirm-modal" id="pedanaEditModal"><div class="confirm-box"><h3>✏️ Modifica Pedana</h3><p id="pedanaEditMsg"></p><input type="text" class="input-field" id="pedanaEditInput" style="text-align:center;font-family:'JetBrains Mono',monospace;font-size:16px;letter-spacing:2px;" maxlength="20"><div class="confirm-actions" style="margin-top:14px;"><button class="btn btn-outline" onclick="closePedanaEdit()">Annulla</button><button class="btn btn-primary" onclick="confirmPedanaEdit()">Conferma</button></div></div></div>
+
+<div class="confirm-modal" id="statusApplyModal"><div class="confirm-box"><h3>📍 Applica Stato</h3><p>Pedana: <b id="applyPedanaName" style="color:var(--warning)"></b></p><div class="status-grid"><button class="btn btn-accent" onclick="executeApplyStatus('Good')">✓ Good</button><button class="btn btn-danger" onclick="executeApplyStatus('Rotto')">✕ Rotto</button><button class="btn btn-warning" onclick="executeApplyStatus('Sporco')">◆ Sporco</button><button class="btn" style="background:#8b5cf6;color:white" onclick="executeApplyStatus('RF-ID')">📡 RF-ID</button><button class="btn" style="background:#06b6d4;color:white" onclick="executeApplyStatus('Barra Mancante')">▤ Barra Manc.</button><button class="btn" style="background:var(--text-dim);color:white" onclick="executeApplyStatus('Dubbio/Altro')">❓ Dubbio</button></div><button class="btn btn-outline" style="margin-top:12px;width:100%" onclick="document.getElementById('statusApplyModal').classList.remove('visible')">Annulla</button></div></div>
+
+<div class="confirm-modal" id="manualEntryModal"><div class="confirm-box"><h3 id="manualEntryTitle">✏️ Inserimento Manuale</h3><p id="manualEntryDesc">Rilevamenti ripetuti a bassa confidenza.</p><div class="pedana-preview" id="manualPreviewWrap" style="margin:10px auto;"></div><input type="text" class="manual-input" id="manualSerialInput" value="BDBCF00" maxlength="10"><div class="confirm-actions"><button class="btn btn-outline" onclick="closeManualEntry()">Annulla</button><button class="btn btn-primary" onclick="confirmManualEntry()">Conferma</button></div></div></div>
+
+<div class="toast" id="toast"></div>
+
+<div class="confirm-modal" id="confirmModal">
+    <div class="confirm-box">
+        <h3 id="confirmTitle">Conferma</h3>
+        <img id="confirmPreviewImage" src="" style="display:none; width:100%; max-height:100px; object-fit:contain; border-radius:6px; margin-bottom:15px; border:1px solid var(--border); background:#000;">
+        <p id="confirmMsg">Sei sicuro?</p>
+        <div class="confirm-actions"><button class="btn btn-outline" onclick="closeConfirm()">Annulla</button><button class="btn btn-danger" id="confirmBtn" onclick="executeConfirm()">Conferma</button></div>
+    </div>
+</div>
+
+<div class="bottom-bar">
+    <button class="btn btn-accent" onclick="exportExcel()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg>Excel</button>
+    <button class="btn btn-primary" onclick="exportHtmlWithImages()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>HTML+Img</button>
+    <button class="btn btn-outline" onclick="exportZip()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8v13H3V8M1 3h22v5H1zM10 12h4"/></svg>ZIP</button>
+</div>
+
+<script>
+const APP_VERSION='6.0.1';
+const STORAGE_KEY='scannerSerialiOCR_data';
+const GSHEET_KEY='scannerSerialiOCR_gsheet';
+const IMG_DB_NAME='ScannerSerialiDB';
+const IMG_DB_VERSION=1;
+const IMG_STORE='images';
+
+const CHANGELOG=[
+    {ver:'v6.0.1',date:'24/05/2026',desc:'Changelog completo ripristinato. Guida Help dettagliata con tutte le funzionalità.',tags:['feat','ui']},
+    {ver:'v6.0.0',date:'24/05/2026',desc:'Codice Google Sheets pulito e ottimizzato. Invio dati a foglio Google senza immagini. Logica funzionante testata.',tags:['feat','fix']},
+    {ver:'v5.5.0',date:'24/05/2026',desc:'Ripristinato export HTML+Img con anteprime embeddate.',tags:['feat','fix']},
+    {ver:'v5.4.0',date:'24/05/2026',desc:'Fix critico: Blocco record duplicati ripristinato.',tags:['fix']},
+    {ver:'v5.3.0',date:'24/05/2026',desc:'Cooldown ridotto a 1 secondo. Changelog completo ripristinato.',tags:['fix']},
+    {ver:'v5.2.0',date:'23/05/2026',desc:'Fix Excel, fix nomi immagini ZIP. Heartbeat audio OCR.',tags:['fix','ui','feat']},
+    {ver:'v5.1.0',date:'23/05/2026',desc:'Tasto apertura Foglio Google. Sincronizzazione record non caricati.',tags:['feat']},
+    {ver:'v5.0.0',date:'23/05/2026',desc:'Protezione accesso versione con password temporanea.',tags:['feat','security']},
+    {ver:'v4.6.0',date:'23/05/2026',desc:'Debug mode. Tap counter. Verifica confidenza.',tags:['feat','fix']},
+    {ver:'v4.5.1',date:'23/05/2026',desc:'Fix export HTML e upload Sheets.',tags:['fix']},
+    {ver:'v4.5.0',date:'23/05/2026',desc:'Changelog completo. Badge colorati.',tags:['feat','ui']},
+    {ver:'v4.4.0',date:'23/05/2026',desc:'Guida dettagliata e completa.',tags:['feat','ui']},
+    {ver:'v4.3.0',date:'23/05/2026',desc:'Tasto conferma bassa confidenza. Inserimento manuale.',tags:['feat','fix']},
+    {ver:'v4.2.0',date:'23/05/2026',desc:'Guida in-app. Contrasto adattivo.',tags:['feat','fix']},
+    {ver:'v4.1.0',date:'23/05/2026',desc:'URL Sheets nel modale Versione. Soglie confidenza.',tags:['feat','fix']},
+    {ver:'v4.0.0',date:'23/05/2026',desc:'Config protetta. Soglie confidenza.',tags:['feat']},
+    {ver:'v3.9.0',date:'23/05/2026',desc:'Fix input Google Sheets. Tasto Apri Sheet.',tags:['fix','ui']},
+    {ver:'v3.8.0',date:'23/05/2026',desc:'Fix upload Sheets. Anteprima margini.',tags:['fix']},
+    {ver:'v3.7.0',date:'23/05/2026',desc:'Tasto conferma seriale bassa confidenza.',tags:['feat']},
+    {ver:'v3.6.0',date:'23/05/2026',desc:'Fix input Sheets. Password HHMM.',tags:['fix']},
+    {ver:'v3.5.0',date:'23/05/2026',desc:'Guida in-app. Contrasto adattivo.',tags:['feat','fix']},
+    {ver:'v3.4.0',date:'23/05/2026',desc:'Contrasto adattivo. Rimossa soglia instabilità.',tags:['feat','fix']},
+    {ver:'v3.3.0',date:'23/05/2026',desc:'URL Sheets nel modale. Soglie confidenza.',tags:['feat']},
+    {ver:'v3.2.0',date:'23/05/2026',desc:'Fix Sheets CORS.',tags:['fix']},
+    {ver:'v3.1.0',date:'23/05/2026',desc:'Integrazione Google Sheets.',tags:['feat']},
+    {ver:'v3.0.0',date:'23/05/2026',desc:'Salvataggio locale IndexedDB.',tags:['feat','ui']},
+    {ver:'v2.2.0',date:'22/05/2026',desc:'Freccia scroll-to-top. Export HTML.',tags:['feat','ui']},
+    {ver:'v2.1.0',date:'22/05/2026',desc:'Applica Stato a pedana.',tags:['feat']},
+    {ver:'v2.0.0',date:'22/05/2026',desc:'URL rimosso da interfaccia principale.',tags:['ui']},
+    {ver:'v1.9.0',date:'22/05/2026',desc:'Tap su pedana nei record. Colori icone.',tags:['ui']},
+    {ver:'v1.8.0',date:'22/05/2026',desc:'Auto-close 30s. Note visibili.',tags:['feat']},
+    {ver:'v1.7.0',date:'22/05/2026',desc:'Blocco seriali simili. Soglia ridotta.',tags:['fix']},
+    {ver:'v1.6.0',date:'22/05/2026',desc:'Anteprima crop +25px. ROI scan.',tags:['feat']},
+    {ver:'v1.5.0',date:'22/05/2026',desc:'Password HHMM per config.',tags:['feat']},
+    {ver:'v1.4.0',date:'22/05/2026',desc:'Confidenza OCR. Correzioni OCR.',tags:['feat']},
+    {ver:'v1.3.0',date:'22/05/2026',desc:'Rimossa lente anteprima. Immagine 130px.',tags:['ui']},
+    {ver:'v1.2.0',date:'22/05/2026',desc:'Anteprima ridotta. Pausa zoom.',tags:['ui','feat']},
+    {ver:'v1.1.0',date:'22/05/2026',desc:'Solo 10 caratteri. Timeout 1s.',tags:['feat','fix']},
+    {ver:'v1.0.0',date:'22/05/2026',desc:'Versione iniziale: OCR Tesseract.js.',tags:['feat']}
+];
+
+let cameraActive=false, flashOn=false, multiDetect=false, videoEl=null, stream=null, ocrWorker=null, scanTimer=null, idleTimer=null;
+let records=[], scanTotal=0, confirmCallback=null, audioCtx=null;
+let scanCooldown=false, scanPaused=false;
+let lastScanPedana='', lastScanImage=null;
+let pedanaCallback=null, pedanaEditRecordId=null;
+let lastScanTime=0;
+let gsheetUrl='', syncStatus='idle';
+const lowConfTracker = {};
+let manualEntrySerial='', manualEntryImage=null;
+const IDLE_TIMEOUT=30000;
+const SCAN_INTERVAL=800;
+const SERIAL_PATTERN=/^BDBCF00[A-F0-9]{3}$/;
+const IMG_MARGIN=25;
+
+// ===== AUDIO =====
+function getAudioCtx(){if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==='suspended')audioCtx.resume();return audioCtx;}
+function playTone(f,d,t='square',v=0.12){try{const c=getAudioCtx(),o=c.createOscillator(),g=c.createGain();o.type=t;o.frequency.value=f;g.gain.value=v;g.gain.exponentialRampToValueAtTime(0.001,c.currentTime+d/1000);o.connect(g);g.connect(c.destination);o.start();o.stop(c.currentTime+d/1000);}catch(e){}}
+function beepOk(){playTone(1200,50,'sine');setTimeout(()=>playTone(1600,50,'sine'),70);}
+function beepDup(){playTone(400,120,'sawtooth');setTimeout(()=>playTone(300,120,'sawtooth'),180);}
+function beepErr(){playTone(200,250,'sawtooth');}
+function vib(p='ok'){if(navigator.vibrate){if(p==='ok')navigator.vibrate([40,25,40]);else if(p==='dup')navigator.vibrate([180]);else if(p==='err')navigator.vibrate([80,40,80,40,80]);}}
+function toast(m,t='success'){const e=document.getElementById('toast');e.textContent=m;e.className='toast '+t;setTimeout(()=>e.classList.add('visible'),10);setTimeout(()=>e.classList.remove('visible'),2800);}
+function showConfirm(title,msg,cb,imageUrl=null){
+    document.getElementById('confirmTitle').textContent=title;
+    document.getElementById('confirmMsg').textContent=msg;
+    const preview = document.getElementById('confirmPreviewImage');
+    if(imageUrl){preview.src=imageUrl;preview.style.display='block';} else{preview.style.display='none';}
+    confirmCallback=cb;
+    document.getElementById('confirmModal').classList.add('visible');
+}
+function closeConfirm(){document.getElementById('confirmModal').classList.remove('visible');confirmCallback=null;}
+function executeConfirm(){if(confirmCallback)confirmCallback();closeConfirm();}
+
+const OCR_CORRECTION_MAP={'O':'0','o':'0','Q':'0','I':'1','l':'1','i':'1','S':'5','s':'5','Z':'2','z':'2'};
+function fixOCR(raw){let c=[],f='';for(let i=0;i<raw.length;i++){if(OCR_CORRECTION_MAP.hasOwnProperty(raw[i])){f+=OCR_CORRECTION_MAP[raw[i]];c.push(`${raw[i]}→${OCR_CORRECTION_MAP[raw[i]]}`);}else{f+=raw[i];}}return{fixed:f.toUpperCase(),corrections:c};}
+function detectCorrections(raw,serial){const c=[],ru=raw.toUpperCase(),mn=Math.min(ru.length,serial.length);for(let i=0;i<mn;i++){if(ru[i]!==serial[i])c.push(`${ru[i]}→${serial[i]}`);}return c;}
+function isValidSerial(s){return SERIAL_PATTERN.test(s);}
+function validateSerial(s){if(s.length!==10)return'10 caratteri richiesti';if(!s.startsWith('BDBCF00'))return'Inizia con BDBCF00';if(!SERIAL_PATTERN.test(s))return'Caratteri non validi';return null;}
+function cropFromBbox(canvas,rw,rh,bbox,margin){const{x0,y0,x1,y1}=bbox;const cX=Math.max(0,x0-margin),cY=Math.max(0,y0-margin);const cW=Math.min(rw-cX,(x1-x0)+margin*2),cH=Math.min(rh-cY,(y1-y0)+margin*2);if(cW<=0||cH<=0)return null;const cc=document.createElement('canvas');cc.width=cW;cc.height=cH;const cctx=cc.getContext('2d');cctx.drawImage(canvas,cX,cY,cW,cH,0,0,cW,cH);return cc.toDataURL('image/jpeg',0.8);}
+
+function scrollToTop(){window.scrollTo({top:0,behavior:'smooth'});}
+function checkScrollPosition(){const btn=document.getElementById('scrollTopBtn');const scrolledDown=window.scrollY>200;if(scrolledDown)btn.classList.add('visible');else btn.classList.remove('visible');}
+window.addEventListener('scroll',checkScrollPosition,{passive:true});
+
+function openHelpModal(){document.getElementById('helpModal').classList.add('visible');}
+function requestVersionAccess(){const n=new Date();document.getElementById('versionPassword').value='';document.getElementById('passwordModal').classList.add('visible');document.getElementById('passwordModal').dataset.pwd=String(n.getHours()).padStart(2,'0')+String(n.getMinutes()).padStart(2,'0');setTimeout(()=>{const i=document.getElementById('versionPassword');if(i)i.focus();},200);}
+function closePasswordModal(){document.getElementById('passwordModal').classList.remove('visible');}
+function checkVersionPassword(){const input=document.getElementById('versionPassword').value.trim();if(input===document.getElementById('passwordModal').dataset.pwd){closePasswordModal();document.getElementById('modalGsheetUrl').value=gsheetUrl;openVersionModal();}else{toast('❌ Password errata','error');beepErr();vib('err');document.getElementById('versionPassword').value='';}}
+document.addEventListener('keydown',(e)=>{if(e.key==='Enter'&&document.getElementById('passwordModal').classList.contains('visible'))checkVersionPassword();});
+
+function openVersionModal(){
+    document.getElementById('versionBuildDate').textContent='Generato il '+new Date().toLocaleString('it-IT');
+    const el=document.getElementById('changelogContent');
+    el.innerHTML=CHANGELOG.map(c=>`<div class="changelog-item"><span class="ch-ver">${c.ver}</span><span class="ch-date">${c.date}</span><div class="ch-desc">${c.desc}</div><div class="ch-tags">${c.tags.map(t=>`<span class="ch-tag ${t}">${t.toUpperCase()}</span>`).join('')}</div></div>`).join('');
+    document.getElementById('versionModal').classList.add('visible');
+}
+function closeVersionModal(){document.getElementById('versionModal').classList.remove('visible');}
+
+// ===== GOOGLE SHEETS LOGIC =====
+function loadGSheetUrl(){try{const u=localStorage.getItem(GSHEET_KEY);if(u){gsheetUrl=u;document.getElementById('modalGsheetUrl').value=u;}}catch(e){}}
+function saveModalGSheet(){const val=document.getElementById('modalGsheetUrl').value.trim();gsheetUrl=val;localStorage.setItem(GSHEET_KEY,val);toast('URL Salvato','success');setSyncStatus(syncStatus);}
+function verifyGSheetFromModal(){
+    if(!gsheetUrl){toast('Inserisci URL','error');return;}
+    if(!gsheetUrl.includes('/exec')){toast('URL deve terminare con /exec','error');return;}
+    document.getElementById('gsheetDiag').style.display='block';
+    document.getElementById('gsheetDiag').textContent='Verifica...';
+    
+    fetch(gsheetUrl, {method:'GET', mode:'no-cors'})
+        .then(()=>{
+            document.getElementById('gsheetDiag').textContent='✅ Connesso';
+            toast('✅ Verifica OK','success');
+            setSyncStatus('synced');
+        })
+        .catch(()=>{
+            document.getElementById('gsheetDiag').textContent='❌ Errore';
+            toast('❌ Verifica fallita','error');
+            setSyncStatus('error');
+        });
+}
+function setSyncStatus(status){
+    syncStatus=status;
+    const el=document.getElementById('syncIndicator');
+    if(status==='idle'||status==='synced'){el.className='sync-status synced';el.textContent='🟢 Sync';}
+    else if(status==='syncing'){el.className='sync-status uploading';el.textContent='🔄 Invio...';}
+    else if(status==='error'){el.className='sync-status error';el.textContent='🔴 Errore';}
+    else if(status==='pending'){el.className='sync-status pending';el.textContent='🟡 In coda';}
+}
+
+async function sendToGSheet(record){
+    if(!gsheetUrl || !gsheetUrl.includes('/exec')) return false;
+    
+    try{
+        const payload = {
+            timestamp: record.timestamp || new Date().toLocaleString('it-IT'),
+            serial: record.serial || '',
+            confidence: record.confidence || '',
+            corrections: (record.corrections||[]).join(', '),
+            modified: record.modified ? 'Sì' : 'No',
+            runNumber: record.runNumber || '',
+            pedana: record.pedana || '',
+            operator: record.operator || '',
+            status: record.status || '',
+            note: record.note || ''
+        };
+        
+        await fetch(gsheetUrl, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: {'Content-Type': 'text/plain;charset=utf-8'},
+            body: JSON.stringify(payload)
+        });
+        
+        record._synced = true;
+        return true;
+    } catch(e) {
+        console.warn('GSheet fail:',e);
+        record._synced = false;
+        return false;
+    }
+}
+
+async function syncPendingToGSheet(){
+    if(!gsheetUrl){toast('Configura URL nella versione','error');return;}
+    const unsynced=records.filter(r=>!r._synced);
+    if(unsynced.length===0){toast('Tutto sincronizzato ✅','success');return;}
+    
+    setSyncStatus('syncing');
+    toast(`🔄 Invio ${unsynced.length} record...`,'success');
+    
+    let ok=0, err=0;
+    for(const r of unsynced){
+        const s = await sendToGSheet(r);
+        if(s) ok++; else err++;
+    }
+    
+    saveToStorage();
+    if(err===0){toast(`✅ ${ok} inviati`,'success');setSyncStatus('synced');}
+    else{toast(`⚠️ ${ok} ok, ${err} errori`,'warning');setSyncStatus('error');}
+    renderRecords();
+}
+
+// ===== APPLY STATUS =====
+function openApplyStatusModal(){const c=document.getElementById('pedana').value.trim();if(!c){toast('Imposta Pedana','warning');return;}document.getElementById('applyPedanaName').textContent=c;document.getElementById('statusApplyModal').classList.add('visible');}
+function executeApplyStatus(status){const c=document.getElementById('pedana').value.trim();if(!c)return;let count=0;records.forEach(r=>{if(r.pedana===c){r.status=status;r._synced=false;count++;}});document.getElementById('statusApplyModal').classList.remove('visible');if(count>0){saveToStorage();renderRecords();toast(`✅ "${status}" a ${count} record`,'success');if(gsheetUrl)syncPendingToGSheet();}else toast('Nessun record','warning');}
+
+// ===== STORAGE & PEDANA =====
+let imgDB=null;
+function openImgDB(){return new Promise((resolve,reject)=>{if(imgDB){resolve(imgDB);return;}const req=indexedDB.open(IMG_DB_NAME,IMG_DB_VERSION);req.onupgradeneeded=(e)=>{const db=e.target.result;if(!db.objectStoreNames.contains(IMG_STORE))db.createObjectStore(IMG_STORE,{keyPath:'id'});};req.onsuccess=(e)=>{imgDB=e.target.result;resolve(imgDB);};req.onerror=(e)=>reject(e);});}
+async function saveImg(id,dataUrl){try{const db=await openImgDB();const tx=db.transaction(IMG_STORE,'readwrite');tx.objectStore(IMG_STORE).put({id:id,data:dataUrl});return new Promise((r)=>{tx.oncomplete=()=>r();});}catch(e){}}
+async function loadAllImages(){try{const db=await openImgDB();const tx=db.transaction(IMG_STORE,'readonly');const store=tx.objectStore(IMG_STORE);return new Promise((r)=>{const req=store.getAll();req.onsuccess=()=>{const map={};(req.result||[]).forEach(item=>{map[item.id]=item.data;});r(map);};req.onerror=()=>r({});});}catch(e){return {};}}
+async function deleteImg(id){try{const db=await openImgDB();const tx=db.transaction(IMG_STORE,'readwrite');tx.objectStore(IMG_STORE).delete(id);}catch(e){}}
+async function saveToStorage(){try{const lean=records.map(r=>{const c={...r};c.image=null;return c;});localStorage.setItem(STORAGE_KEY,JSON.stringify({records:lean,scanTotal:scanTotal,operator:document.getElementById('operatorName').value,pedana:document.getElementById('pedana').value,timestamp:Date.now()}));for(const r of records){if(r.image&&!r.image.includes('[truncated]')){await saveImg(r.id,r.image);}}}catch(e){}}
+async function loadFromStorage(){try{const raw=localStorage.getItem(STORAGE_KEY);if(!raw)return false;const d=JSON.parse(raw);if(Date.now()-d.timestamp>7*24*60*60*1000){localStorage.removeItem(STORAGE_KEY);return false;}records=d.records||[];scanTotal=d.scanTotal||0;if(d.operator)document.getElementById('operatorName').value=d.operator;if(d.pedana)document.getElementById('pedana').value=d.pedana;document.getElementById('scanCount').textContent=scanTotal;const imgMap=await loadAllImages();records.forEach(r=>{if(imgMap[r.id])r.image=imgMap[r.id];});return true;}catch(e){return false;}}
+
+function showPedanaModal(serial,imgData,callback){const current=document.getElementById('pedana').value.trim()||'—';document.getElementById('pedanaSerialRef').textContent='Seriale: '+serial;document.getElementById('pedanaBigRef').textContent=current;document.getElementById('pedanaModalTitle').textContent='📍 Pedana';document.getElementById('pedanaModalMsg').textContent='Conferma o modifica';const pw=document.getElementById('pedanaPreviewWrap');if(imgData){pw.innerHTML=`<img src="${imgData}" alt="preview">`;pw.style.display='block';}else{pw.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--text-dim);font-size:9px;">No img</div>';pw.style.display='flex';}document.getElementById('pedanaChangeInput').style.display='none';document.getElementById('newPedanaInput').value='';pedanaCallback=callback;document.getElementById('pedanaModal').classList.add('visible');}
+function pedanaKeep(){document.getElementById('pedanaModal').classList.remove('visible');if(pedanaCallback)pedanaCallback(document.getElementById('pedana').value.trim());pedanaCallback=null;}
+function pedanaChange(){
+    const container = document.getElementById('pedanaModal');
+    const box = container.querySelector('.confirm-box');
+    box.scrollTop = 0;
+    document.getElementById('pedanaChangeInput').style.display='block';
+    document.getElementById('newPedanaInput').value='';
+    setTimeout(()=>{
+        document.getElementById('newPedanaInput').focus();
+        container.scrollTo({ top: 0, behavior: 'smooth' });
+    },100);
+}
+function pedanaCancel(){document.getElementById('pedanaChangeInput').style.display='none';}
+function pedanaConfirm(){const nv=document.getElementById('newPedanaInput').value.trim();if(!nv){toast('Obbligatorio','error');return;}document.getElementById('pedana').value=nv;document.getElementById('pedanaModal').classList.remove('visible');document.getElementById('pedana').classList.remove('missing');lastScanPedana=nv;saveToStorage();if(pedanaCallback)pedanaCallback(nv);pedanaCallback=null;}
+document.addEventListener('keydown',(e)=>{if(e.key==='Enter'&&document.getElementById('pedanaChangeInput').style.display==='block')pedanaConfirm();});
+
+function openPedanaEdit(id){const rec=records.find(r=>r.id===id);if(!rec)return;pedanaEditRecordId=id;document.getElementById('pedanaEditMsg').textContent=`Seriale: ${rec.serial}`;document.getElementById('pedanaEditInput').value=rec.pedana;document.getElementById('pedanaEditModal').classList.add('visible');setTimeout(()=>{const i=document.getElementById('pedanaEditInput');if(i){i.focus();i.select();}},200);}
+function closePedanaEdit(){document.getElementById('pedanaEditModal').classList.remove('visible');pedanaEditRecordId=null;}
+function confirmPedanaEdit(){const nv=document.getElementById('pedanaEditInput').value.trim();if(!nv){toast('Obbligatorio','error');return;}const rec=records.find(r=>r.id===pedanaEditRecordId);if(rec){rec.pedana=nv;rec._synced=false;renderRecords();saveToStorage();toast('Aggiornata','success');}closePedanaEdit();}
+document.addEventListener('keydown',(e)=>{if(e.key==='Enter'&&document.getElementById('pedanaEditModal').classList.contains('visible'))confirmPedanaEdit();});
+
+// ===== CAMERA & SCAN =====
+function resetIdleTimer(){if(idleTimer)clearTimeout(idleTimer);if(!cameraActive)return;lastScanTime=Date.now();idleTimer=setTimeout(()=>{if(cameraActive){toast('⚡ Chiusura: 30s inattività','warning');setTimeout(()=>stopCamera(),500);}},IDLE_TIMEOUT);}
+async function toggleCamera(){if(cameraActive){stopCamera();}else{await startCamera();}}
+async function startCamera(){
+    const btn=document.getElementById('btnCamera');
+    btn.innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2"/><line x1="18" y1="6" x2="6" y2="18"/></svg><span>Ferma</span>`;
+    btn.classList.remove('btn-primary');btn.classList.add('btn-danger');
+    try{
+        videoEl=document.getElementById('videoFeed');
+        stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment',width:{ideal:1280},height:{ideal:720}},audio:false});
+        videoEl.srcObject=stream;
+        await new Promise(r=>{videoEl.onloadedmetadata=()=>r();});
+        document.getElementById('cameraContainer').classList.add('active');
+        document.getElementById('btnFlash').disabled=false;
+        document.getElementById('scanIndicator').innerHTML='<span class="loading-indicator"><span class="spinner"></span> Caricamento...</span>';
+        document.getElementById('ocrStatus').textContent='Inizializzazione OCR...';
+        cameraActive=true;
+        ocrWorker=await Tesseract.createWorker('eng',1,{logger:(m)=>{
+            if(m.status==='recognizing text'){
+                document.getElementById('progressBar').style.width=Math.round(m.progress*100)+'%';
+                document.getElementById('ocrStatus').textContent=`OCR ${Math.round(m.progress*100)}%`;
+                if(Math.round(m.progress*100) >= 100) { playTone(1000, 50, 'sine', 0.05); }
+            }
+        }});
+        await ocrWorker.setParameters({tessedit_char_whitelist:'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789',preserve_interword_spaces:'0'});
+        document.getElementById('scanIndicator').innerHTML='<span class="scanning-indicator"><span class="dot"></span> Pronto</span>';
+        document.getElementById('ocrStatus').textContent='✓ Scansione attiva';
+        document.getElementById('progressBar').style.width='0%';
+        scanTimer=setInterval(scanFrame,SCAN_INTERVAL);
+        resetIdleTimer();checkScrollPosition();
+        toast('📷 Avviata','success');vib('ok');
+    }catch(err){console.error(err);toast('Errore: '+err.message,'error');beepErr();vib('err');resetBtnCamera();}
+}
+function stopCamera(){
+    if(scanTimer){clearInterval(scanTimer);scanTimer=null;}
+    if(idleTimer){clearTimeout(idleTimer);idleTimer=null;}
+    if(stream){stream.getTracks().forEach(t=>t.stop());stream=null;}
+    if(ocrWorker){ocrWorker.terminate();ocrWorker=null;}
+    cameraActive=false;flashOn=false;videoEl=null;scanCooldown=false;scanPaused=false;
+    document.getElementById('cameraContainer').classList.remove('active');
+    document.getElementById('btnFlash').disabled=true;
+    document.getElementById('btnFlash').classList.remove('btn-accent');document.getElementById('btnFlash').classList.add('btn-warning');
+    document.getElementById('progressBar').style.width='0%';
+    document.getElementById('cooldownOverlay').classList.remove('active');
+    updateScanIndicator();resetBtnCamera();checkScrollPosition();toast('📷 Spenta','warning');
+}
+function resetBtnCamera(){const btn=document.getElementById('btnCamera');btn.innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg><span>Avvia OCR</span>`;btn.classList.add('btn-primary');btn.classList.remove('btn-danger');}
+function updateScanIndicator(){const el=document.getElementById('scanIndicator');if(!cameraActive){el.innerHTML='';return;}if(scanPaused){el.innerHTML='<span class="paused-indicator"><span class="dot"></span> Pausa</span>';return;}if(scanCooldown){el.innerHTML='<span class="paused-indicator"><span class="dot"></span> Cooldown</span>';return;}el.innerHTML='<span class="scanning-indicator"><span class="dot"></span> Scansione</span>';}
+async function toggleFlash(){if(!stream)return;try{const track=stream.getVideoTracks()[0];if(!track)return;const caps=track.getCapabilities();if(!caps||!caps.torch){toast('Flash non supportato','error');return;}flashOn=!flashOn;await track.applyConstraints({advanced:[{torch:flashOn}]});const btn=document.getElementById('btnFlash');if(flashOn){btn.classList.remove('btn-warning');btn.classList.add('btn-accent');toast('🔦 ON','success');}else{btn.classList.remove('btn-accent');btn.classList.add('btn-warning');toast('🔦 OFF','warning');}}catch(e){toast('Errore flash','error');}}
+function toggleMultiDetect(){multiDetect=!multiDetect;document.getElementById('toggleMulti').classList.toggle('active',multiDetect);}
+function checkPedanaRequired(){const p=document.getElementById('pedana').value.trim();if(!p){document.getElementById('pedana').classList.add('missing');toast('⚠️ Pedana richiesta','error');beepErr();vib('err');return false;}document.getElementById('pedana').classList.remove('missing');return true;}
+
+// ===== OCR & UPSIDE DOWN DETECTION =====
+function applyAdaptiveThreshold(ctx,w,h){const imageData=ctx.getImageData(0,0,w,h);const data=imageData.data;const gray=new Uint8Array(w*h);for(let i=0;i<data.length;i+=4)gray[i/4]=0.299*data[i]+0.587*data[i+1]+0.114*data[i+2];let min=255,max=0;for(let i=0;i<gray.length;i++){if(gray[i]<min)min=gray[i];if(gray[i]>max)max=gray[i];}const range=max-min;if(range===0)return;const threshold=min+range*0.5;for(let i=0;i<data.length;i+=4){const val=gray[i/4];const binary=val<threshold?0:255;data[i]=binary;data[i+1]=binary;data[i+2]=binary;}ctx.putImageData(imageData,0,0);}
+
+function extractBestFromOCR(result, sourceCanvas) {
+    let best = null;
+    for(const word of result.data.words||[]){
+        let cleaned=word.text.replace(/[^A-Za-z0-9]/g,'');
+        if(cleaned.length<10)continue;
+        let{fixed,corrections}=fixOCR(cleaned);
+        const conf=Math.round(word.confidence);
+        if(fixed.length===10&&isValidSerial(fixed)){
+            const img=cropFromBbox(sourceCanvas,sourceCanvas.width,sourceCanvas.height,word.bbox,IMG_MARGIN);
+            best={serial:fixed,confidence:conf,corrections,image:img};
+        }
+    }
+    return best;
+}
+
+async function processROIAndOCR(roiCanvas) {
+    let best = extractBestFromOCR(await ocrWorker.recognize(roiCanvas), roiCanvas);
+    if(best && best.confidence >= 35) return best;
+
+    const flipCanvas = document.createElement('canvas');
+    flipCanvas.width = roiCanvas.width; flipCanvas.height = roiCanvas.height;
+    const fCtx = flipCanvas.getContext('2d');
+    fCtx.translate(flipCanvas.width, flipCanvas.height);
+    fCtx.rotate(Math.PI);
+    fCtx.drawImage(roiCanvas, 0, 0);
+
+    const flippedBest = extractBestFromOCR(await ocrWorker.recognize(flipCanvas), flipCanvas);
+    return flippedBest;
+}
+
+async function scanFrame(){
+    if(!cameraActive||!videoEl||!ocrWorker)return;
+    if(videoEl.readyState<2)return;
+    if(scanCooldown||scanPaused)return;
+    if(!checkPedanaRequired())return;
+
+    const canvas=document.getElementById('captureCanvas'),ctx=canvas.getContext('2d');
+    const vw=videoEl.videoWidth,vh=videoEl.videoHeight;
+    const rw=Math.floor(vw*0.85),rh=Math.floor(vh*0.3);
+    const rx=Math.floor((vw-rw)/2),ry=Math.floor((vh-rh)/2);
+    canvas.width=rw;canvas.height=rh;
+    ctx.drawImage(videoEl,rx,ry,rw,rh,0,0,rw,rh);
+    applyAdaptiveThreshold(ctx,rw,rh);
+
+    try{
+        const roiX=rw*0.075,roiY=rh*0.35,roiW=rw*0.85,roiH=rh*0.30;
+        const roiCanvas=document.createElement('canvas');roiCanvas.width=roiW;roiCanvas.height=roiH;
+        const roiCtx=roiCanvas.getContext('2d');roiCtx.drawImage(canvas,roiX,roiY,roiW,roiH,0,0,roiW,roiH);
+
+        const best = await processROIAndOCR(roiCanvas);
+        if(best){
+            if(isValidSerial(best.serial)){
+                processSerial(best.serial,best.image,best.confidence,best.corrections);
+            } else if(best.confidence < 35) {
+                const trackText=(best.serial&&best.serial.length>=7)?best.serial.substring(0,7):'';
+                if(trackText){const c=trackLowConfidence(trackText,Date.now());if(c>=5){openManualEntryModal(trackText,best.image);scanPaused=true;}}
+            }
+        }
+    }catch(e){console.error('OCR error:',e);}
+    document.getElementById('ocrStatus').textContent='✓ Pronto';
+    document.getElementById('progressBar').style.width='0%';
+}
+
+function getConfClass(c){if(c>=80)return'conf-high';if(c>=60)return'conf-mid';return'conf-low';}
+
+function processSerial(serial,imgData,confidence,corrections){
+    const isDup=records.some(r=>r.serial===serial);
+    if(isDup){
+        toast('⚠️ Seriale duplicato','warning');
+        beepDup();vib('dup');
+        scanCooldown=false;
+        document.getElementById('cooldownOverlay').classList.remove('active');
+        if(cameraActive&&!scanPaused)document.getElementById('ocrStatus').textContent='✓ Pronto';
+        updateScanIndicator();
+        return;
+    }
+    
+    resetIdleTimer();scanCooldown=true;
+    document.getElementById('cooldownOverlay').classList.add('active');
+    document.getElementById('ocrStatus').textContent='⏱ Cooldown...';
+    updateScanIndicator();
+    
+    const operator=document.getElementById('operatorName').value.trim()||'N/D';
+    const pedana=document.getElementById('pedana').value.trim()||'N/D';
+    lastScanPedana=pedana;lastScanImage=imgData;
+    const ts=new Date().toLocaleString('it-IT');
+    const rec={id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),serial,timestamp:ts,operator,pedana,runNumber:'',modified:false,status:'',note:'',image:imgData||null,confidence:confidence,corrections:corrections||[],_synced:false,_imgUploaded:false,_confirmed:false};
+    records.unshift(rec);scanTotal++;document.getElementById('scanCount').textContent=scanTotal;
+    if(imgData)saveImg(rec.id,imgData);saveToStorage();
+    beepOk();vib('ok');renderRecords();
+    if(confidence<50)toast('⚠️ Bassa confidenza','warning');
+    else toast('✅ '+serial,'success');
+    if(gsheetUrl)sendToGSheet(rec).then(()=>{saveToStorage();setSyncStatus('synced');renderRecords();}).catch(()=>{setSyncStatus('pending');renderRecords();});
+    
+    setTimeout(()=>{showPedanaModal(serial,imgData,()=>{scanCooldown=false;document.getElementById('cooldownOverlay').classList.remove('active');if(cameraActive&&!scanPaused)document.getElementById('ocrStatus').textContent='✓ Pronto';updateScanIndicator();resetIdleTimer();});},1000);
+}
+
+function trackLowConfidence(serial, timestamp){if(!lowConfTracker[serial])lowConfTracker[serial]=[];lowConfTracker[serial].push(timestamp);const now=Date.now();lowConfTracker[serial]=lowConfTracker[serial].filter(t=>now-t<10000);return lowConfTracker[serial].length;}
+function openManualEntryModal(serial,imgData){
+    manualEntrySerial=serial;manualEntryImage=imgData;
+    document.getElementById('manualSerialInput').value='BDBCF00';
+    const wrap=document.getElementById('manualPreviewWrap');
+    if(imgData){wrap.innerHTML=`<img src="${imgData}" alt="preview">`;wrap.style.display='block';}else{wrap.innerHTML='';wrap.style.display='none';}
+    document.getElementById('manualEntryModal').classList.add('visible');setTimeout(()=>document.getElementById('manualSerialInput').focus(),300);
+}
+function closeManualEntry(){document.getElementById('manualEntryModal').classList.remove('visible');scanPaused=false;for(let k in lowConfTracker)delete lowConfTracker[k];}
+function confirmManualEntry(){const val=document.getElementById('manualSerialInput').value.trim().toUpperCase();if(validateSerial(val)){toast('❌ '+validateSerial(val),'error');return;}closeManualEntry();const operator=document.getElementById('operatorName').value.trim()||'N/D';const pedana=document.getElementById('pedana').value.trim()||'N/D';const ts=new Date().toLocaleString('it-IT');const rec={id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),serial:val,timestamp:ts,operator,pedana,runNumber:'',modified:false,status:'',note:'',image:manualEntryImage||null,confidence:100,corrections:[],_synced:false,_imgUploaded:false,_confirmed:true};records.unshift(rec);scanTotal++;document.getElementById('scanCount').textContent=scanTotal;if(manualEntryImage)saveImg(rec.id,manualEntryImage);saveToStorage();beepOk();vib('ok');renderRecords();toast('✅ '+val,'success');if(gsheetUrl)sendToGSheet(rec).then(()=>{saveToStorage();setSyncStatus('synced');renderRecords();});setTimeout(()=>{showPedanaModal(val,manualEntryImage,()=>{if(cameraActive&&!scanPaused)document.getElementById('ocrStatus').textContent='✓ Pronto';updateScanIndicator();resetIdleTimer();});},400);}
+function confirmLowConf(id){const rec=records.find(r=>r.id===id);if(rec){rec._confirmed=true;renderRecords();toast('Confermato','success');}}
+
+function renderRecords(){
+    const el=document.getElementById('recordsList');
+    if(records.length===0){el.innerHTML=`<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 7h.01M12 7h.01M17 7h.01M7 12h10M7 17h6"/></svg><p>Nessun seriale.<br>Avvia la fotocamera.</p></div>`;return;}
+    el.innerHTML=records.map(r=>{
+        const cc=getConfClass(r.confidence);
+        const ch=r.corrections&&r.corrections.length>0?`<span class="meta-tag correction">⚡ ${r.corrections.join(', ')}</span>`:'';
+        let syncTag='';if(r._synced&&r._imgUploaded)syncTag='<span class="meta-tag synced-tag">☁️🖼</span>';else if(r._synced)syncTag='<span class="meta-tag synced-tag">☁️</span>';else syncTag='<span class="meta-tag pending-tag">📤</span>';
+        const runVal=r.runNumber||'';
+        const lowConfClass=r.confidence<50&&!r._confirmed?'low-conf':'';
+        const confirmBtn=r.confidence<50&&!r._confirmed?`<button class="confirm-low-btn" onclick="confirmLowConf('${r.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Conferma</button>`:'';
+        return `<div class="record-card ${lowConfClass}" id="record-${r.id}">
+            <div class="record-top">
+                <div class="record-image-wrap" onclick="openModal('${r.id}')">${r.image?`<img src="${r.image}" alt="img">`:`<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--text-dim);font-size:9px;">No img</div>`}</div>
+                <div class="record-info">
+                    <input type="text" class="serial-display ${r.modified?'modified':''}" value="${r.serial}" onchange="editSerial('${r.id}',this.value)" onfocus="this.dataset.orig=this.value" spellcheck="false" autocomplete="off" maxlength="12">
+                    <div class="record-meta">
+                        <span class="meta-tag ${cc}">🎯 ${r.confidence}%</span>
+                        ${ch}${syncTag}
+                        <span>🕐 ${r.timestamp}</span>
+                        <span class="run-cell" id="runCell-${r.id}" onclick="editRun('${r.id}')">${runVal?runVal:'<span style="color:var(--text-dim)">RUN</span>'}</span>
+                        <span>👤 ${r.operator}</span>
+                        <span class="pedana-inline" onclick="openPedanaEdit('${r.id}')">📍 ${r.pedana}</span>
+                        ${r.modified?'<span class="mod-badge">MODIF.</span>':''}
+                    </div>
+                    ${confirmBtn}
+                </div>
+                <button class="delete-btn" onclick="deleteRecord('${r.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
+            </div>
+            <div class="status-selector">
+                <button class="status-btn ${r.status==='Good'?'active-good':''}" onclick="setStatus('${r.id}','Good')"><span class="st-good">✓</span> Good</button>
+                <button class="status-btn ${r.status==='Rotto'?'active-broken':''}" onclick="setStatus('${r.id}','Rotto')"><span class="st-rotto">✕</span> Rotto</button>
+                <button class="status-btn ${r.status==='Sporco'?'active-dirty':''}" onclick="setStatus('${r.id}','Sporco')"><span class="st-sporco">◆</span> Sporco</button>
+                <button class="status-btn ${r.status==='RF-ID'?'active-rfid':''}" onclick="setStatus('${r.id}','RF-ID')">📡 RF-ID</button>
+                <button class="status-btn ${r.status==='Barra Mancante'?'active-bar':''}" onclick="setStatus('${r.id}','Barra Mancante')"><span class="st-bar">/</span> Barra Manc.</button>
+                <button class="status-btn ${r.status==='Dubbio/Altro'?'active-doubt':''}" onclick="setStatus('${r.id}','Dubbio/Altro')">❓ Dubbio</button>
+                ${r.status?`<button class="status-btn active-none" onclick="setStatus('${r.id}','')">✕ Reset</button>`:''}
+            </div>
+            <input type="text" class="note-input" placeholder="Note..." value="${r.note||''}" onchange="setNote('${r.id}',this.value)">
+        </div>`;
+    }).join('');
+}
+
+function editRun(id){const rec=records.find(r=>r.id===id);if(!rec)return;const cell=document.getElementById('runCell-'+id);const cur=rec.runNumber||'';cell.innerHTML=`<input type="text" class="run-input" id="runInput-${id}" value="${cur}" placeholder="RUN" maxlength="10" onblur="saveRun('${id}')" onkeydown="if(event.key==='Enter')this.blur()">`;cell.classList.add('editing');const inp=document.getElementById('runInput-'+id);inp.focus();inp.select();}
+function saveRun(id){const rec=records.find(r=>r.id===id);if(!rec)return;const inp=document.getElementById('runInput-'+id);if(!inp)return;const nv=inp.value.trim();rec.runNumber=nv;rec._synced=false;saveToStorage();renderRecords();if(gsheetUrl&&nv)sendToGSheet(rec);}
+
+function editSerial(id,newVal){
+    const rec=records.find(r=>r.id===id);
+    if(!rec)return;
+    const input=document.querySelector(`#record-${id} .serial-display`);
+    const orig=input?.dataset?.orig||rec.serial;
+    if(newVal===orig)return;
+    let{fixed}=fixOCR(newVal.trim().toUpperCase());
+    const errMsg=validateSerial(fixed);
+    if(errMsg){toast('❌ '+errMsg,'error');beepErr();input.value=orig;return;}
+    showConfirm('Conferma modifica',`Modificare "${rec.serial}" in "${fixed}"?`,()=>{
+        if(records.some(r=>r.serial===fixed&&r.id!==rec.id)){toast('⚠️ Già esistente!','warning');beepDup();vib('dup');input.value=orig;return;}
+        rec.serial=fixed;rec.modified=true;rec._synced=false;toast('Modificato: '+fixed,'success');beepOk();renderRecords();saveToStorage();
+    }, rec.image || null);
+    input.value=orig;
+}
+
+function setStatus(id,s){const rec=records.find(r=>r.id===id);if(!rec)return;rec.status=s;rec._synced=false;vib('ok');renderRecords();saveToStorage();}
+function setNote(id,n){const rec=records.find(r=>r.id===id);if(rec)rec.note=n;saveToStorage();}
+function deleteRecord(id){const rec=records.find(r=>r.id===id);if(!rec)return;showConfirm('Elimina record',`Eliminare "${rec.serial}"?`,()=>{records=records.filter(r=>r.id!==id);scanTotal=Math.max(0,scanTotal-1);document.getElementById('scanCount').textContent=scanTotal;deleteImg(id);vib('err');beepErr();renderRecords();saveToStorage();toast('Eliminato','warning');},rec.image||null);}
+
+function openModal(id){const rec=records.find(r=>r.id===id);if(!rec||!rec.image)return;scanPaused=true;updateScanIndicator();document.getElementById('modalImage').src=rec.image;document.getElementById('imageModal').classList.add('visible');}
+function closeModal(){document.getElementById('imageModal').classList.remove('visible');scanPaused=false;updateScanIndicator();}
+
+// ===== EXPORT =====
+function exportExcel(){
+    if(records.length===0){toast('Nessun record','warning');return;}
+    const data=records.map((r,i)=>({
+        '#':i+1,
+        'Timestamp':r.timestamp,
+        'Seriale':r.serial,
+        'Run':r.runNumber||'—',
+        'Confidenza %':r.confidence,
+        'Correzioni OCR':r.corrections&&r.corrections.length?r.corrections.join(', '):'—',
+        'Modificato':r.modified?'Sì':'No',
+        'Lotto/Posizione':r.pedana,
+        'Operatore':r.operator,
+        'Stato':r.status||'—',
+        'Note':r.note
+    }));
+    const ws=XLSX.utils.json_to_sheet(data);
+    ws['!cols']=[{wch:5},{wch:20},{wch:15},{wch:8},{wch:12},{wch:20},{wch:10},{wch:15},{wch:15},{wch:14},{wch:25}];
+    const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Scansioni');
+    XLSX.writeFile(wb,`Scansioni_${new Date().toISOString().slice(0,10)}.xlsx`);
+    toast(`📊 Excel: ${records.length} record`,'success');vib('ok');
+}
+
+function exportHtmlWithImages(){
+    if(records.length===0){toast('Nessun record','warning');return;}
+    let html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Report Scansioni ${new Date().toLocaleDateString('it-IT')}</title><style>body{font-family:Arial,sans-serif;margin:20px;background:#f5f5f5;color:#333;}h1{font-size:20px;margin-bottom:4px;}.meta{font-size:12px;color:#666;margin-bottom:16px;}table{width:100%;border-collapse:collapse;background:white;box-shadow:0 1px 3px rgba(0,0,0,0.1);font-size:12px;}th{background:#1e293b;color:white;padding:8px 6px;text-align:left;font-size:11px;position:sticky;top:0;}td{padding:6px;border-bottom:1px solid #e2e8f0;vertical-align:middle;}tr:hover{background:#f0f9ff;}.img-cell{width:140px;text-align:center;vertical-align:middle;}.img-cell img{max-width:130px;max-height:50px;border-radius:4px;border:1px solid #ddd;}.serial{font-family:monospace;font-weight:bold;font-size:14px;letter-spacing:1px;}.good{color:#10b981;font-weight:bold;}.rotto{color:#ef4444;font-weight:bold;}.sporco{color:#a16207;font-weight:bold;}.rfid{color:#8b5cf6;font-weight:bold;}.bar{color:#06b6d4;font-weight:bold;}.dubbio{color:#64748b;font-weight:bold;}.conf-high{color:#10b981;}.conf-mid{color:#f59e0b;}.conf-low{color:#ef4444;}@media print{body{margin:10px;}table{font-size:10px;}}</style></head><body><h1>📋 Report Scansioni Seriali</h1><div class="meta">Generato: ${new Date().toLocaleString('it-IT')} | Totale: ${records.length}</div><table><thead><tr><th>#</th><th>Timestamp</th><th>Seriale</th><th>Run</th><th>Anteprima</th><th>Conf.</th><th>Correzioni</th><th>Pedana</th><th>Operatore</th><th>Stato</th><th>Note</th></tr></thead><tbody>`;
+    records.forEach((r,i)=>{
+        const cc=r.confidence>=80?'conf-high':r.confidence>=60?'conf-mid':'conf-low';
+        let stClass='',stText=r.status||'—';
+        if(r.status==='Good')stClass='good';else if(r.status==='Rotto')stClass='rotto';else if(r.status==='Sporco')stClass='sporco';else if(r.status==='RF-ID')stClass='rfid';else if(r.status==='Barra Mancante')stClass='bar';else if(r.status==='Dubbio/Altro')stClass='dubbio';
+        const imgHtml=r.image?`<td class="img-cell"><img src="${r.image}" alt="serial"></td>`:`<td class="img-cell">—</td>`;
+        html+=`<tr><td>${i+1}</td><td>${r.timestamp}</td><td class="serial">${r.serial}${r.modified?' <small style="color:#f59e0b;">(mod)</small>':''}</td><td>${r.runNumber||'—'}</td>${imgHtml}<td class="${cc}">${r.confidence}%</td><td>${(r.corrections||[]).join(', ')||'—'}</td><td>${r.pedana}</td><td>${r.operator}</td><td class="${stClass}">${stText}</td><td>${r.note||''}</td></tr>`;
+    });
+    html+=`</tbody></table></body></html>`;
+    const blob=new Blob([html],{type:'text/html;charset=utf-8'});
+    saveAs(blob,`Report_Scansioni_${new Date().toISOString().slice(0,10)}.html`);
+    toast(`📄 HTML: ${records.length} record`,'success');vib('ok');
+}
+
+async function exportZip(){
+    if(records.length===0){toast('Nessun record','warning');return;}
+    toast('📦 ZIP...','success');
+    try{
+        const zip=new JSZip(),imgF=zip.folder('immagini');
+        let cnt=0;
+        for(const r of records){
+            if(r.image){
+                const fileName = `${r.serial}.jpg`;
+                imgF.file(fileName, r.image.split(',')[1], {base64:true});
+                cnt++;
+            }
+        }
+        const csv='N,Timestamp,Seriale,Run,Conf%,Correzioni,Modificato,Lotto,Operatore,Stato,Note\n'+records.map((r,i)=>`${i+1},${r.timestamp},${r.serial},${r.runNumber||''},${r.confidence},"${(r.corrections||[]).join(', ')}",${r.modified?'Sì':'No'},${r.pedana},${r.operator},${r.status||'—'},"${r.note}"`).join('\n');
+        zip.file('riepilogo.csv',csv);
+        const blob=await zip.generateAsync({type:'blob'});
+        saveAs(blob,`Archivio_${new Date().toISOString().slice(0,10)}.zip`);
+        toast(`📦 ZIP: ${cnt} img`,'success');vib('ok');
+    }catch(e){console.error(e);toast('Errore ZIP','error');beepErr();}
+}
+
+document.addEventListener('DOMContentLoaded',async()=>{await openImgDB();loadGSheetUrl();const loaded=await loadFromStorage();if(loaded&&records.length>0){renderRecords();toast(`📂 ${records.length} recuperati`,'success');const unsynced=records.filter(r=>!r._synced);if(unsynced.length>0){setSyncStatus('pending');if(gsheetUrl)setTimeout(()=>syncPendingToGSheet(),2000);}else{setSyncStatus('synced');}}else{renderRecords();setSyncStatus('idle');}setSyncStatus(syncStatus);});
+window.addEventListener('beforeunload',()=>{saveToStorage();});
+document.addEventListener('visibilitychange',()=>{if(document.hidden)saveToStorage();});
+document.addEventListener('touchstart',e=>{if(e.touches.length>1)e.preventDefault();},{passive:false});
+let lastEnd=0;document.addEventListener('touchend',e=>{const n=Date.now();if(n-lastEnd<=300)e.preventDefault();lastEnd=n;},false);
+</script>
+</body>
+</html>
+
