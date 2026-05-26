@@ -193,7 +193,11 @@
         .empty-state svg { width:44px; height:44px; margin-bottom:10px; opacity:0.4; }
         .empty-state p { font-size:13px; }
         .bottom-bar { position:fixed; bottom:0; left:0; right:0; background:var(--bg-card); border-top:1px solid var(--border); padding:10px 18px; display:flex; gap:6px; z-index:100; backdrop-filter:blur(20px); flex-wrap:wrap; }
-        .bottom-bar .btn { font-size:11px; padding:8px 8px; }
+        .bottom-bar .btn { font-size:10px; padding:8px 4px; white-space:normal; line-height:1.3; min-height:52px; flex-direction:column; gap:3px; }
+        .bottom-bar .btn svg { width:16px; height:16px; flex-shrink:0; }
+        .btn-label { display:flex; flex-direction:column; align-items:center; line-height:1.2; }
+        .btn-label .l1 { font-size:10px; font-weight:600; }
+        .btn-label .l2 { font-size:9px; font-weight:400; opacity:0.85; }
         .progress-bar { position:absolute; bottom:0; left:0; height:3px; background:var(--accent); transition:width 0.3s; z-index:5; }
         .cooldown-overlay { position:absolute; top:0; left:0; right:0; bottom:0; background:rgba(16,185,129,0.08); pointer-events:none; z-index:4; display:none; }
         .cooldown-overlay.active { display:block; }
@@ -218,7 +222,7 @@
         .settings-label { font-size:12px; color:var(--text-muted); }
         .settings-input { width:100px; background:var(--bg-input); border:1px solid var(--border); border-radius:6px; color:var(--text); padding:6px 8px; font-family:'JetBrains Mono',monospace; font-size:12px; outline:none; }
         .settings-input:focus { border-color:var(--primary); }
-        @media (max-width:380px) { .btn { padding:8px 8px; font-size:11px; } .status-btn { font-size:9px; padding:3px 6px; } .record-image-wrap { width:120px; height:46px; } .serial-display { width:120px; } .record-meta { gap:3px; } }
+        @media (max-width:380px) { .status-btn { font-size:9px; padding:3px 6px; } .record-image-wrap { width:120px; height:46px; } .serial-display { width:120px; } .record-meta { gap:3px; } }
     </style>
 </head>
 <body>
@@ -236,7 +240,7 @@
             <button class="icon-btn" onclick="openSettingsModal()" title="Impostazioni">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33 2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82 2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33 2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
             </button>
-            <span class="version-badge" id="versionBadge" onclick="requestVersionAccess()">v7.2.0</span>
+            <span class="version-badge" id="versionBadge" onclick="requestVersionAccess()">v7.2.1</span>
         </div>
     </div>
     <div class="scan-counter">
@@ -448,24 +452,29 @@
 
 <div class="bottom-bar">
     <button class="btn btn-accent" onclick="exportExcel()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg>Excel
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg>
+        <span class="btn-label"><span class="l1">Esporta</span><span class="l2">Excel</span></span>
     </button>
     <button class="btn btn-primary" onclick="exportHtmlWithImages()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>HTML+Img
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+        <span class="btn-label"><span class="l1">Esporta</span><span class="l2">HTML+Img</span></span>
     </button>
     <button class="btn btn-outline" onclick="exportZip()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8v13H3V8M1 3h22v5H1zM10 12h4"/></svg>ZIP
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8v13H3V8M1 3h22v5H1zM10 12h4"/></svg>
+        <span class="btn-label"><span class="l1">Esporta</span><span class="l2">ZIP</span></span>
     </button>
     <button class="btn btn-outline" onclick="openGSheetLink()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Apri GSheet
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        <span class="btn-label"><span class="l1">Apri</span><span class="l2">GSheet</span></span>
     </button>
     <button class="btn btn-accent" onclick="requestGSheetExport()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>Esporta GSheet
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        <span class="btn-label"><span class="l1">Esporta</span><span class="l2">GSheet</span></span>
     </button>
 </div>
 
 <script>
-const APP_VERSION='7.2.0';
+const APP_VERSION='7.2.1';
 const STORAGE_KEY='scannerSerialiOCR_data';
 const SETTINGS_KEY='scannerSettings';
 const GSHEET_KEY='scannerSerialiOCR_gsheet';
@@ -475,6 +484,7 @@ const IMG_DB_VERSION=1;
 const IMG_STORE='images';
 
 const CHANGELOG=[
+    {ver:'v7.2.1',date:'26/05/2026',desc:'Bottom bar: testi su due righe per adattarsi allo schermo.',tags:['ui']},
     {ver:'v7.2.0',date:'26/05/2026',desc:'Esporta GSheet su richiesta + tasto Apri GSheet nella bottom bar. Pattern disabilitabile. Miglioramento seriali sbiaditi.',tags:['feat']},
     {ver:'v7.1.0',date:'26/05/2026',desc:'Contrasto adattivo migliorato con Otsu + stretch locale.',tags:['feat','fix']},
     {ver:'v7.0.0',date:'26/05/2026',desc:'Merge completo: OCR funzionante con flip detection, impostazioni avanzate, sync GSheet.',tags:['feat','fix']},
