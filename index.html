@@ -22,10 +22,10 @@
             --text: #0f172a; --text-muted: #475569; --text-dim: #64748b;
             --border: #cbd5e1; --shadow: 0 4px 24px rgba(0,0,0,0.1);
         }
-        [data-theme="light"] .header { background:linear-gradient(135deg,#ffffff,#f1f5f9); }
         * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
         body { font-family:'Inter',-apple-system,sans-serif; background:var(--bg); color:var(--text); min-height:100vh; overflow-x:hidden; padding-bottom:120px; scroll-behavior:smooth; }
         .header { background:linear-gradient(135deg,var(--bg-card),#1a2332); padding:16px 20px; position:sticky; top:0; z-index:100; border-bottom:1px solid var(--border); backdrop-filter:blur(20px); }
+        [data-theme="light"] .header { background:linear-gradient(135deg,#ffffff,#f1f5f9); }
         .header-top { display:flex; align-items:center; justify-content:space-between; gap:10px; }
         .header-actions { display:flex; gap:8px; }
         .header h1 { font-size:18px; font-weight:700; background:linear-gradient(135deg,var(--primary-light),var(--accent)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; display:flex; align-items:center; gap:8px; }
@@ -211,7 +211,9 @@
         .gsheet-input-row input { flex:1; background:var(--bg); border:1px solid var(--border); border-radius:6px; color:var(--text); padding:8px; font-family:'JetBrains Mono',monospace; font-size:11px; }
         .gsheet-options { display:flex; align-items:center; justify-content:space-between; font-size:11px; color:var(--text-muted); flex-wrap:wrap; gap:8px; }
         .gsheet-diagnostic { margin-top:8px; padding:6px; background:var(--bg); border-radius:4px; font-size:10px; color:var(--text-muted); font-family:'JetBrains Mono',monospace; }
-        
+        .gsheet-float-btn { position:fixed; bottom:80px; right:80px; background:var(--bg-card); border:1px solid var(--accent); border-radius:50%; width:40px; height:40px; display:flex; align-items:center; justify-content:center; cursor:pointer; z-index:200; box-shadow:0 2px 12px rgba(0,0,0,0.4); transition:all 0.2s; }
+        .gsheet-float-btn:hover { transform:scale(1.1); }
+        .gsheet-float-btn svg { width:20px; height:20px; color:var(--accent); }
         .settings-group { margin-bottom:16px; }
         .settings-group h4 { font-size:13px; color:var(--text-dim); margin-bottom:8px; display:flex; align-items:center; gap:6px; }
         .settings-row { display:flex; align-items:center; justify-content:space-between; padding:8px 0; border-bottom:1px solid rgba(71,85,105,0.2); }
@@ -219,7 +221,6 @@
         .settings-label { font-size:12px; color:var(--text-muted); }
         .settings-input { width:100px; background:var(--bg-input); border:1px solid var(--border); border-radius:6px; color:var(--text); padding:6px 8px; font-family:'JetBrains Mono',monospace; font-size:12px; outline:none; }
         .settings-input:focus { border-color:var(--primary); }
-        
         @media (max-width:380px) { .btn { padding:8px 8px; font-size:11px; } .status-btn { font-size:9px; padding:3px 6px; } .record-image-wrap { width:120px; height:46px; } .serial-display { width:120px; } .record-meta { gap:3px; } }
     </style>
 </head>
@@ -238,7 +239,7 @@
             <button class="icon-btn" onclick="openSettingsModal()" title="Impostazioni">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33 2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82 2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33 2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
             </button>
-            <span class="version-badge" id="versionBadge" onclick="requestVersionAccess()">v7.0.0</span>
+            <span class="version-badge" id="versionBadge" onclick="requestVersionAccess()">v7.1.0</span>
         </div>
     </div>
     <div class="scan-counter">
@@ -359,7 +360,7 @@
         <div class="settings-group">
             <h4>🔍 Miglioramento Scansione</h4>
             <div class="settings-row">
-                <span class="settings-label">Contrasto Adattivo</span>
+                <span class="settings-label">Contrasto Adattivo (Otsu)</span>
                 <div class="toggle-switch active" id="contrastToggle" onclick="toggleSetting('contrast')"></div>
             </div>
             <div class="settings-row">
@@ -447,8 +448,13 @@
     <button class="btn btn-outline" onclick="exportZip()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8v13H3V8M1 3h22v5H1zM10 12h4"/></svg>ZIP</button>
 </div>
 
+<!-- Google Sheet Floating Button -->
+<a class="gsheet-float-btn" href="https://docs.google.com/spreadsheets/d/18WJa9UjOLjqHLF8DCUvwhbt5pPHx0bdCBN6lOPsmdxA/edit?gid=0#gid=0" target="_blank" rel="noopener noreferrer" title="Apri Google Sheet">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/><line x1="16" y1="8" x2="8" y2="8"/><line x1="16" y1="12" x2="8" y2="12"/><line x1="14" y1="16" x2="8" y2="16"/></svg>
+</a>
+
 <script>
-const APP_VERSION='7.0.0';
+const APP_VERSION='7.1.0';
 const STORAGE_KEY='scannerSerialiOCR_data';
 const SETTINGS_KEY='scannerSettings';
 const GSHEET_KEY='scannerSerialiOCR_gsheet';
@@ -457,10 +463,9 @@ const IMG_DB_VERSION=1;
 const IMG_STORE='images';
 
 const CHANGELOG=[
-    {ver:'v7.0.0',date:'26/05/2026',desc:'Merge completo: OCR funzionante con flip detection, impostazioni avanzate (tema, contrasto, invert, edge), pulsante manuale, sync GSheet.',tags:['feat','fix']},
-    {ver:'v6.0.0',date:'24/05/2026',desc:'Codice Google Sheets pulito e ottimizzato. Invio dati a foglio Google senza immagini. Logica funzionante testata.',tags:['feat','fix']},
-    {ver:'v5.5.0',date:'24/05/2026',desc:'Ripristinato export HTML+Img con anteprime embeddate.',tags:['feat','fix']},
-    {ver:'v5.4.0',date:'24/05/2026',desc:'Fix critico: Blocco record duplicati ripristinato.',tags:['fix']},
+    {ver:'v7.1.0',date:'26/05/2026',desc:'Contrasto adattivo migliorato con Otsu + stretch locale. Tasto G-Sheet ripristinato.',tags:['feat','fix']},
+    {ver:'v7.0.0',date:'26/05/2026',desc:'Merge completo: OCR funzionante con flip detection, impostazioni avanzate, sync GSheet.',tags:['feat','fix']},
+    {ver:'v6.0.0',date:'24/05/2026',desc:'Codice Google Sheets pulito e ottimizzato.',tags:['feat','fix']},
     {ver:'v1.0.0',date:'22/05/2026',desc:'Versione iniziale.',tags:['feat']}
 ];
 
@@ -490,10 +495,7 @@ let settings = {
 
 // ===== SETTINGS =====
 function loadSettings(){
-    try{
-        const s=localStorage.getItem(SETTINGS_KEY);
-        if(s){const parsed=JSON.parse(s);settings={...settings,...parsed};}
-    }catch(e){}
+    try{const s=localStorage.getItem(SETTINGS_KEY);if(s){const parsed=JSON.parse(s);settings={...settings,...parsed};}}catch(e){}
     applySettings();
 }
 function applySettings(){
@@ -578,43 +580,103 @@ async function processROIAndOCR(roiCanvas) {
     return flippedBest || best;
 }
 
-// ===== IMAGE PREPROCESSING =====
-function applyAdaptiveThreshold(ctx,w,h){
-    const imageData=ctx.getImageData(0,0,w,h);
-    const data=imageData.data;
-    const gray=new Uint8Array(w*h);
-    for(let i=0;i<data.length;i+=4)gray[i/4]=0.299*data[i]+0.587*data[i+1]+0.114*data[i+2];
+// ===== IMPROVED ADAPTIVE CONTRAST (Otsu + Local Stretch) =====
+function computeHistogram(gray, len) {
+    const hist = new Uint32Array(256);
+    for (let i = 0; i < len; i++) hist[gray[i]]++;
+    return hist;
+}
+
+function otsuThreshold(hist, totalPixels) {
+    let sum = 0;
+    for (let t = 0; t < 256; t++) sum += t * hist[t];
     
-    // Binary threshold (contrast)
-    if(settings.contrast){
-        let min=255,max=0;
-        for(let i=0;i<gray.length;i++){if(gray[i]<min)min=gray[i];if(gray[i]>max)max=gray[i];}
-        const range=max-min;
-        const threshold=range===0?128:min+range*0.5;
-        for(let i=0;i<gray.length;i++){gray[i]=gray[i]<threshold?0:255;}
+    let sumB = 0, wB = 0, wF = 0, maxVar = 0, threshold = 128;
+    
+    for (let t = 0; t < 256; t++) {
+        wB += hist[t];
+        if (wB === 0) continue;
+        wF = totalPixels - wB;
+        if (wF === 0) break;
+        sumB += t * hist[t];
+        const mB = sumB / wB;
+        const mF = (sum - sumB) / wF;
+        const variance = wB * wF * (mB - mF) * (mB - mF);
+        if (variance > maxVar) {
+            maxVar = variance;
+            threshold = t;
+        }
+    }
+    return threshold;
+}
+
+function applyAdaptiveThreshold(ctx, w, h) {
+    const imageData = ctx.getImageData(0, 0, w, h);
+    const data = imageData.data;
+    const totalPixels = w * h;
+    
+    // Grayscale conversion
+    const gray = new Uint8Array(totalPixels);
+    for (let i = 0; i < totalPixels; i++) {
+        gray[i] = (0.299 * data[i*4] + 0.587 * data[i*4+1] + 0.114 * data[i*4+2]) | 0;
     }
     
-    // Invert
-    if(settings.invert){
-        for(let i=0;i<gray.length;i++)gray[i]=255-gray[i];
+    if (settings.contrast) {
+        // Step 1: Compute global histogram and Otsu threshold
+        const hist = computeHistogram(gray, totalPixels);
+        const otsuThresh = otsuThreshold(hist, totalPixels);
+        
+        // Step 2: Calculate percentiles for adaptive stretch (2nd and 98th)
+        const sorted = Uint8Array.from(gray).sort();
+        const pLow = sorted[Math.floor(totalPixels * 0.02)];
+        const pHigh = sorted[Math.floor(totalPixels * 0.98)];
+        const dynamicRange = pHigh - pLow;
+        
+        // Step 3: Apply contrast stretch + Otsu binarization
+        const stretchFactor = dynamicRange > 0 ? 255 / dynamicRange : 1;
+        
+        for (let i = 0; i < totalPixels; i++) {
+            // Stretch contrast
+            let val = gray[i];
+            if (val < pLow) val = 0;
+            else if (val > pHigh) val = 255;
+            else val = ((val - pLow) * stretchFactor) | 0;
+            
+            // Then apply Otsu threshold
+            gray[i] = val > otsuThresh ? 255 : 0;
+        }
     }
     
-    // Edge detection (Sobel)
-    if(settings.edge){
-        const edges=new Uint8Array(gray);
-        for(let y=1;y<h-1;y++){
-            for(let x=1;x<w-1;x++){
-                const idx=(pos)=>gray[y*w+x+pos];
-                const gx=-idx(-w-1)+idx(-w+1)-2*idx(-1)+2*idx(1)-idx(w-1)+idx(w+1);
-                const gy=-idx(-w-1)-2*idx(-w)-idx(-w+1)+idx(w-1)+2*idx(w)+idx(w+1);
-                edges[y*w+x]=Math.sqrt(gx*gx+gy*gy)>128?255:0;
+    // Invert if enabled
+    if (settings.invert) {
+        for (let i = 0; i < totalPixels; i++) gray[i] = 255 - gray[i];
+    }
+    
+    // Edge detection (Sobel) if enabled
+    if (settings.edge) {
+        const edges = new Uint8Array(totalPixels);
+        for (let y = 1; y < h - 1; y++) {
+            for (let x = 1; x < w - 1; x++) {
+                const idx = (r, c) => gray[y * w + x + r * w + c];
+                const gx = -idx(-1,-1) + idx(-1,1) - 2*idx(0,-1) + 2*idx(0,1) - idx(1,-1) + idx(1,1);
+                const gy = -idx(-1,-1) - 2*idx(-1,0) - idx(-1,1) + idx(1,-1) + 2*idx(1,0) + idx(1,1);
+                edges[y * w + x] = Math.sqrt(gx*gx + gy*gy) > 128 ? 255 : 0;
             }
         }
-        for(let i=0;i<data.length;i+=4){data[i]=data[i+1]=data[i+2]=edges[i/4];}
-    }else{
-        for(let i=0;i<data.length;i+=4){data[i]=data[i+1]=data[i+2]=gray[i/4];}
+        for (let i = 0; i < totalPixels; i++) {
+            const v = edges[i];
+            data[i*4] = data[i*4+1] = data[i*4+2] = v;
+            data[i*4+3] = 255;
+        }
+    } else {
+        for (let i = 0; i < totalPixels; i++) {
+            const v = gray[i];
+            data[i*4] = data[i*4+1] = data[i*4+2] = v;
+            data[i*4+3] = 255;
+        }
     }
-    ctx.putImageData(imageData,0,0);
+    
+    ctx.putImageData(imageData, 0, 0);
 }
 
 // ===== SCROLL & NAV =====
