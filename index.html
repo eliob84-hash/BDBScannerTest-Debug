@@ -192,8 +192,8 @@
         .empty-state { text-align:center; padding:36px 20px; color:var(--text-dim); }
         .empty-state svg { width:44px; height:44px; margin-bottom:10px; opacity:0.4; }
         .empty-state p { font-size:13px; }
-        .bottom-bar { position:fixed; bottom:0; left:0; right:0; background:var(--bg-card); border-top:1px solid var(--border); padding:10px 18px; display:flex; gap:8px; z-index:100; backdrop-filter:blur(20px); flex-wrap:wrap; }
-        .bottom-bar .btn { font-size:12px; padding:10px 10px; }
+        .bottom-bar { position:fixed; bottom:0; left:0; right:0; background:var(--bg-card); border-top:1px solid var(--border); padding:10px 18px; display:flex; gap:6px; z-index:100; backdrop-filter:blur(20px); flex-wrap:wrap; }
+        .bottom-bar .btn { font-size:11px; padding:8px 8px; }
         .progress-bar { position:absolute; bottom:0; left:0; height:3px; background:var(--accent); transition:width 0.3s; z-index:5; }
         .cooldown-overlay { position:absolute; top:0; left:0; right:0; bottom:0; background:rgba(16,185,129,0.08); pointer-events:none; z-index:4; display:none; }
         .cooldown-overlay.active { display:block; }
@@ -211,9 +211,6 @@
         .gsheet-input-row input { flex:1; background:var(--bg); border:1px solid var(--border); border-radius:6px; color:var(--text); padding:8px; font-family:'JetBrains Mono',monospace; font-size:11px; }
         .gsheet-options { display:flex; align-items:center; justify-content:space-between; font-size:11px; color:var(--text-muted); flex-wrap:wrap; gap:8px; }
         .gsheet-diagnostic { margin-top:8px; padding:6px; background:var(--bg); border-radius:4px; font-size:10px; color:var(--text-muted); font-family:'JetBrains Mono',monospace; }
-        .gsheet-float-btn { position:fixed; bottom:80px; right:80px; background:var(--bg-card); border:1px solid var(--accent); border-radius:50%; width:40px; height:40px; display:flex; align-items:center; justify-content:center; cursor:pointer; z-index:200; box-shadow:0 2px 12px rgba(0,0,0,0.4); transition:all 0.2s; }
-        .gsheet-float-btn:hover { transform:scale(1.1); }
-        .gsheet-float-btn svg { width:20px; height:20px; color:var(--accent); }
         .settings-group { margin-bottom:16px; }
         .settings-group h4 { font-size:13px; color:var(--text-dim); margin-bottom:8px; display:flex; align-items:center; gap:6px; }
         .settings-row { display:flex; align-items:center; justify-content:space-between; padding:8px 0; border-bottom:1px solid rgba(71,85,105,0.2); }
@@ -239,7 +236,7 @@
             <button class="icon-btn" onclick="openSettingsModal()" title="Impostazioni">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33 2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82 2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33 2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
             </button>
-            <span class="version-badge" id="versionBadge" onclick="requestVersionAccess()">v7.1.0</span>
+            <span class="version-badge" id="versionBadge" onclick="requestVersionAccess()">v7.2.0</span>
         </div>
     </div>
     <div class="scan-counter">
@@ -364,6 +361,10 @@
                 <div class="toggle-switch active" id="contrastToggle" onclick="toggleSetting('contrast')"></div>
             </div>
             <div class="settings-row">
+                <span class="settings-label">Migliora Sbiaditi</span>
+                <div class="toggle-switch" id="fadedToggle" onclick="toggleSetting('faded')"></div>
+            </div>
+            <div class="settings-row">
                 <span class="settings-label">Inversione Colori</span>
                 <div class="toggle-switch" id="invertToggle" onclick="toggleSetting('invert')"></div>
             </div>
@@ -442,28 +443,40 @@
     </div>
 </div>
 
+<!-- Google Sheets Export Confirm Modal -->
+<div class="confirm-modal" id="gsheetExportModal"><div class="confirm-box"><h3>☁️ Esporta su GSheet</h3><p id="gsheetExportMsg"></p><div class="confirm-actions" style="margin-top:14px;"><button class="btn btn-outline" onclick="document.getElementById('gsheetExportModal').classList.remove('visible')">Annulla</button><button class="btn btn-primary" id="gsheetExportBtn">Esporta</button></div></div></div>
+
 <div class="bottom-bar">
-    <button class="btn btn-accent" onclick="exportExcel()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg>Excel</button>
-    <button class="btn btn-primary" onclick="exportHtmlWithImages()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>HTML+Img</button>
-    <button class="btn btn-outline" onclick="exportZip()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8v13H3V8M1 3h22v5H1zM10 12h4"/></svg>ZIP</button>
+    <button class="btn btn-accent" onclick="exportExcel()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg>Excel
+    </button>
+    <button class="btn btn-primary" onclick="exportHtmlWithImages()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>HTML+Img
+    </button>
+    <button class="btn btn-outline" onclick="exportZip()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8v13H3V8M1 3h22v5H1zM10 12h4"/></svg>ZIP
+    </button>
+    <button class="btn btn-outline" onclick="openGSheetLink()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Apri GSheet
+    </button>
+    <button class="btn btn-accent" onclick="requestGSheetExport()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>Esporta GSheet
+    </button>
 </div>
 
-<!-- Google Sheet Floating Button -->
-<a class="gsheet-float-btn" href="https://docs.google.com/spreadsheets/d/18WJa9UjOLjqHLF8DCUvwhbt5pPHx0bdCBN6lOPsmdxA/edit?gid=0#gid=0" target="_blank" rel="noopener noreferrer" title="Apri Google Sheet">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/><line x1="16" y1="8" x2="8" y2="8"/><line x1="16" y1="12" x2="8" y2="12"/><line x1="14" y1="16" x2="8" y2="16"/></svg>
-</a>
-
 <script>
-const APP_VERSION='7.1.0';
+const APP_VERSION='7.2.0';
 const STORAGE_KEY='scannerSerialiOCR_data';
 const SETTINGS_KEY='scannerSettings';
 const GSHEET_KEY='scannerSerialiOCR_gsheet';
+const GSHEET_URL='https://docs.google.com/spreadsheets/d/18WJa9UjOLjqHLF8DCUvwhbt5pPHx0bdCBN6lOPsmdxA/edit?gid=0#gid=0';
 const IMG_DB_NAME='ScannerSerialiDB';
 const IMG_DB_VERSION=1;
 const IMG_STORE='images';
 
 const CHANGELOG=[
-    {ver:'v7.1.0',date:'26/05/2026',desc:'Contrasto adattivo migliorato con Otsu + stretch locale. Tasto G-Sheet ripristinato.',tags:['feat','fix']},
+    {ver:'v7.2.0',date:'26/05/2026',desc:'Esporta GSheet su richiesta + tasto Apri GSheet nella bottom bar. Pattern disabilitabile. Miglioramento seriali sbiaditi.',tags:['feat']},
+    {ver:'v7.1.0',date:'26/05/2026',desc:'Contrasto adattivo migliorato con Otsu + stretch locale.',tags:['feat','fix']},
     {ver:'v7.0.0',date:'26/05/2026',desc:'Merge completo: OCR funzionante con flip detection, impostazioni avanzate, sync GSheet.',tags:['feat','fix']},
     {ver:'v6.0.0',date:'24/05/2026',desc:'Codice Google Sheets pulito e ottimizzato.',tags:['feat','fix']},
     {ver:'v1.0.0',date:'22/05/2026',desc:'Versione iniziale.',tags:['feat']}
@@ -487,6 +500,7 @@ let settings = {
     cooldown: 800,
     theme: 'dark',
     contrast: true,
+    faded: false,
     invert: false,
     edge: false,
     pattern: true,
@@ -502,6 +516,7 @@ function applySettings(){
     document.documentElement.setAttribute('data-theme',settings.theme);
     if(document.getElementById('themeToggle'))document.getElementById('themeToggle').classList.toggle('active',settings.theme==='light');
     if(document.getElementById('contrastToggle'))document.getElementById('contrastToggle').classList.toggle('active',settings.contrast);
+    if(document.getElementById('fadedToggle'))document.getElementById('fadedToggle').classList.toggle('active',settings.faded);
     if(document.getElementById('invertToggle'))document.getElementById('invertToggle').classList.toggle('active',settings.invert);
     if(document.getElementById('edgeToggle'))document.getElementById('edgeToggle').classList.toggle('active',settings.edge);
     if(document.getElementById('patternToggle'))document.getElementById('patternToggle').classList.toggle('active',settings.pattern);
@@ -511,12 +526,15 @@ function applySettings(){
 function openSettingsModal(){applySettings();document.getElementById('settingsModal').classList.add('visible');}
 function closeSettingsModal(){document.getElementById('settingsModal').classList.remove('visible');}
 function toggleTheme(){settings.theme=settings.theme==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',settings.theme);document.getElementById('themeToggle').classList.toggle('active',settings.theme==='light');}
-function toggleSetting(key){settings[key]=!settings[key];document.getElementById(key+'Toggle').classList.toggle('active',settings[key]);}
+function toggleSetting(key){settings[key]=!settings[key];const el=document.getElementById(key+'Toggle');if(el)el.classList.toggle('active',settings[key]);}
 function saveSettings(){
     settings.cooldown=Math.max(200,Math.min(3000,parseInt(document.getElementById('cooldownInput').value)||800));
     settings.minChars=Math.max(3,Math.min(20,parseInt(document.getElementById('minCharsInput').value)||10));
     localStorage.setItem(SETTINGS_KEY,JSON.stringify(settings));applySettings();closeSettingsModal();toast('Impostazioni salvate','success');
 }
+
+// ===== GOOGLE SHEET LINK =====
+function openGSheetLink(){window.open(GSHEET_URL,'_blank','noopener,noreferrer');}
 
 // ===== AUDIO & UI =====
 function getAudioCtx(){if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==='suspended')audioCtx.resume();return audioCtx;}
@@ -554,11 +572,16 @@ function extractBestFromOCR(result, sourceCanvas) {
         if(cleaned.length<settings.minChars)continue;
         let{fixed,corrections}=fixOCR(cleaned);
         const conf=Math.round(word.confidence);
-        if(fixed.length===10&&isValidSerial(fixed)){
-            const img=cropFromBbox(sourceCanvas,sourceCanvas.width,sourceCanvas.height,word.bbox,IMG_MARGIN);
-            if(!best || conf > best.confidence) {
-                best={serial:fixed,confidence:conf,corrections,image:img};
+        
+        if(settings.pattern){
+            if(fixed.length===10&&isValidSerial(fixed)){
+                const img=cropFromBbox(sourceCanvas,sourceCanvas.width,sourceCanvas.height,word.bbox,IMG_MARGIN);
+                if(!best||conf>best.confidence)best={serial:fixed,confidence:conf,corrections,image:img};
             }
+        }else{
+            // No pattern - accept any text
+            const img=cropFromBbox(sourceCanvas,sourceCanvas.width,sourceCanvas.height,word.bbox,IMG_MARGIN);
+            if(!best||conf>best.confidence)best={serial:fixed,confidence:conf,corrections,image:img};
         }
     }
     return best;
@@ -590,24 +613,58 @@ function computeHistogram(gray, len) {
 function otsuThreshold(hist, totalPixels) {
     let sum = 0;
     for (let t = 0; t < 256; t++) sum += t * hist[t];
-    
-    let sumB = 0, wB = 0, wF = 0, maxVar = 0, threshold = 128;
-    
+    let sumB = 0, wB = 0, maxVar = 0, threshold = 128;
     for (let t = 0; t < 256; t++) {
         wB += hist[t];
         if (wB === 0) continue;
-        wF = totalPixels - wB;
+        const wF = totalPixels - wB;
         if (wF === 0) break;
         sumB += t * hist[t];
-        const mB = sumB / wB;
-        const mF = (sum - sumB) / wF;
+        const mB = sumB / wB, mF = (sum - sumB) / wF;
         const variance = wB * wF * (mB - mF) * (mB - mF);
-        if (variance > maxVar) {
-            maxVar = variance;
-            threshold = t;
-        }
+        if (variance > maxVar) { maxVar = variance; threshold = t; }
     }
     return threshold;
+}
+
+// Local contrast enhancement for faded text (background normalization)
+function applyFadedTextEnhancement(gray, w, h) {
+    const out = new Uint8Array(gray.length);
+    const winSize = Math.max(15, Math.min(w, h) / 8) | 0;
+    const halfWin = winSize >> 1;
+    
+    for (let y = 0; y < h; y++) {
+        for (let x = 0; x < w; x++) {
+            let sum = 0, count = 0, minV = 255, maxV = 0;
+            const y0 = Math.max(0, y - halfWin), y1 = Math.min(h - 1, y + halfWin);
+            const x0 = Math.max(0, x - halfWin), x1 = Math.min(w - 1, x + halfWin);
+            
+            for (let dy = y0; dy <= y1; dy++) {
+                const row = dy * w;
+                for (let dx = x0; dx <= x1; dx++) {
+                    const v = gray[row + dx];
+                    sum += v; count++;
+                    if (v < minV) minV = v;
+                    if (v > maxV) maxV = v;
+                }
+            }
+            
+            const localMean = sum / count;
+            const localRange = maxV - minV;
+            const center = gray[y * w + x];
+            
+            // Normalize: subtract local mean to remove background gradient
+            let val = center - localMean + 128;
+            
+            // Stretch local contrast
+            if (localRange > 0) {
+                val = ((val - 128) * (255 / Math.max(localRange, 10))) + 128;
+            }
+            
+            out[y * w + x] = Math.max(0, Math.min(255, val));
+        }
+    }
+    return out;
 }
 
 function applyAdaptiveThreshold(ctx, w, h) {
@@ -616,43 +673,39 @@ function applyAdaptiveThreshold(ctx, w, h) {
     const totalPixels = w * h;
     
     // Grayscale conversion
-    const gray = new Uint8Array(totalPixels);
+    let gray = new Uint8Array(totalPixels);
     for (let i = 0; i < totalPixels; i++) {
         gray[i] = (0.299 * data[i*4] + 0.587 * data[i*4+1] + 0.114 * data[i*4+2]) | 0;
     }
     
+    // Faded text enhancement (local contrast normalization)
+    if (settings.faded) {
+        gray = applyFadedTextEnhancement(gray, w, h);
+    }
+    
     if (settings.contrast) {
-        // Step 1: Compute global histogram and Otsu threshold
         const hist = computeHistogram(gray, totalPixels);
         const otsuThresh = otsuThreshold(hist, totalPixels);
         
-        // Step 2: Calculate percentiles for adaptive stretch (2nd and 98th)
         const sorted = Uint8Array.from(gray).sort();
         const pLow = sorted[Math.floor(totalPixels * 0.02)];
         const pHigh = sorted[Math.floor(totalPixels * 0.98)];
         const dynamicRange = pHigh - pLow;
-        
-        // Step 3: Apply contrast stretch + Otsu binarization
         const stretchFactor = dynamicRange > 0 ? 255 / dynamicRange : 1;
         
         for (let i = 0; i < totalPixels; i++) {
-            // Stretch contrast
             let val = gray[i];
             if (val < pLow) val = 0;
             else if (val > pHigh) val = 255;
             else val = ((val - pLow) * stretchFactor) | 0;
-            
-            // Then apply Otsu threshold
             gray[i] = val > otsuThresh ? 255 : 0;
         }
     }
     
-    // Invert if enabled
     if (settings.invert) {
         for (let i = 0; i < totalPixels; i++) gray[i] = 255 - gray[i];
     }
     
-    // Edge detection (Sobel) if enabled
     if (settings.edge) {
         const edges = new Uint8Array(totalPixels);
         for (let y = 1; y < h - 1; y++) {
@@ -725,17 +778,41 @@ async function sendToGSheet(record){
         record._synced=true;return true;
     }catch(e){console.warn('GSheet fail:',e);record._synced=false;return false;}
 }
-async function syncPendingToGSheet(){
-    if(!gsheetUrl){toast('Configura URL nella versione','error');return;}
-    const unsynced=records.filter(r=>!r._synced);if(unsynced.length===0){toast('Tutto sincronizzato ✅','success');return;}
-    setSyncStatus('syncing');toast(`🔄 Invio ${unsynced.length} record...`,'success');
-    let ok=0,err=0;for(const r of unsynced){const s=await sendToGSheet(r);if(s)ok++;else err++;}
-    saveToStorage();if(err===0){toast(`✅ ${ok} inviati`,'success');setSyncStatus('synced');}else{toast(`⚠️ ${ok} ok, ${err} errori`,'warning');setSyncStatus('error');}renderRecords();
+
+function requestGSheetExport(){
+    if(!gsheetUrl){toast('Configura URL GSheet nella versione','error');return;}
+    const unsynced=records.filter(r=>!r._synced);
+    const total=records.length;
+    const msg=unsynced.length>0?`Esportare ${unsynced.length} record non sincronizzati (totale: ${total})?`:`Esportare ${total} record su Google Sheets?`;
+    document.getElementById('gsheetExportMsg').textContent=msg;
+    document.getElementById('gsheetExportBtn').onclick=executeGSheetExport;
+    document.getElementById('gsheetExportModal').classList.add('visible');
+}
+
+async function executeGSheetExport(){
+    document.getElementById('gsheetExportModal').classList.remove('visible');
+    if(!gsheetUrl){toast('Configura URL GSheet','error');return;}
+    const unsynced=records.filter(r=>!r._synced);
+    const toExport=unsynced.length>0?unsynced:records;
+    
+    setSyncStatus('syncing');
+    toast(`🔄 Invio ${toExport.length} record...`,'success');
+    
+    let ok=0,err=0;
+    for(const r of toExport){
+        const s=await sendToGSheet(r);
+        if(s)ok++;else err++;
+    }
+    
+    saveToStorage();
+    if(err===0){toast(`✅ ${ok} record inviati`,'success');setSyncStatus('synced');}
+    else{toast(`⚠️ ${ok} ok, ${err} errori`,'warning');setSyncStatus('error');}
+    renderRecords();
 }
 
 // ===== APPLY STATUS =====
 function openApplyStatusModal(){const c=document.getElementById('pedana').value.trim();if(!c){toast('Imposta Pedana','warning');return;}document.getElementById('applyPedanaName').textContent=c;document.getElementById('statusApplyModal').classList.add('visible');}
-function executeApplyStatus(status){const c=document.getElementById('pedana').value.trim();if(!c)return;let count=0;records.forEach(r=>{if(r.pedana===c){r.status=status;r._synced=false;count++;}});document.getElementById('statusApplyModal').classList.remove('visible');if(count>0){saveToStorage();renderRecords();toast(`✅ "${status}" a ${count} record`,'success');if(gsheetUrl)syncPendingToGSheet();}else toast('Nessun record','warning');}
+function executeApplyStatus(status){const c=document.getElementById('pedana').value.trim();if(!c)return;let count=0;records.forEach(r=>{if(r.pedana===c){r.status=status;r._synced=false;count++;}});document.getElementById('statusApplyModal').classList.remove('visible');if(count>0){saveToStorage();renderRecords();toast(`✅ "${status}" a ${count} record`,'success');}else toast('Nessun record','warning');}
 
 // ===== STORAGE =====
 let imgDB=null;
@@ -835,11 +912,18 @@ async function scanFrame(){
         const roiCtx=roiCanvas.getContext('2d');roiCtx.drawImage(canvas,roiX,roiY,roiW,roiH,0,0,roiW,roiH);
         
         const best = await processROIAndOCR(roiCanvas);
-        if(best && isValidSerial(best.serial)){
-            processSerial(best.serial, best.image, best.confidence, best.corrections);
-        } else if(best && best.confidence < 35) {
-            const trackText=(best.serial&&best.serial.length>=7)?best.serial.substring(0,7):'';
-            if(trackText){const c=trackLowConfidence(trackText,Date.now());if(c>=5){openManualEntryModal(trackText,best.image);scanPaused=true;}}
+        if(best){
+            if(settings.pattern){
+                if(isValidSerial(best.serial)){
+                    processSerial(best.serial, best.image, best.confidence, best.corrections);
+                } else if(best.confidence < 35) {
+                    const trackText=(best.serial&&best.serial.length>=7)?best.serial.substring(0,7):'';
+                    if(trackText){const c=trackLowConfidence(trackText,Date.now());if(c>=5){openManualEntryModal(trackText,best.image);scanPaused=true;}}
+                }
+            }else{
+                // No pattern - accept any text
+                processSerial(best.serial, best.image, best.confidence, best.corrections);
+            }
         }
     }catch(e){console.error('OCR error:',e);}
     
@@ -871,7 +955,6 @@ function processSerial(serial,imgData,confidence,corrections){
     if(imgData)saveImg(rec.id,imgData);saveToStorage();
     beepOk();vib('ok');renderRecords();
     if(confidence<50)toast('⚠️ Bassa confidenza','warning');else toast('✅ '+serial,'success');
-    if(gsheetUrl)sendToGSheet(rec).then(()=>{saveToStorage();setSyncStatus('synced');renderRecords();}).catch(()=>{setSyncStatus('pending');renderRecords();});
     
     setTimeout(()=>{showPedanaModal(serial,imgData,()=>{scanCooldown=false;document.getElementById('cooldownOverlay').classList.remove('active');if(cameraActive&&!scanPaused)document.getElementById('ocrStatus').textContent='✓ Pronto';updateScanIndicator();resetIdleTimer();});},1000);
 }
@@ -894,8 +977,10 @@ function openManualEntryModal(serial,imgData){
 function closeManualEntry(){document.getElementById('manualEntryModal').classList.remove('visible');scanPaused=false;for(let k in lowConfTracker)delete lowConfTracker[k];}
 function confirmManualEntry(){
     const val=document.getElementById('manualSerialInput').value.trim().toUpperCase();
-    const errMsg=validateSerial(val);if(errMsg){toast('❌ '+errMsg,'error');return;}
-    const isDup=records.some(r=>r.serial===val);if(isDup){toast('⚠️ Seriale già esistente!','warning');beepDup();return;}
+    if(settings.pattern){
+        const errMsg=validateSerial(val);if(errMsg){toast('❌ '+errMsg,'error');return;}
+        const isDup=records.some(r=>r.serial===val);if(isDup){toast('⚠️ Seriale già esistente!','warning');beepDup();return;}
+    }
     closeManualEntry();
     const operator=document.getElementById('operatorName').value.trim()||'N/D';
     const pedana=document.getElementById('pedana').value.trim()||'N/D';
@@ -903,7 +988,6 @@ function confirmManualEntry(){
     const rec={id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),serial:val,timestamp:ts,operator,pedana,runNumber:'',modified:false,status:'',note:'',image:manualEntryImage||null,confidence:100,corrections:[],_synced:false,_imgUploaded:false,_confirmed:true,_manual:true};
     records.unshift(rec);scanTotal++;document.getElementById('scanCount').textContent=scanTotal;
     if(manualEntryImage)saveImg(rec.id,manualEntryImage);saveToStorage();beepOk();vib('ok');renderRecords();toast('✅ '+val,'success');
-    if(gsheetUrl)sendToGSheet(rec).then(()=>{saveToStorage();setSyncStatus('synced');renderRecords();});
     setTimeout(()=>{showPedanaModal(val,manualEntryImage,()=>{if(cameraActive&&!scanPaused)document.getElementById('ocrStatus').textContent='✓ Pronto';updateScanIndicator();resetIdleTimer();});},400);
 }
 function confirmLowConf(id){const rec=records.find(r=>r.id===id);if(rec){rec._confirmed=true;renderRecords();toast('Confermato','success');}}
@@ -952,15 +1036,17 @@ function renderRecords(){
 }
 
 function editRun(id){const rec=records.find(r=>r.id===id);if(!rec)return;const cell=document.getElementById('runCell-'+id);const cur=rec.runNumber||'';cell.innerHTML=`<input type="text" class="run-input" id="runInput-${id}" value="${cur}" placeholder="RUN" maxlength="10" onblur="saveRun('${id}')" onkeydown="if(event.key==='Enter')this.blur()">`;cell.classList.add('editing');const inp=document.getElementById('runInput-'+id);inp.focus();inp.select();}
-function saveRun(id){const rec=records.find(r=>r.id===id);if(!rec)return;const inp=document.getElementById('runInput-'+id);if(!inp)return;const nv=inp.value.trim();rec.runNumber=nv;rec._synced=false;saveToStorage();renderRecords();if(gsheetUrl&&nv)sendToGSheet(rec);}
+function saveRun(id){const rec=records.find(r=>r.id===id);if(!rec)return;const inp=document.getElementById('runInput-'+id);if(!inp)return;const nv=inp.value.trim();rec.runNumber=nv;rec._synced=false;saveToStorage();renderRecords();}
 
 function editSerial(id,newVal){
     const rec=records.find(r=>r.id===id);if(!rec)return;
     const input=document.querySelector(`#record-${id} .serial-display`);
     const orig=input?.dataset?.orig||rec.serial;if(newVal===orig)return;
     let{fixed}=fixOCR(newVal.trim().toUpperCase());
-    const errMsg=validateSerial(fixed);
-    if(errMsg){toast('❌ '+errMsg,'error');beepErr();if(input)input.value=orig;return;}
+    if(settings.pattern){
+        const errMsg=validateSerial(fixed);
+        if(errMsg){toast('❌ '+errMsg,'error');beepErr();if(input)input.value=orig;return;}
+    }
     showConfirm('Conferma modifica',`Modificare "${rec.serial}" in "${fixed}"?`,()=>{
         if(records.some(r=>r.serial===fixed&&r.id!==rec.id)){toast('⚠️ Già esistente!','warning');beepDup();vib('dup');if(input)input.value=orig;return;}
         rec.serial=fixed;rec.modified=true;rec._synced=false;toast('Modificato: '+fixed,'success');beepOk();renderRecords();saveToStorage();
@@ -1011,7 +1097,7 @@ async function exportZip(){
 document.addEventListener('DOMContentLoaded',async()=>{
     await openImgDB();loadSettings();loadGSheetUrl();
     const loaded=await loadFromStorage();
-    if(loaded&&records.length>0){renderRecords();toast(`📂 ${records.length} recuperati`,'success');const unsynced=records.filter(r=>!r._synced);if(unsynced.length>0){setSyncStatus('pending');if(gsheetUrl)setTimeout(()=>syncPendingToGSheet(),2000);}else{setSyncStatus('synced');}}else{renderRecords();setSyncStatus('idle');}
+    if(loaded&&records.length>0){renderRecords();toast(`📂 ${records.length} recuperati`,'success');const unsynced=records.filter(r=>!r._synced);if(unsynced.length>0){setSyncStatus('pending');}else{setSyncStatus('synced');}}else{renderRecords();setSyncStatus('idle');}
     setSyncStatus(syncStatus);
 });
 window.addEventListener('beforeunload',()=>{saveToStorage();});
