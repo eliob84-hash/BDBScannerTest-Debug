@@ -68,13 +68,6 @@
         .btn-danger { background:var(--danger); color:white; }
         .btn-outline { background:var(--bg-input); color:var(--text); border:1px solid var(--border); }
         .btn svg { width:16px; height:16px; flex-shrink:0; }
-        .toggle-row { display:flex; align-items:center; justify-content:space-between; padding:6px 18px 12px; }
-        .toggle-label { font-size:12px; color:var(--text-muted); display:flex; align-items:center; gap:6px; }
-        .toggle-label svg { width:15px; height:15px; }
-        .toggle-switch { position:relative; width:42px; height:23px; background:var(--bg-input); border-radius:12px; cursor:pointer; transition:background 0.3s; border:1px solid var(--border); }
-        .toggle-switch.active { background:var(--primary); border-color:var(--primary); }
-        .toggle-switch::after { content:''; position:absolute; top:2px; left:2px; width:17px; height:17px; background:white; border-radius:50%; transition:transform 0.3s; }
-        .toggle-switch.active::after { transform:translateX(19px); }
         .scanner-section { padding:0 18px; position:relative; }
         .camera-container { position:relative; border-radius:var(--radius); overflow:hidden; background:#000; display:none; aspect-ratio:4/3; }
         .camera-container.active { display:block; }
@@ -226,8 +219,8 @@
         .settings-input:focus { border-color:var(--primary); }
         
         /* Search Modal Styles */
-        .search-prefix { font-family:'JetBrains Mono',monospace; font-size:24px; font-weight:700; color:var(--primary-light); letter-spacing:3px; padding:12px 8px; background:rgba(37,99,235,0.08); border:1px solid rgba(37,99,235,0.2); border-radius:8px; border-right:none; text-align:center; }
-        .search-suffix { font-family:'JetBrains Mono',monospace; font-size:24px; font-weight:700; color:var(--text); letter-spacing:3px; padding:12px 8px; background:var(--bg-input); border:1px solid var(--border); border-radius:8px; border-left:none; outline:none; width:80px; text-align:center; }
+        .search-prefix { font-family:'JetBrains Mono',monospace; font-size:24px; font-weight:700; color:var(--primary-light); letter-spacing:3px; padding:12px 8px; background:rgba(37,99,235,0.08); border:1px solid rgba(37,99,235,0.2); border-radius:8px 0 0 8px; border-right:none; text-align:center; }
+        .search-suffix { font-family:'JetBrains Mono',monospace; font-size:24px; font-weight:700; color:var(--text); letter-spacing:3px; padding:12px 8px; background:var(--bg-input); border:1px solid var(--border); border-radius:0 8px 8px 0; border-left:none; outline:none; width:80px; text-align:center; }
         .search-suffix:focus { border-color:var(--primary); box-shadow:0 0 0 3px rgba(37,99,235,0.2); }
         .search-row { display:flex; align-items:center; margin:16px 0; }
         .search-result { margin-top:16px; padding:12px; border-radius:8px; text-align:center; }
@@ -258,7 +251,7 @@
             <button class="icon-btn" onclick="openSettingsModal()" title="Impostazioni">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33 2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82 2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33 2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
             </button>
-            <span class="version-badge" id="versionBadge" onclick="requestVersionAccess()">v7.3.0</span>
+            <span class="version-badge" id="versionBadge" onclick="requestVersionAccess()">v7.3.2</span>
         </div>
     </div>
     <div class="scan-counter">
@@ -287,14 +280,6 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
         <span>Manuale</span>
     </button>
-</div>
-
-<div class="toggle-row">
-    <span class="toggle-label">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="M7 7h3v3H7z"/><path d="M14 7h3v3h-3z"/><path d="M7 14h3v3H7z"/></svg>
-        Rilevamento multiplo (Sperimentale)
-    </span>
-    <div class="toggle-switch" id="toggleMulti" onclick="toggleMultiDetect()"></div>
 </div>
 
 <div class="scanner-section" id="scannerSection">
@@ -335,7 +320,7 @@
         <p style="font-size:12px;color:var(--text-dim);margin-bottom:8px;">Inserisci le ultime 3 cifre del seriale</p>
         <div class="search-row">
             <div class="search-prefix">BDBCF00</div>
-            <input type="text" class="search-suffix" id="searchSuffix" maxlength="3" placeholder="XXX" inputmode="numeric" autocomplete="off">
+            <input type="text" class="search-suffix" id="searchSuffix" maxlength="3" placeholder="XXX" inputmode="text" autocomplete="off">
         </div>
         <div class="btn-row" style="display:flex;gap:10px;">
             <button class="btn btn-outline" onclick="closeSearchModal()" style="flex:1;">Annulla</button>
@@ -470,7 +455,7 @@
 
 <div class="confirm-modal" id="statusApplyModal"><div class="confirm-box"><h3>📍 Applica Stato</h3><p>Pedana: <b id="applyPedanaName" style="color:var(--warning)"></b></p><div class="status-grid"><button class="btn btn-accent" onclick="executeApplyStatus('Good')">✓ Good</button><button class="btn btn-danger" onclick="executeApplyStatus('Rotto')">✕ Rotto</button><button class="btn btn-warning" onclick="executeApplyStatus('Sporco')">◆ Sporco</button><button class="btn" style="background:#8b5cf6;color:white" onclick="executeApplyStatus('RF-ID')">📡 RF-ID</button><button class="btn" style="background:#06b6d4;color:white" onclick="executeApplyStatus('Barra Mancante')">▤ Barra Manc.</button><button class="btn" style="background:var(--text-dim);color:white" onclick="executeApplyStatus('Dubbio/Altro')">❓ Dubbio</button></div><button class="btn btn-outline" style="margin-top:12px;width:100%" onclick="document.getElementById('statusApplyModal').classList.remove('visible')">Annulla</button></div></div>
 
-<div class="confirm-modal" id="manualEntryModal"><div class="confirm-box"><h3 id="manualEntryTitle">✏️ Inserimento Manuale</h3><p id="manualEntryDesc">Inserisci manualmente il seriale completo (10 caratteri).</p><div class="pedana-preview" id="manualPreviewWrap" style="margin:10px auto;display:none;"></div><input type="text" class="manual-input" id="manualSerialInput" value="BDBCF00" maxlength="10"><div class="confirm-actions" style="margin-top:14px;"><button class="btn btn-outline" onclick="closeManualEntry()">Annulla</button><button class="btn btn-primary" onclick="confirmManualEntry()">Conferma</button></div></div></div>
+<div class="confirm-modal" id="manualEntryModal"><div class="confirm-box"><h3 id="manualEntryTitle">✏️ Inserimento Manuale</h3><p id="manualEntryDesc">Inserisci le ultime 3 cifre del seriale.</p><div class="pedana-preview" id="manualPreviewWrap" style="margin:10px auto;display:none;"></div><input type="text" class="manual-input" id="manualSerialInput" value="BDBCF00" maxlength="10"><div class="confirm-actions" style="margin-top:14px;"><button class="btn btn-outline" onclick="closeManualEntry()">Annulla</button><button class="btn btn-primary" onclick="confirmManualEntry()">Conferma</button></div></div></div>
 
 <div class="toast" id="toast"></div>
 
@@ -479,7 +464,7 @@
         <h3 id="confirmTitle">Conferma</h3>
         <img id="confirmPreviewImage" src="" style="display:none; width:100%; max-height:100px; object-fit:contain; border-radius:6px; margin-bottom:15px; border:1px solid var(--border); background:#000;">
         <p id="confirmMsg">Sei sicuro?</p>
-        <div class="confirm-actions"><button class="btn btn-outline" onclick="closeConfirm()">Annulla</button><button class="btn btn-danger" id="confirmBtn" onclick="executeConfirm()">Conferma</button></div>
+        <div class="confirm-actions"><button class="btn btn-outline" onclick="closeConfirm()">Annulla</button><button class="btn btn-primary" id="confirmBtn" onclick="executeConfirm()">Conferma</button></div>
     </div>
 </div>
 
@@ -510,7 +495,7 @@
 </div>
 
 <script>
-const APP_VERSION='7.3.0';
+const APP_VERSION='7.3.2';
 const STORAGE_KEY='scannerSerialiOCR_data';
 const SETTINGS_KEY='scannerSettings';
 const GSHEET_KEY='scannerSerialiOCR_gsheet';
@@ -520,6 +505,8 @@ const IMG_DB_VERSION=1;
 const IMG_STORE='images';
 
 const CHANGELOG=[
+    {ver:'v7.3.2',date:'26/05/2026',desc:'Tastiera completa per ricerca. UI conferma modifica migliorata (colore tasti e seriali). Rimossa riga rilevamento multiplo. Suggerimento manuale su fallimenti OCR ripetuti.',tags:['fix','ui','feat']},
+    {ver:'v7.3.1',date:'26/05/2026',desc:'Inserimento manuale: pausa fotocamera, cursore automatico, immagine "INSERIMENTO MANUALE".',tags:['feat','ui']},
     {ver:'v7.3.0',date:'26/05/2026',desc:'Ricerca seriale con prefisso fisso. OCR ottimizzato per velocità e affidabilità.',tags:['feat']},
     {ver:'v7.2.1',date:'26/05/2026',desc:'Bottom bar: testi su due righe per adattarsi allo schermo.',tags:['ui']},
     {ver:'v7.2.0',date:'26/05/2026',desc:'Esporta GSheet su richiesta + tasto Apri GSheet nella bottom bar. Pattern disabilitabile. Miglioramento seriali sbiaditi.',tags:['feat']},
@@ -529,7 +516,7 @@ const CHANGELOG=[
     {ver:'v1.0.0',date:'22/05/2026',desc:'Versione iniziale.',tags:['feat']}
 ];
 
-let cameraActive=false, flashOn=false, multiDetect=false, videoEl=null, stream=null, ocrWorker=null, scanTimer=null, idleTimer=null;
+let cameraActive=false, flashOn=false, videoEl=null, stream=null, ocrWorker=null, scanTimer=null, idleTimer=null;
 let records=[], scanTotal=0, confirmCallback=null, audioCtx=null;
 let scanCooldown=false, scanPaused=false;
 let lastScanPedana='', lastScanImage=null;
@@ -553,6 +540,22 @@ let settings = {
     pattern: true,
     minChars: 10
 };
+
+// ===== MANUAL ENTRY IMAGE GENERATOR =====
+function createManualEntryImage() {
+    const canvas = document.createElement('canvas');
+    canvas.width = 300; canvas.height = 60;
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#1e293b';
+    ctx.fillRect(0, 0, 300, 60);
+    ctx.fillStyle = '#f59e0b';
+    ctx.font = 'bold 18px "JetBrains Mono", monospace';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('INSERIMENTO MANUALE', 150, 30);
+    return canvas.toDataURL('image/png');
+}
+const MANUAL_ENTRY_IMG = createManualEntryImage();
 
 // ===== SETTINGS =====
 function loadSettings(){
@@ -629,7 +632,8 @@ function beepErr(){playTone(200,250,'sawtooth');}
 function vib(p='ok'){if(navigator.vibrate){if(p==='ok')navigator.vibrate([40,25,40]);else if(p==='dup')navigator.vibrate([180]);else if(p==='err')navigator.vibrate([80,40,80,40,80]);}}
 function toast(m,t='success'){const e=document.getElementById('toast');e.textContent=m;e.className='toast '+t;setTimeout(()=>e.classList.add('visible'),10);setTimeout(()=>e.classList.remove('visible'),2800);}
 function showConfirm(title,msg,cb,imageUrl=null){
-    document.getElementById('confirmTitle').textContent=title;document.getElementById('confirmMsg').textContent=msg;
+    document.getElementById('confirmTitle').textContent=title;
+    document.getElementById('confirmMsg').innerHTML=msg;
     const preview=document.getElementById('confirmPreviewImage');
     if(imageUrl){preview.src=imageUrl;preview.style.display='block';}else{preview.style.display='none';}
     confirmCallback=cb;document.getElementById('confirmModal').classList.add('visible');
@@ -671,11 +675,9 @@ function extractBestFromOCR(result, sourceCanvas) {
 }
 
 async function processROIAndOCR(roiCanvas) {
-    // Pass 1: Normal recognition with single word mode (fast)
     let best = extractBestFromOCR(await ocrWorker.recognize(roiCanvas), roiCanvas);
     if(best && best.confidence >= 35) return best;
     
-    // Pass 2: Flip detection for upside-down serials
     const flipCanvas = document.createElement('canvas');
     flipCanvas.width = roiCanvas.width; flipCanvas.height = roiCanvas.height;
     const fCtx = flipCanvas.getContext('2d');
@@ -713,7 +715,6 @@ function otsuThreshold(hist, totalPixels) {
     return threshold;
 }
 
-// Local contrast enhancement for faded text (background normalization)
 function applyFadedTextEnhancement(gray, w, h) {
     const out = new Uint8Array(gray.length);
     const winSize = Math.max(15, Math.min(w, h) / 8) | 0;
@@ -755,13 +756,11 @@ function applyAdaptiveThreshold(ctx, w, h) {
     const data = imageData.data;
     const totalPixels = w * h;
     
-    // Grayscale conversion
     let gray = new Uint8Array(totalPixels);
     for (let i = 0; i < totalPixels; i++) {
         gray[i] = (0.299 * data[i*4] + 0.587 * data[i*4+1] + 0.114 * data[i*4+2]) | 0;
     }
     
-    // Faded text enhancement (local contrast normalization)
     if (settings.faded) {
         gray = applyFadedTextEnhancement(gray, w, h);
     }
@@ -947,7 +946,6 @@ async function startCamera(){
         document.getElementById('ocrStatus').textContent='Inizializzazione OCR...';
         cameraActive=true;
         
-        // Optimized OCR worker setup with single word mode for speed
         ocrWorker=await Tesseract.createWorker('eng',1,{
             logger:(m)=>{
                 if(m.status==='recognizing text'){
@@ -958,12 +956,11 @@ async function startCamera(){
             }
         });
         
-        // Optimized parameters for serial number recognition
         await ocrWorker.setParameters({
             tessedit_char_whitelist:'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789',
             preserve_interword_spaces:'0',
-            tessedit_pageseg_mode:'7', // Single line mode
-            classify_bln_numeric_mode:'1' // Optimize for alphanumeric
+            tessedit_pageseg_mode:'7',
+            classify_bln_numeric_mode:'1'
         });
         
         document.getElementById('scanIndicator').innerHTML='<span class="scanning-indicator"><span class="dot"></span> Pronto</span>';
@@ -987,7 +984,6 @@ function stopCamera(){
 function resetBtnCamera(){const btn=document.getElementById('btnCamera');btn.innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg><span>Avvia OCR</span>`;btn.classList.add('btn-primary');btn.classList.remove('btn-danger');}
 function updateScanIndicator(){const el=document.getElementById('scanIndicator');if(!cameraActive){el.innerHTML='';return;}if(scanPaused){el.innerHTML='<span class="paused-indicator"><span class="dot"></span> Pausa</span>';return;}if(scanCooldown){el.innerHTML='<span class="paused-indicator"><span class="dot"></span> Cooldown</span>';return;}el.innerHTML='<span class="scanning-indicator"><span class="dot"></span> Scansione</span>';}
 async function toggleFlash(){if(!stream)return;try{const track=stream.getVideoTracks()[0];if(!track)return;const caps=track.getCapabilities();if(!caps||!caps.torch){toast('Flash non supportato','error');return;}flashOn=!flashOn;await track.applyConstraints({advanced:[{torch:flashOn}]});const btn=document.getElementById('btnFlash');if(flashOn){btn.classList.remove('btn-warning');btn.classList.add('btn-accent');toast('🔦 ON','success');}else{btn.classList.remove('btn-accent');btn.classList.add('btn-warning');toast('🔦 OFF','warning');}}catch(e){toast('Errore flash','error');}}
-function toggleMultiDetect(){multiDetect=!multiDetect;document.getElementById('toggleMulti').classList.toggle('active',multiDetect);}
 function checkPedanaRequired(){const p=document.getElementById('pedana').value.trim();if(!p){document.getElementById('pedana').classList.add('missing');toast('⚠️ Pedana richiesta','error');beepErr();vib('err');return false;}document.getElementById('pedana').classList.remove('missing');return true;}
 
 // ===== OCR LOOP =====
@@ -1017,7 +1013,14 @@ async function scanFrame(){
                     processSerial(best.serial, best.image, best.confidence, best.corrections);
                 } else if(best.confidence < 35) {
                     const trackText=(best.serial&&best.serial.length>=7)?best.serial.substring(0,7):'';
-                    if(trackText){const c=trackLowConfidence(trackText,Date.now());if(c>=5){openManualEntryModal(trackText,best.image);scanPaused=true;}}
+                    if(trackText){
+                        const c=trackLowConfidence(trackText,Date.now());
+                        if(c>=5){
+                            toast('📝 Inserimento manuale suggerito','warning');
+                            openManualEntryModalFromOCR(trackText,best.image);
+                            scanPaused=true;
+                        }
+                    }
                 }
             }else{
                 processSerial(best.serial, best.image, best.confidence, best.corrections);
@@ -1059,20 +1062,39 @@ function processSerial(serial,imgData,confidence,corrections){
 
 // ===== MANUAL ENTRY =====
 function trackLowConfidence(serial, timestamp){if(!lowConfTracker[serial])lowConfTracker[serial]=[];lowConfTracker[serial].push(timestamp);const now=Date.now();lowConfTracker[serial]=lowConfTracker[serial].filter(t=>now-t<10000);return lowConfTracker[serial].length;}
+
 function openManualEntry(){
-    manualEntrySerial='';manualEntryImage=null;
+    manualEntrySerial='';manualEntryImage=MANUAL_ENTRY_IMG;
     document.getElementById('manualSerialInput').value='BDBCF00';
     document.getElementById('manualPreviewWrap').style.display='none';
-    document.getElementById('manualEntryModal').classList.add('visible');setTimeout(()=>document.getElementById('manualSerialInput').focus(),300);
+    document.getElementById('manualEntryTitle').textContent='✏️ Inserimento Manuale';
+    document.getElementById('manualEntryDesc').textContent='Inserisci le ultime 3 cifre del seriale.';
+    scanPaused=true;
+    document.getElementById('manualEntryModal').classList.add('visible');
+    setTimeout(()=>{
+        const inp=document.getElementById('manualSerialInput');
+        inp.focus();
+        inp.setSelectionRange(7, 10);
+    },300);
 }
-function openManualEntryModal(serial,imgData){
+
+function openManualEntryModalFromOCR(serial,imgData){
     manualEntrySerial=serial;manualEntryImage=imgData;
     document.getElementById('manualSerialInput').value='BDBCF00';
+    document.getElementById('manualEntryTitle').textContent='🔁 Conferma Manuale';
+    document.getElementById('manualEntryDesc').textContent='Rilevamenti ripetuti a bassa confidenza.';
     const wrap=document.getElementById('manualPreviewWrap');
     if(imgData){wrap.innerHTML=`<img src="${imgData}" alt="preview">`;wrap.style.display='block';}else{wrap.innerHTML='';wrap.style.display='none';}
-    document.getElementById('manualEntryModal').classList.add('visible');setTimeout(()=>document.getElementById('manualSerialInput').focus(),300);
+    scanPaused=true;
+    document.getElementById('manualEntryModal').classList.add('visible');
+    setTimeout(()=>{
+        const inp=document.getElementById('manualSerialInput');
+        inp.focus();
+        inp.setSelectionRange(7, 10);
+    },300);
 }
-function closeManualEntry(){document.getElementById('manualEntryModal').classList.remove('visible');scanPaused=false;for(let k in lowConfTracker)delete lowConfTracker[k];}
+
+function closeManualEntry(){document.getElementById('manualEntryModal').classList.remove('visible');scanPaused=false;for(let k in lowConfTracker)delete lowConfTracker[k];updateScanIndicator();}
 function confirmManualEntry(){
     const val=document.getElementById('manualSerialInput').value.trim().toUpperCase();
     if(settings.pattern){
@@ -1083,10 +1105,10 @@ function confirmManualEntry(){
     const operator=document.getElementById('operatorName').value.trim()||'N/D';
     const pedana=document.getElementById('pedana').value.trim()||'N/D';
     const ts=new Date().toLocaleString('it-IT');
-    const rec={id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),serial:val,timestamp:ts,operator,pedana,runNumber:'',modified:false,status:'',note:'',image:manualEntryImage||null,confidence:100,corrections:[],_synced:false,_imgUploaded:false,_confirmed:true,_manual:true};
+    const rec={id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),serial:val,timestamp:ts,operator,pedana,runNumber:'',modified:false,status:'',note:'',image:manualEntryImage||MANUAL_ENTRY_IMG,confidence:100,corrections:[],_synced:false,_imgUploaded:false,_confirmed:true,_manual:true};
     records.unshift(rec);scanTotal++;document.getElementById('scanCount').textContent=scanTotal;
-    if(manualEntryImage)saveImg(rec.id,manualEntryImage);saveToStorage();beepOk();vib('ok');renderRecords();toast('✅ '+val,'success');
-    setTimeout(()=>{showPedanaModal(val,manualEntryImage,()=>{if(cameraActive&&!scanPaused)document.getElementById('ocrStatus').textContent='✓ Pronto';updateScanIndicator();resetIdleTimer();});},400);
+    saveImg(rec.id,rec.image);saveToStorage();beepOk();vib('ok');renderRecords();toast('✅ '+val,'success');
+    setTimeout(()=>{showPedanaModal(val,rec.image,()=>{if(cameraActive&&!scanPaused)document.getElementById('ocrStatus').textContent='✓ Pronto';updateScanIndicator();resetIdleTimer();});},400);
 }
 function confirmLowConf(id){const rec=records.find(r=>r.id===id);if(rec){rec._confirmed=true;renderRecords();toast('Confermato','success');}}
 
@@ -1145,7 +1167,9 @@ function editSerial(id,newVal){
         const errMsg=validateSerial(fixed);
         if(errMsg){toast('❌ '+errMsg,'error');beepErr();if(input)input.value=orig;return;}
     }
-    showConfirm('Conferma modifica',`Modificare "${rec.serial}" in "${fixed}"?`,()=>{
+    showConfirm('Conferma modifica',
+        `Modificare <span style="color:var(--danger);font-family:'JetBrains Mono',monospace;font-weight:700;">${rec.serial}</span> in <span style="color:var(--accent);font-family:'JetBrains Mono',monospace;font-weight:700;">${fixed}</span>?`,
+        ()=>{
         if(records.some(r=>r.serial===fixed&&r.id!==rec.id)){toast('⚠️ Già esistente!','warning');beepDup();vib('dup');if(input)input.value=orig;return;}
         rec.serial=fixed;rec.modified=true;rec._synced=false;toast('Modificato: '+fixed,'success');beepOk();renderRecords();saveToStorage();
     },rec.image||null);
